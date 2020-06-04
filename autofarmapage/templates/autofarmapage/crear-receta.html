@@ -3,164 +3,171 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!--Enlace css-->
-  <link rel="stylesheet" href="{% static 'css/styleMedico.css' %}" />
-  <!--Enlace flexbox-->
-  <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}" />
-  <!--Enlace iconos-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--Enlace css-->
+    <link rel="stylesheet" href="{% static 'css/styleMedico.css' %}" />
+    <!--Enlace flexbox-->
+    <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}" />
+    <!--Enlace iconos-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
-  <!--  Enlace a fuentes-->
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet" />
+    <!--  Enlace a fuentes-->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet" />
 
-  <title>AutoFarma</title>
+    <title>AutoFarma</title>
 </head>
 
 <body>
-  <div class="container">
-    <header class="row backgroundheader">
-      <div class="col-xs-12 col-lg-12">
-        <div class="header">
-          <div class="logo2 col-xs-12 end-xs">
-            <a href="{% url 'home_medico' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco"
-                height="40" width="200" />
-            </a>
-          </div>
-          <div class="col-xs-12 star-xs">
-            <p>{{ user.rut.id_centro.nombre_centro }}</p>
-            <h4>Nombre del Médico: {{user.rut.nombres}} {{user.rut.apellido_paterno}}</h4>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <section class="row">
-      <!--Menú lateral-->
-      <div class="col-xs-12 col-md-2 col-lg-2 star-large home-medico">
-        <div class="opciones">
-          <div class="row">
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-crear-receta">
-                <a href="{% url 'crear-receta' %}">
-                  <img src="{% static 'imagenes/crear-receta2.png' %}" alt="crear receta" height="60" width="60" />
-                </a>
-                <h4>Crear receta</h4>
-              </div>
+    <div class="container">
+        <header class="row backgroundheader">
+            <div class="col-xs-12 col-lg-12">
+                <div class="header">
+                    <div class="logo2 col-xs-12 end-xs">
+                        <a href="{% url 'home_medico' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}"
+                                alt="Logopaginablanco" height="40" width="200" />
+                        </a>
+                    </div>
+                    <div class="col-xs-12 star-xs">
+                        <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                        <h4>Nombre del Médico: {{user.rut.nombres}} {{user.rut.apellido_paterno}}</h4>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-agregar-paciente">
-                <a href="{% url 'agregar-paciente' %}"><img src="{% static 'imagenes/agregarUsuario.png' %}"
-                    alt="agregar paciente" height="60" width="60" /></a>
-                <h4>Agregar paciente</h4>
-              </div>
+        </header>
+
+        <section class="row">
+            <!--Menú lateral-->
+            <div class="col-xs-12 col-md-2 col-lg-2 star-large home-medico">
+                <div class="opciones">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-crear-receta">
+                                <a href="{% url 'crear-receta' %}">
+                                    <img src="{% static 'imagenes/crear-receta2.png' %}" alt="crear receta" height="60"
+                                        width="60" />
+                                </a>
+                                <h4>Crear receta</h4>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-agregar-paciente">
+                                <a href="{% url 'agregar-paciente' %}"><img
+                                        src="{% static 'imagenes/agregarUsuario.png' %}" alt="agregar paciente"
+                                        height="60" width="60" /></a>
+                                <h4>Agregar paciente</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-asignar-tutor">
+                                <a href="{% url 'registrar-tutor' %}"><img
+                                        src="{% static 'imagenes/asignar-tutor2.png' %}" alt="listar_informes"
+                                        height="60" width="60" /></a>
+                                <h4>Registrar tutor</h4>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-ver-recetas">
+                                <a href="{% url 'ver-recetas' %}"><img src="{% static 'imagenes/ver-recetas2.png' %}"
+                                        alt="ver recetas" height="60" width="60" /></a>
+                                <h4>Ver recetas</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!--FIN Menú lateral-->
 
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-asignar-tutor">
-                <a href="{% url 'registrar-tutor' %}"><img src="{% static 'imagenes/asignar-tutor2.png' %}"
-                    alt="listar_informes" height="60" width="60" /></a>
-                <h4>Registrar tutor</h4>
-              </div>
+            <!--FORMULARIO CREAR RECETA -->
+            <div class="col-xs-12 col-md-10 col-lg-10 center-xs backgroundrightside">
+                <div class="contenido">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12 center xs">
+                            <h4 id="encabezadoform">Información de la prescripción</h4>
+                        </div>
+                    </div>
+
+                    <form method="GET" class="formulario-receta">
+                        {% csrf_token %}
+                        <!--Buscar -->
+                        <div class="contenedor-inputs">
+                            <input class="input-48 campo-buscar" type="text" name="rutpaciente" minlength="7"
+                                maxlength="8" placeholder="RUT paciente sin DV"
+                                title="Ingrese un valor válido, solo dígitos del 0 al 9" required>
+                            <button class="b-buscar" formmethod="GET" type="submit" name="submit">
+                                <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
+                            </button>
+                    </form>
+
+                    <div class="row center-xs input-100-s opcion-mensaje">
+                        {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <h4 class="mensaje">Paciente no registrado en el sistema</h4>
+                        <a href="{% url 'agregar-paciente' %}">
+                            <button class="b-agregarpaciente" type="button">
+                                <h4>Agregar paciente</h4>
+                            </button></a>
+
+                        {% endif %}
+                    </div>
+
+                    <!-- Datos si encuentra al paciente -->
+                    <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
+                        <form method="POST">{% csrf_token %}
+                            <fieldset class="cuadro-datos">
+                                <legend class="st-datos">
+                                    <h4>Datos del paciente</h4>
+                                </legend>
+                                <!--Nombre paciente -->
+                                <label for="2">Nombre completo: </label>
+                                <input class="input-40" type="text" name="nombre-completo" value="{{nombrePaciente}}"
+                                    readonly />
+                                <!--Rut paciente -->
+                                <label for="2">RUT: </label>
+                                <input class="input-20" name="pacienterut" id="2" value="{{rutpat}}" readonly />
+                            </fieldset>
+                            <div class="checkbox-tutor">
+                                <label class="casilla input-60-s">
+                                    <input class="campo-casilla" type="checkbox" name="casilla" value="no" />
+                                    Necesita de un tutor para retiro de medicamentos </label>
+                                <a href="{% url 'agregar-tutor' rutpat %}">
+                                    <button class="b-tutor" type="button">
+                                        <h4>Agregar tutor</h4>
+                                    </button></a>
+                            </div>
+                            <fieldset class="cuadro-datos">
+                                <legend class="st-datos">
+                                    <h4>Datos médico</h4>
+                                </legend>
+                                <!-- Nombre médico-->
+                                <label>Nombre médico:</label>
+                                <input class="input-40" type="text" name="nombre-completo"
+                                    value="{{user.rut.nombres}} {{user.rut.apellido_paterno}} {{user.rut.apellido_materno}}"
+                                    readonly />
+                                <!--Rut médico-->
+                                <label for="1">RUT médico:</label>
+                                <input class="input-20" name="rutmedico" id="1"
+                                    value="{{ user.rut.rut}}-{{ user.rut.dv}}" readonly />
+                            </fieldset>
+
+                            <div class="campo-doble">
+                                <div class="area-continuar">
+                                    <button class="btn b-continuar" formmethod="POST"> Continuar </button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-ver-recetas">
-                <a href="{% url 'ver-recetas' %}"><img src="{% static 'imagenes/ver-recetas2.png' %}" alt="ver recetas"
-                    height="60" width="60" /></a>
-                <h4>Ver recetas</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--FIN Menú lateral-->
-
-      <!--FORMULARIO CREAR RECETA -->
-      <div class="col-xs-12 col-md-10 col-lg-10 center-xs backgroundrightside">
-        <div class="contenido">
-          <div class="row">
-            <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-              <h4 id="encabezadoform">Información de la prescripción</h4>
-            </div>
-          </div>
-
-          <form method="GET" class="formulario-receta">
-            {% csrf_token %}
-            <!--Buscar -->
-            <div class="contenedor-inputs">
-              <input class="input-48 campo-buscar" type="text" name="rutpaciente" required
-                placeholder="Buscar por RUT" />
-              <button class="b-buscar" formmethod="GET" type="submit" name="submit">
-                <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
-              </button>
-          </form>
-
-          <div class="row center-xs input-100-s opcion-mensaje">
-            {% if messages %}
-            <ul>
-              {% for message in messages %}
-              <li class="{{ message.tags }}">{{ message }}</li>
-              {% endfor %}
-            </ul>
-            {% else %}
-            <h4 class="mensaje">Este paciente no se encuentra registrado</h4>
-
-            <a href="{% url 'agregar-paciente' %}">
-              <button class="b-agregarpaciente" type="button">
-                <h4>Agregar paciente</h4>
-              </button></a>
-
-            {% endif %}
-          </div>
-
-
-          <!-- Datos si encuentra al paciente -->
-
-          <!--Nombre completo paciente -->
-          <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-            <form method="POST">{% csrf_token %}
-
-              <label class="campo">Nombre paciente:</label>
-              <input class="input-100" type="text" name="nombre-completo" value="{{nombrePaciente}}" disabled />
-
-              <label for="2">RUT paciente: </label>
-              <input name="pacienterut" id="2" value="{{ rutpat}}" readonly />
-
-
-              <div class="campo-compuesto">
-                <label class="casilla input-60-s">
-
-                  <input class="campo-casilla" type="checkbox" name="casilla" value="no" />
-                  Necesita de un tutor para retiro de medicamentos </label>
-
-                <a href="{% url 'agregar-tutor' rutpat %}">
-                  <button class="b-tutor" type="button">
-                    <h4>Agregar tutor</h4>
-                  </button></a>
-              </div>
-              <div class="campo-doble">
-
-                <!-- NÚMERO DE LA RECETA -->
-
-                <label class="campo">Nombre médico:</label>
-                <input class="input-100" type="text" name="nombre-completo"
-                  value="{{user.rut.nombres}} {{user.rut.apellido_paterno}}" disabled />
-                <label for="1">RUT médico:</label>
-                <input name="rutmedico" id="1" value="{{ user.rut.rut}}" readonly>
-
-                <!-- apartado receta-->
-
-
-                <button class="btn b-guardar" formmethod="POST">Continuar</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+        </section>
+    </div>
 </body>
 
 </html>

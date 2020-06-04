@@ -14,6 +14,15 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from .validacion import Validador
 from datetime import datetime
+#import rest_framework
+from rest_framework import viewsets
+from .serializers import RecetaSerializer, PersonaSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
 
 # Create your views here.
 
@@ -24,7 +33,7 @@ def index(request):
         # datos para autenticar al usuario
         username = request.POST['rut']
         username = username.replace('.', '')
-        username = username.replace('-','')
+        username = username.replace('-', '')
         dv = username[-1]
         username = username[0 : len(username) - 1]
         print(dv)
@@ -234,7 +243,7 @@ def editarPersona(request, rut):
                     # ejecutar el procedimiento
                     realizado = cursor.var(int)
                     cursor.callproc('pkg_administrar_usuario.sp_editar_persona', [
-                                    rut, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s,realizado])
+                                    rut, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, realizado])
 
                     if int(realizado.getvalue()) == 1:
                         return redirect('exito-modificar-usuario')
@@ -908,12 +917,18 @@ def crearreceta(request):
             rut = request.GET['rutpaciente']
             for i in persona:
                 if i.rut == rut:
-                    nombrePaciente = i.nombres + " " + i.apellido_paterno
-                    rutpat = i.rut
-                    messages.success(request, 'Paciente encontrado')
+                    nombrePaciente = i.nombres + " " + i.apellido_paterno + " " + i.apellido_materno
+                    rutpat = i.rut + "-" + i.dv
+                    messages.success(request, 'Paciente encontrado satisfactoriamente.')
     elif request.method == 'POST':
         rut_medico = request.POST['rutmedico']
-        rutpatiente = request.POST['pacienterut']
+        rut_medico = rut_medico.replace('-', '')
+        rut_medico = rut_medico[0: len(rut_medico) - 1]
+        rutpaciente = request.POST['pacienterut']
+        rutpaciente = rutpaciente.replace('-', '')
+        rutpaciente = rutpaciente[0: len(rutpaciente) - 1]
+        print(rutpaciente)
+        print(rut_medico)
         fecha = datetime.now()
         #rut paciente#
         # conexión a la bd
@@ -923,12 +938,12 @@ def crearreceta(request):
         realizado = cursor.var(int)
         retorno = cursor.var(int)
         cursor.callproc('pkg_administrar_receta.sp_nueva_receta', [
-                        rut_medico, fecha, rutpatiente, realizado, retorno])
+                        rut_medico, fecha, rutpaciente, realizado, retorno])
         id_receta = retorno.getvalue()
         if int(realizado.getvalue()) == 1:
             return redirect('crear-receta2', id_receta)
         elif int(realizado.getvalue()) == 0:
-            messages.error(request, 'HA OCURRIDO UN ERROR :(')
+            messages.error(request, 'Debe agregar un RUT de búsqueda')
     return render(request, 'autofarmapage/crear-receta.html', {'nombrePaciente': nombrePaciente, 'rutpat': rutpat})
 
 #Crear Receta Paso 2: Guardado en Tabla Detalle_Receta
@@ -976,8 +991,18 @@ def crearreceta2(request, id_receta):
         if realizado.getvalue() == 1:
             messages.success(request, "Medicamento Agregado")
         elif realizado.getvalue() == 0:
-            messages.success(request, "hubo un error :(")
+            messages.success(request, "Complete todos los campos.")
     return render(request, 'autofarmapage/crear-receta2.html', data5)
+
+# Vista Ver Receta (Visualizar la receta recién prescrita)
+def verReceta(request, id_receta):
+    receta = Receta.objects.get(id_receta=id_receta)
+    detallereceta = DetalleReceta.objects.filter(id_receta=id_receta)
+    data = {
+        'receta': receta,
+        'detallereceta': detallereceta
+        }
+    return render(request, 'autofarmapage/ver-receta.html', data) 
 
 #Vista Registrar Tutor (Se Registra una nueva Persona y Usuario) (Médico)
 def registrartutor(request):
@@ -1039,18 +1064,23 @@ def registrartutor(request):
 
 #Vista Agregar Tutor (Se agregar el RUT del Tutor a una Persona)
 def agregarTutor(request, rut):
-    paciente = Persona.objects.get(rut=rut)
+    paciente = Persona.objects.get(rut=rut[0: len(rut) - 2])
     ruttutor = None
+    nombreTutor = None
     if request.method == 'GET':
-        campoBuscar = request.GET.get("busqueda")
+        campoBuscar = request.GET.get("ruttutor")
         if campoBuscar is not None:
             persona = Persona.objects.all()
             for i in persona:
                 if i.rut == campoBuscar:
-                    ruttutor = i.rut
-                    messages.success(request, 'tutor encontrado')
+                    ruttutor = i.rut + '-' + i.dv
+                    nombreTutor = i.nombres + ' ' +i.apellido_paterno + ' ' +i.apellido_materno
+                    messages.success(request, 'Tutor encontrado en el sistema.')
     elif request.method == 'POST':
         rutdeltutor = request.POST['rutu']
+        rutdeltutor = rutdeltutor.replace('-', '')
+        rutdeltutor = rutdeltutor[0: len(rutdeltutor) - 2]
+        print(rutdeltutor)
         # conexión a la bd
         bd = ConexionBD()
         con = bd.conectar()
@@ -1063,7 +1093,7 @@ def agregarTutor(request, rut):
         elif realizado.getvalue() == 0:
             messages.error(
                 request, 'Ocurrió un error :( - Intente ingresando un rut en el buscador')
-    return render(request, 'autofarmapage/agregar-tutor.html', {'paciente': paciente, 'ruttutor': ruttutor})
+    return render(request, 'autofarmapage/agregar-tutor.html', {'paciente': paciente, 'ruttutor': ruttutor, 'nombreTutor': nombreTutor})
 
 #Vista Listar Recetas (Médico)
 def verRecetas(request):
@@ -1091,6 +1121,26 @@ def verReceta2(request, id_receta):
         'detallereceta':detallereceta
     }
     return render(request, 'autofarmapage/ver-receta2.html', data)
+
+#rest_framework
+class RecetaViewSet(viewsets.ModelViewSet):
+    queryset = Receta.objects.all()
+    serializer_class = RecetaSerializer    
+
+class ApiRecetaListView(generics.ListAPIView):
+    queryset = Receta.objects.all()
+    serializer_class = RecetaSerializer
+    pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    pagination_class = PageNumberPagination
+    search_fields = ('id_receta', 'rut_paciente__rut')
+
+class ApiUsuario(generics.ListAPIView):
+    queryset = Persona.objects.all()
+    serializer_class =   PersonaSerializer
+    pagination_class = PageNumberPagination
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('rut',)
 
 # este es la forma con el form de django en el html la vista
 # de html que deben usar es la llamada editarpage

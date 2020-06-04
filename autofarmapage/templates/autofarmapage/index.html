@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +19,6 @@
 
     <title>AutoFarma</title>
 </head>
-
 
 <body>
     <header>
@@ -53,17 +51,10 @@
 
                 <form id="formulario-logeo" method="POST" class="formulariologeo">
                     {% csrf_token %}
-                    <input id='rut' 
-                        class="intputs" 
-                        type="text" 
-                        name="rut" 
-                        required
-                        maxlength="12"
-                        placeholder="Usuario"
-                        oninput="checkRut(this)"
-                        onkeypress="return isNumber(event)">
+                    <input id='rut' class="intputs" type="text" name="rut" required maxlength="12" placeholder="Usuario"
+                        oninput="checkRut(this)" onkeypress="return isNumber(event)">
                     <input class="intputs" type="password" id="password" name="password" minlength="4"
-                        placeholder="Contraseña">
+                        placeholder="Contraseña" required>
                     <div class="logeo-opcion">
                         <span class="olvidaste"><a class="enlace" href="#" target="_blank"> ¿Olvidaste tu contraseña?
                             </a>
@@ -84,21 +75,22 @@
                 <i class='fas fa-user-cog'></i>
 
                 <h3>Administrador</h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Incidunt fugit natus magni repellat
-                    deleniti et, voluptate atque odio obcaecati ullam aspernatur eum vero. </p>
+                <p> Puede realizar tareas relacionadas a la administración de usuarios del sistema e informes
+                    relacionados al stock y reserva de medicamentos </p>
             </li>
             <li>
                 <i class="fas fa-user-nurse"></i>
 
                 <h3>Farmacia</h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Incidunt fugit natus magni repellat
-                    deleniti et, voluptate atque odio obcaecati ullam aspernatur eum vero. </p>
+                <p> Es quien tiene acceso a realizar tareas pertinentes a farmacia, es decir, la gestión, stock y
+                    reserva de medicamentos </p>
             </li>
             <li>
                 <i class="fas fa-user-md"></i>
                 <h3>Médico</h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Incidunt fugit natus magni repellat
-                    deleniti et, voluptate atque odio obcaecati ullam aspernatur eum vero. </p>
+                <p> Realiza acciones asociadas a agregar pacientes, hacer prescripciones en forma automatica con el
+                    stock de medicamentos y ver la lista de recetas
+                </p>
             </li>
         </ul>
     </section>
@@ -106,28 +98,36 @@
     <section class="movil-area" id="movil">
         <h1 class="section-title"> Aplicación móvil para los pacientes </h1>
         <ul class="movil-content">
-            <li>
+            <li class="movil-caracteristicas">
                 <i class="fas fa-bell"></i>
                 <h4>Notificaciones</h4>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quibusdam, ad corrupti ipsa quod
-                    placeat! Ab dolores illum minima.</p>
+                <p> Llegarán notificaciones automáticas cuando un medicamento en reserva esté disponible.</p>
+                <br>
+                <br>
+                <br>
+                <i class="fas fa-pills"></i>
+                <h4>Reserva de medicamentos</h4>
+                <p>Ver los medicamentos que tiene en reserva para ser retirarados</p>
             </li>
             <li>
-                <a href="#"><img src="{% static 'imagenes/celular.png' %}" alt="imagen app celular" height=" auto"
-                        width="250"></a>
-
+                <img src="{% static 'imagenes/celular.svg' %}" alt="imagen app celular" height=" auto" width="250">
             </li>
-            <li>
+            <li class="movil-caracteristicas">
                 <i class="fas fa-bullhorn"></i>
                 <h4>Recordatorios</h4>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione quibusdam, ad corrupti ipsa quod
-                    placeat! Ab dolores illum minima.</p>
+                <p>Recordatorio automático de la fecha límite para ir a retirar los medicamentos</p>
+                <br>
+                <br>
+                <br>
+                <i class="fas fa-file-prescription"></i>
+                <h4>Listar recetas</h4>
+                <p>Tener acceso a las recetas prescritas a lo largo del tiempo</p>
             </li>
         </ul>
     </section>
 
     <footer>
-        <p> Hecho por Carlos Bastias, Karina Moreira y Fabrizio Rojas. </p>
+        <p> Copyright ©2020 Software AUTOFARMA. Hecho por Carlos Bastias, Karina Moreira y Fabrizio Rojas. </p>
     </footer>
 </body>
 

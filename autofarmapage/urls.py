@@ -1,13 +1,20 @@
-from django.urls import path, reverse_lazy
+from django.urls import path, reverse_lazy, include
 from . import views
 from django.contrib.auth import views as auth_views
+from .views import RecetaViewSet, ApiRecetaListView, ApiUsuario
+from rest_framework import routers
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import obtain_auth_token
+
+router = routers.DefaultRouter()
+router.register('receta', RecetaViewSet)
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('homeadmi', views.homeadmi, name='homeadmi'),
     path('agregar-usuario', views.agregarusuario, name="agregar-usuario"),
-    path('listar-usuario', views.listarusuario ,name='listar-usuario'),
-    path('listar-informe', views.listarinforme , name='listar-informe'),
+    path('listar-usuario', views.listarusuario, name='listar-usuario'),
+    path('listar-informe', views.listarinforme, name='listar-informe'),
     path('editarPersona/<slug:rut>', views.editarPersona, name='editarPersona'),
     path('deshabilitarpage/<slug:rut>', views.deshabilitarUsuario,  name='deshabilitarpage'),
     path('exito-crear-usuario', views.guardadoUsuarioExito, name='exito-crear-usuario'),
@@ -37,7 +44,10 @@ urlpatterns = [
     path('registrar-tutor', views.registrartutor, name="registrar-tutor"),
     path('agregar-tutor/<slug:rut>', views.agregarTutor, name='agregar-tutor'),
     path('ver-recetas', views.verRecetas, name="ver-recetas"),
-    path('ver-receta2/<int:id_receta>',views.verReceta2, name='ver-receta2'),
+    path('ver-receta2/<int:id_receta>', views.verReceta2, name='ver-receta2'),
+
+    ###urls del k-prueba
+    path('ver-receta/<int:id_receta>', views.verReceta, name='ver-receta'),
 
     #urls modificaciones contraseña
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(
@@ -63,5 +73,11 @@ urlpatterns = [
         name='password_reset'),
 
     path('cambio_exitoso', views.passwordResetCompleto, name='reset_completo'),
+
+    #rest_framework
+    path('api/', include(router.urls)),
+    path('api-token-auth/', obtain_auth_token, name='api-token-auth'),
+    path('ListReceta', ApiRecetaListView.as_view(), name='ListReceta'),
+    path('GetPersona', ApiUsuario.as_view(), name='GetPersona')
 
 ]

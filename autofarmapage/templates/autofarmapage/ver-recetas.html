@@ -1,8 +1,6 @@
 {% extends 'autofarmapage/base_medico.html' %}
 {% load static %}
 
-
-
 {% block content %}
 <!-- CONTENIDO DE LA HTML-->
 <div class="contenido">
@@ -13,19 +11,24 @@
     </div>
 
     <!--CAMPO BUSCAR-->
-    <form id="formulario-ver-receta" method="GET" class="formulario-ver-receta">
-        <div class="contenedor-inputs">
-            <div class="ancho-48">
-                <input class="campo-buscar" type="search" name="q" value="{{ request.GET.q}}" required
-                    placeholder="Buscar por RUT paciente" />
-                <button class="b-buscar" type="submit" name="submit" value="Search">
-                    <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
-                </button>
-            </div>
-        </div>
+    <form id="formulario-ver-receta" method="GET">
+        <input class="ancho-30" type="search" name="q" value="{{ request.GET.q}}" minlength="7" maxlength="8" required
+            required placeholder="Buscar por RUT sin DV" />
+        <!--
+        <select class="input-20-ver" name="" id="">
+            <option value="" selected> Filtar por</option>
+            {% for X in XY %}
+            <option value="{{ campo.id_x }}" required>
+                {{ X.campo }}</option>
+            {% endfor %}
+        </select>
+        -->
+        <button class="b-buscar" type="submit" name="submit" value="Search">
+            <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
+        </button>
     </form>
 
-    <div class="ancho-100" id="main-container">
+    <div class="ancho-70" id="main-container">
         <table>
             <thead>
                 <tr>
@@ -50,6 +53,19 @@
             {% endfor %}
             {% endif %}
         </table>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="row center-xs input-100-s opcion-mensaje">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <h4 class="mensaje">No hay recetas registradas con ese RUT. Intente con otro. </h4>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

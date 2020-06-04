@@ -1,4 +1,4 @@
-{% extends 'autofarmapage/base_medico.html' %}
+{{% extends 'autofarmapage/base_medico.html' %}
 {% load static %}
 
 
@@ -6,68 +6,77 @@
 <!-- CONTENIDO DE LA HTML-->
 
 
-<div class="contenido">
-  <div class="row">
-    <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-      <h4 id="encabezadoform">Agregar Tutor al Paciente:</h4>
-    </div>
-  </div>
-
-  <!--Formulario agregar paciente -->
-  <form method="GET" class="formulario-buscar">
-    {% csrf_token %}
-    <div class="contenedor-inputs centrado">
-
-      <input class="input-40 campo-buscar" type="text" name="busqueda" required placeholder="Ingrese RUT del tutor" />
-      <button class="b-buscar" formmethod="GET" type="submit" name="submit">
-        <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
-      </button>
-
-  </form>
-
-  <div class="row center-xs input-100-s opcion-mensaje">
-    {% if messages %}
-    <ul>
-      {% for message in messages %}
-      <li class="{{ message.tags }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <h4 class="mensaje">No se ecuentra registro de tutor</h4>
-
-    <a href="{% url 'registrar-tutor' %}">
-      <button class="b-agregarpaciente" type="button">
-        <h4>Registrar tutor</h4>
-      </button></a>
-
-    {% endif %}
-  </div>
-
-
-
-  <!-- RUT paciente y tutor -->
-  <form class="ruts-conte" method="POST">
-    {% csrf_token %}
-
+<div class="contenido2">
     <div class="row">
-      <div class="col-xs-12 center-xs">
-
-        <label>RUT paciente:
-          <input name="rutpa" value="{{paciente.rut}}" required placeholder="Rut paciente" /></label>
-
-        <label>RUT tutor:
-          <input name="rutu" value="{{ruttutor}}" required placeholder="Rut tutor"/></label>
-      </div>
-
+        <div class="col-xs-12 col-md-12 col-lg-12 center xs">
+            <h4 id="encabezadoform">Agregar Tutor al Paciente:</h4>
+        </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-        <button class="btn b-guardar" formmethod="POST">Agregar</button>
-      </div>
-    </div>
-  </form>
+    <!--Formulario agregar paciente -->
+    <form method="GET" class="formulario-buscar">
+        {% csrf_token %}
+        <div class="contenedor-inputs centrado">
 
-</div>
+            <input class="input-40 campo-buscar" type="text" name="ruttutor" minlength="7" maxlength="8" required
+                placeholder="RUT tutor sin DV" />
+            <button class="b-buscar" formmethod="GET" type="submit" name="submit">
+                <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
+            </button>
+    </form>
+    <div class="row center-xs input-100-s opcion-mensaje">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <h4 class="mensaje">No hay registro de tutor. Debe agregarlo al sistema. </h4>
+
+        <a href="{% url 'registrar-tutor' %}">
+            <button class="b-agregarpaciente" type="button">
+                <h4>Registrar tutor</h4>
+            </button></a>
+        {% endif %}
+    </div>
+
+    <!-- RUT paciente y tutor -->
+    <form class="form-agregar-tutor" method="POST">
+        {% csrf_token %}
+
+        <fieldset class="cuadro-datos2">
+            <legend class="st-datos2">
+                <h4>Datos tutor</h4>
+            </legend>
+            <!--Nombre tutor -->
+            <label>Nombre tutor:</label>
+            <input class="input-60" name="nombretu" value="{{nombreTutor}} " required placeholder="Nombre tutor"
+                readonly />
+            <!--Rut tutor-->
+            <label>RUT tutor:
+                <input name="rutu" value="{{ruttutor}} " required placeholder="Rut tutor" readonly />
+        </fieldset>
+
+        <fieldset class="cuadro-datos2">
+            <legend class="st-datos2">
+                <h4>Datos paciente</h4>
+            </legend>
+            <!--Nombre paciente-->
+            <label for="2">Nombre paciente: </label>
+            <input class="input-60" type="text" name="Nombre paciente"
+                value="{{paciente.nombres}} {{paciente.apellido_paterno}} {{paciente.apellido_materno}}" readonly />
+            <!--Rut paciente-->
+            <label>RUT paciente:
+                <input name="rutpa" value="{{paciente.rut}} - {{paciente.dv}}" required placeholder="Rut paciente"
+                    readonly /></label>
+        </fieldset>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
+                <button class="btn b-agregar" formmethod="POST">Agregar</button>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}

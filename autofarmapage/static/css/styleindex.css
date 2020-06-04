@@ -437,8 +437,7 @@ ul.perfiles {
 
 /* ----------- App Móvil -----------  */
 
-.movil-area {
-}
+/*.movil-area {}*/
 
 .movil-area h1 {
     font-size: 30px;
@@ -458,9 +457,15 @@ ul.movil-content {
 }
 
 .movil-content li {
-    padding: 0 30px;
+    padding: 30px;
     flex-basis: 33%;
     text-align: center;
+    justify-content: baseline;
+}
+
+.movil-caracteristicas {
+    margin-top: 6%;
+    padding-bottom: 30%;
 }
 
 .movil-content li i {

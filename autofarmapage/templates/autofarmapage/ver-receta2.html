@@ -1,5 +1,6 @@
 {% extends 'autofarmapage/base_medico.html' %}
 {% load static %}
+
 {% block content %}
 <div class="contenido">
     <div class="row">
@@ -7,73 +8,58 @@
             <h4 id="encabezadoform">Información receta: {{receta.id_receta}}</h4>
         </div>
     </div>
-  
-    <div class="row">
-        <div class="col-xs-6 col-md-6 col-lg-6 end-xs">
-            <h4>Fecha:</h4>
-        </div>
-        <div class="col-xs-6 col-md-6 col-lg-6 start-xs">
-            <h3>{{receta.fecha_receta}}</h3>
+    <div class="receta-elegida">
+        <div class="receta-datos">
+            <div class="receta-superior">
+                <div class="receta-logo">
+                    <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco" height="40" width="200" />
+                </div>
+                <div class="receta-medico">
+                    <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                    <h4 class="nombre-medico">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
+                        {{user.rut.apellido_materno}}</h4>
+                    <h4>RUT: {{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}}</h4>
+                </div>
+            </div>
+            <div class="receta-paciente">
+                <div class="n-paciente">
+                    <h4><b>Nombre paciente: </b> {{receta.rut_paciente.nombres}}
+                        {{receta.rut_paciente.apellido_paterno}}
+                        {{receta.rut_paciente.apellido_materno}}
+                    </h4>
+                </div>
+                <div class="r-paciente">
+                    <h4> <b> RUT paciente: </b> {{receta.rut_paciente.rut}} - {{receta.rut_paciente.dv}} </h4>
+                </div>
+                <br>
+            </div>
+            <div class="receta-detalle">
+                <hr class="hr-receta">
+                <h4 class="subtitulo-detalle"> <b>RECETA MÉDICA</b></h4>
+                <hr class="hr-receta">
+                <div class="receta ancho-100">
+                    {%if detallereceta%}
+                    {%for j in detallereceta%}
+                    <li class="receta-remedios">
+                        <p><b>{{j.codigo.nombre_medicamento}}</b>
+                            en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
+                            unidades/dosis por {{j.duracion_tratamiento}} días
+                            <p>
+                        <p>{{j.posologia}}</p>
+                    </li>
+                    {%endfor%}
+                    {%endif%}
+                </div>
+            </div>
+            <div class="receta-inferior">
+                <div class="receta-fecha">
+                    <h4>Fecha: {{receta.fecha_receta}}</h4>
+                </div>
+                <div class="receta-firma">
+                    <h4> Firma médico</h4>
+                </div>
+            </div>
         </div>
     </div>
-    <br>
-    <hr>
-    <br>
-   <div class="row">
-       <div class="col-xs-12 col-md-6 col-lg-6 center-xs">
-           <h4>Nombre paciente:</h4>
-           <h3>{{receta.rut_paciente.nombres}} {{receta.rut_paciente.apellido_paterno}}</h3>
-           <br>
-           <h4>Nombre medico:</h4>
-           <h3>{{receta.rut_medico.rut.nombres}} {{receta.rut_medico.rut.apellido_paterno}}</h3>
-       </div>
-       <div class="col-xs-12 col-md-6 col-lg-6 center-xs">
-        <h4>rut paciente:</h4>
-        <h3>{{receta.rut_paciente.rut}}</h3>
-        <br>
-        <h4>rut medico:</h4>
-        <h3>{{receta.rut_medico.rut.rut}}</h3>
-       </div>
-   </div>
-   <br>
-   <hr>
-   <br>
-   <div class="row">
-       <div class="col-xs-12">
-           <h4>Detalle receta</h4>
-       </div>
-   </div>
-   <br>
-   <div class="ancho-100" id="main-container">
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre medicamento</th>
-          <th>Duración</th>
-          <th>Dosis diaria</th>
-          <th>Posologia</th>
-          <!--<th>Eliminar</th>-->
-        </tr>
-      </thead>
-      {%if detallereceta%}
-      {%for j in detallereceta%}
-      <tr class="listarAgregados">
-        <td>{{j.codigo.nombre_medicamento}}</td>
-        <td>{{j.duracion_tratamiento}} - dias</td>
-        <td>{{j.dosis_diaria}} - Por día</td>
-        <td>{{j.posologia}}</td>
-       <!-- <td>
-          <button class="btn-x" type="button" id="add">
-            <i class="fa fa-plus fa-lg"> </i>
-          </button>
-        </td>-->
-      </tr>
-      {%endfor%}
-      {%endif%}
-     
-    
-    </table>
-  </div>
-
 </div>
 {% endblock %}

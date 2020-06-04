@@ -25,7 +25,7 @@ SECRET_KEY = 'spgp9n@+!5$+no63hrfxkw2))t$xlgrgybm)rwo^qe45vv#&yw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.43.104', '127.0.0.1']
 
 
 # Application definition
@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'autofarmapage.apps.AutofarmapageConfig'
+    'autofarmapage.apps.AutofarmapageConfig',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'autofarma.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

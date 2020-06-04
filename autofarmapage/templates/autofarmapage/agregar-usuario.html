@@ -6,219 +6,190 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!--Enlace css-->
-    <link rel="stylesheet"  href="{% static 'css/estiloBaseAdmi.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estiloBaseAdmi.css' %}">
     <!--Enlace flexbox-->
-    <link rel="stylesheet"  href="{% static 'css/flexboxgrid.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
 
     <!--  Enlace a fuentes-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
-    
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
-    
+
     <script src="{% static 'js/validarRut.js' %}"></script>
 
     <title>AutoFarma</title>
 </head>
 <body>
-
     <div class="container">
-
         <header class="row backgroundheader">
-            <div class="col-xs-12 col-lg-12" >
-               <div class="header"> 
-                   <div class="col-xs-12 end-xs">
-                        <a href="{% url 'homeadmi' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="40" width="200"> </a>
+            <div class="col-xs-12 col-lg-12">
+                <div class="header">
+                    <div class="col-xs-12 end-xs">
+                        <a href="{% url 'homeadmi' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}"
+                                alt="Logopaginablanco" height="40" width="200"> </a>
                         <p>{{ user.rut.id_centro.nombre_centro }}</p>
                         <div class="col-xs-12 star-xs">
                             <h4>{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>
                         </div>
-                   </div>
-               </div>
+                    </div>
+                </div>
             </div>
         </header>
 
         <section class="row section">
-
-          <div class="col-xs-12 col-md-2 col-lg-2 star-large backgroundleftside">
-              <div class="sideleft">
-                  <div class="row">
-                    <div class="col-xs-12 col-lg-12 center-lg">
-        
-                                                
+            <div class="col-xs-12 col-md-2 col-lg-2 star-large backgroundleftside">
+                <div class="sideleft">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-12 center-lg">
                             <div class="button_usuario">
-
-                                <a href="{% url 'agregar-usuario' %}"><img src="{% static 'imagenes/agregarUsuario.png' %}" alt="agregar_Usuario"  height="60" width="60"></a>
+                                <a href="{% url 'agregar-usuario' %}"><img
+                                        src="{% static 'imagenes/agregarUsuario.png' %}" alt="agregar_Usuario"
+                                        height="60" width="60"></a>
                                 <h4>Crear Usuario</h4>
-
                             </div>
-                        
                         </div>
 
                         <div class="col-xs-12 col-lg-12 center-lg">
-        
-                                                
-                                <div class="button_listarusuarios">
-    
-                                    <a href="{% url 'listar-usuario' %}"><img src="{% static 'imagenes/listarusuarios.png' %}" alt="lstar_usuario"  height="60" width="60"></a>
-                                    <h4>Listar Usuarios</h4>
-    
-                                </div>
-                            
+                            <div class="button_listarusuarios">
+                                <a href="{% url 'listar-usuario' %}"><img
+                                        src="{% static 'imagenes/listarusuarios.png' %}" alt="lstar_usuario" height="60"
+                                        width="60"></a>
+                                <h4>Listar Usuarios</h4>
                             </div>
+                        </div>
 
-                            <div class="col-xs-12 col-lg-12 center-lg">
-        
-                                                
-                                    <div class="button_listarinformes">
-        
-                                        <a href="{% url 'listar-informe' %}"><img src="{% static 'imagenes/listarInformes.png' %}" alt="listar_informes"  height="60" width="60"></a>
-                                        <h4>Listar Informes</h4>
-        
-                                    </div>
-                                
-                                </div>
-
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="button_listarinformes">
+                                <a href="{% url 'listar-informe' %}"><img
+                                        src="{% static 'imagenes/listarInformes.png' %}" alt="listar_informes"
+                                        height="60" width="60"></a>
+                                <h4>Listar Informes</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
+            <div class="col-xs-12 col-md-10 col-lg-10 center-xs backgroundrightside">
+                <div class="sideright">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12 center xs">
+                            <h4 id="encabezadoform">INFORMACIÓN DEL USUARIO</h4>
+                        </div>
+                    </div>
 
-
-
-              </div>
-          </div>
-
-
-          <div class="col-xs-12 col-md-10 col-lg-10 center-xs backgroundrightside">
-              <div class="sideright">
-                  <div class="row">
-                      <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                          <h4 id="encabezadoform">INFORMACIÓN DEL USUARIO</h4>
-                      </div>
-                  </div>
-
-                  <form id="formulario-logeo" method="POST" action="#" class="formulariologeo">{% csrf_token %}
+                    <form id="formulario-logeo" method="POST" action="#" class="formulariologeo">{% csrf_token %}
                         <!--rut-->
-                       <div class="row">
+                        <div class="row">
                             <div class="col-xs-12 center xs">
-                                <input class="intputs" 
-                                    id="rut" 
-                                    type="text" 
-                                    name="rut" 
-                                    required 
-                                    placeholder="RUT" 
-                                    maxlength="12" 
-                                    oninput="checkRut(this)"
-                                    onkeypress="return isNumber(event)">
+                                <input class="intputs" id="rut" type="text" name="rut" required placeholder="RUT"
+                                    maxlength="12" oninput="checkRut(this)" onkeypress="return isNumber(event)">
                                 <!--<input class="inputDV" id="dv" type="text" name="dv" required maxlength="1" placeholder="K">-->
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12 center-xs">
-                                
+
                             </div>
                         </div>
-                    
                         <!--Nombre-->
-                       <div class="row">
-                           <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                            
-                                <input class="intputs" id="nombres" type="text" name="nombres" required placeholder="Nombres" value="">
-                           </div>
-                       </div>
-
-                       <!--apellido p-->
-                       <div class="row">
+                        <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                                    <input class="intputs" id="apellido_paterno" type="text" name="apellido_paterno" required placeholder="Apellido Paterno">
+                                <input class="intputs" id="nombres" type="text" name="nombres" required
+                                    placeholder="Nombres" value="">
+                            </div>
+                        </div>
+
+                        <!--apellido p-->
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12 col-lg-12 center xs">
+                                <input class="intputs" id="apellido_paterno" type="text" name="apellido_paterno"
+                                    required placeholder="Apellido Paterno">
                             </div>
                         </div>
 
                         <!--apellido m-->
-                       <div class="row">
+                        <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                                    <input class="intputs" id="apellido_materno" type="text" name="apellido_materno" required placeholder="Apellido Materno">
+                                <input class="intputs" id="apellido_materno" type="text" name="apellido_materno"
+                                    required placeholder="Apellido Materno">
                             </div>
                         </div>
 
                         <!--telefono-->
-                       <div class="row">
+                        <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                                    <input class="intputs" id="telefono" type="tel" pattern="[0-9]{9}" name="telefono" required placeholder="Telefono celular" >
+                                <input class="intputs" id="telefono" type="tel" pattern="[0-9]{9}" name="telefono"
+                                    required placeholder="Telefono celular">
                             </div>
                         </div>
 
-
                         <!--email-->
-                       <div class="row">
+                        <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                                    <input class="intputs" id="correo_electronico" type="email" name="correo_electronico" required placeholder="Correo electrónico" >
+                                <input class="intputs" id="correo_electronico" type="email" name="correo_electronico"
+                                    required placeholder="Correo electrónico">
                             </div>
                         </div>
 
                         <!--direccion-->
-                       <div class="row">
+                        <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                                <input class="intputs" id="direccion" type="text" name="direccion" required placeholder="Dirección" >
+                                <input class="intputs" id="direccion" type="text" name="direccion" required
+                                    placeholder="Dirección">
                             </div>
                         </div>
 
                         <!--centro de salud-->
-                        <div class="row">   
+                        <div class="row">
                             <div class="col-xs-12 center-xs">
                                 {% if centro_salud %}
-                                <input class="intputs" id="nombre_centro" type="text" 
-                                    name="nombre_centro" required readonly 
-                                    value="{{ centro_salud.nombre_centro }}">
-                                <input class="intputs" id="id_centro" type="hidden" 
-                                    name="id_centro" required placeholder="Centro de Salud" 
-                                    value="{{ centro_salud.id_centro }}" >
+                                <input class="intputs" id="nombre_centro" type="text" name="nombre_centro" required
+                                    readonly value="{{ centro_salud.nombre_centro }}">
+                                <input class="intputs" id="id_centro" type="hidden" name="id_centro" required
+                                    placeholder="Centro de Salud" value="{{ centro_salud.id_centro }}">
                                 {% endif %}
                             </div>
                         </div>
 
                         <!--comuna-->
-                       <div class="row">
-                            <div class="col-xs-12 center xs">        
+                        <div class="row">
+                            <div class="col-xs-12 center xs">
                                 {% if ciudades %}
-                                <input class="intputs" id="nombre_comuna" type="text"
-                                    name="nombre_comuna" required readonly
-                                    value="{{ ciudades.nombre_comuna }}">
-                                <input class="intputs" id="id_comuna" type="hidden" 
-                                    name="id_comuna" required  
-                                    value="{{ comunas.id_comuna }}" >
+                                <input class="intputs" id="nombre_comuna" type="text" name="nombre_comuna" required
+                                    readonly value="{{ ciudades.nombre_comuna }}">
+                                <input class="intputs" id="id_comuna" type="hidden" name="id_comuna" required
+                                    value="{{ comunas.id_comuna }}">
                                 {% endif %}
                             </div>
                         </div>
 
-                         <!--region-->
-                       <div class="row">
+                        <!--region-->
+                        <div class="row">
                             <div class="col-xs-12 center-xs">
                                 {% if regiones %}
-                                <input class="intputs" id="nombre_region" type="text"
-                                    name="nombre_region" required readonly
-                                    value="{{ regiones.nombre_region }}">
-                                <input class="intputs" id="id_region" type="hidden" 
-                                    name="id_region" required  
-                                    value="{{ regiones.id_region }}" >
+                                <input class="intputs" id="nombre_region" type="text" name="nombre_region" required
+                                    readonly value="{{ regiones.nombre_region }}">
+                                <input class="intputs" id="id_region" type="hidden" name="id_region" required
+                                    value="{{ regiones.id_region }}">
                                 {% endif %}
                             </div>
                         </div>
 
-                         <!--tipo de empleado-->
-                       <div class="row">
+                        <!--tipo de empleado-->
+                        <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-                                 
-                                    <select required name="id_tipo_empleado" id="id_tipo_empleado">
-                                        {% for tipo in tipo_empleado %}
-                                            <option value="{{ tipo.id_tipo_empleado }}">{{ tipo.tipo_empleado }}</option>
-                                        {% endfor %}
-                                    </select>
+                                <select required name="id_tipo_empleado" id="id_tipo_empleado">
+                                    {% for tipo in tipo_empleado %}
+                                    <option value="{{ tipo.id_tipo_empleado }}">{{ tipo.tipo_empleado }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="row center-xs mensajes">
                             {% if messages %}
                             <ul>
-                                {% for message in messages %} 
+                                {% for message in messages %}
                                 <li class="{{ message.tags }}">{{ message }}</li>
                                 {% endfor %}
                             </ul>
@@ -226,18 +197,16 @@
                         </div>
 
                         <div class="row">
-                                <div class="col-xs-12  col-lg-6 center-xs end-lg">
-                                    <button class="buttonformuser">GUARDAR</button>
-                                </div>
-
-                                <div class="col-xs-12  col-lg-6 center-xs start-lg">
-                                        <button type="reset" class="buttoncancelar">LIMPIAR</button>
-                                    </div>
-
+                            <div class="col-xs-12  col-lg-6 center-xs end-lg">
+                                <button class="buttonformuser">GUARDAR</button>
                             </div>
-                  </form>
-              </div>
-          </div>
+                            <div class="col-xs-12  col-lg-6 center-xs start-lg">
+                                <button type="reset" class="buttoncancelar">LIMPIAR</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </section>
     </div>
 </body>

@@ -3,243 +3,263 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!--Enlace css-->
-  <link rel="stylesheet" href="{% static 'css/styleMedico.css' %}" />
-  <!--Enlace flexbox-->
-  <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}" />
-  <!--Enlace iconos-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--Enlace css-->
+    <link rel="stylesheet" href="{% static 'css/styleMedico.css' %}" />
+    <!--Enlace flexbox-->
+    <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}" />
+    <!--Enlace iconos-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <!--  Enlace a fuentes-->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet" />
 
-  <!--  Enlace a fuentes-->
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-  <title>AutoFarma</title>
+    <title>AutoFarma</title>
 </head>
 
 <body>
-  <div class="container">
-    <header class="row backgroundheader">
-      <div class="col-xs-12 col-lg-12">
-        <div class="header">
-          <div class="logo2 col-xs-12 end-xs">
-            <a href="{% url 'home_medico' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco"
-                height="40" width="200" />
-            </a>
-          </div>
-          <div class="col-xs-12 star-xs">
-            <p>{{ user.rut.id_centro.nombre_centro }}</p>
-            <h4>Nombre del Médico: {{user.rut.nombres}} {{user.rut.apellido_paterno}}</h4>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <section class="row">
-      <!--Menú lateral-->
-      <div class="col-xs-12 col-md-2 col-lg-2 star-large home-medico">
-        <div class="opciones">
-          <div class="row">
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-crear-receta">
-                <a href="{% url 'crear-receta' %}">
-                  <img src="{% static 'imagenes/crear-receta2.png' %}" alt="crear receta" height="60" width="60" />
-                </a>
-                <h4>Crear receta</h4>
-              </div>
-            </div>
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-agregar-paciente">
-                <a href="{% url 'agregar-paciente' %}"><img src="{% static 'imagenes/agregarUsuario.png' %}"
-                    alt="agregar paciente" height="60" width="60" /></a>
-                <h4>Agregar paciente</h4>
-              </div>
-            </div>
-
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-asignar-tutor">
-                <a href="{% url 'registrar-tutor' %}"><img src="{% static 'imagenes/asignar-tutor2.png' %}"
-                    alt="listar_informes" height="60" width="60" /></a>
-                <h4>Registrar tutor</h4>
-              </div>
-            </div>
-            <div class="col-xs-12 col-lg-12 center-lg">
-              <div class="b2-ver-recetas">
-                <a href="{% url 'ver-recetas' %}"><img src="{% static 'imagenes/ver-recetas2.png' %}" alt="ver recetas"
-                    height="60" width="60" /></a>
-                <h4>Ver recetas</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--FIN Menú lateral-->
-
-      <!--FORMULARIO CREAR RECETA -->
-      <div class="col-xs-12 col-md-12 col-lg-10 center-xs backgroundrightside">
-        <div class="contenido">
-          <div class="row">
-            <div class="col-xs-12 col-md-12 col-lg-12 center xs">
-              <h4 id="encabezadoform" name="idreceta" value="{{recetapk.id_receta}}">Información de la receta:
-                {{recetapk.id_receta}}</h4>
-
-              <form method="GET" class="formulario-receta2">
-                {% csrf_token %}
-                <!--Buscar -->
-                <div class="contenedor-inputs">
-                  <input class="ancho-48 campo-buscar" type="search" name="q" value="{{ request.GET.q }}" required
-                    placeholder="Buscar nombre fármaco " />
-                  <button class="b-buscar" type="submit" name="submit" value="Search">
-                    <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
-                  </button>
+    <div class="container">
+        <header class="row backgroundheader">
+            <div class="col-xs-12 col-lg-12">
+                <div class="header">
+                    <div class="logo2 col-xs-12 end-xs">
+                        <a href="{% url 'home_medico' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}"
+                                alt="Logopaginablanco" height="40" width="200" />
+                        </a>
+                    </div>
+                    <div class="col-xs-12 star-xs">
+                        <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                        <h4>Nombre del Médico: {{user.rut.nombres}} {{user.rut.apellido_paterno}}</h4>
+                    </div>
                 </div>
-                <!-- Tabla resultado busqueda -->
-                <div class="ancho-100" id="main-container">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Nombre medicamento</th>
-                        <th>Tipo</th>
-                        <th>Stock</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    {% if remedios%}
-                    {% for n in remedios%}
-                    <tr class="listar" id="{{n.codigo}}">
-                      <td>{{n.nombre_medicamento}}</td>
-                      <td>{{n.id_tipo_med.nombre_tipo_med}}</td>
-                      <td></td>
-                      <td>
-                        <button class="btn-x" type="button" id="add">
-                          <i class="fa fa-plus fa-lg"> </i>
+            </div>
+        </header>
+
+        <section class="row">
+            <!--Menú lateral-->
+            <div class="col-xs-12 col-md-2 col-lg-2 star-large home-medico">
+                <div class="opciones">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-crear-receta">
+                                <a href="{% url 'crear-receta' %}">
+                                    <img src="{% static 'imagenes/crear-receta2.png' %}" alt="crear receta" height="60"
+                                        width="60" />
+                                </a>
+                                <h4>Crear receta</h4>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-agregar-paciente">
+                                <a href="{% url 'agregar-paciente' %}"><img
+                                        src="{% static 'imagenes/agregarUsuario.png' %}" alt="agregar paciente"
+                                        height="60" width="60" /></a>
+                                <h4>Agregar paciente</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-asignar-tutor">
+                                <a href="{% url 'registrar-tutor' %}"><img
+                                        src="{% static 'imagenes/asignar-tutor2.png' %}" alt="listar_informes"
+                                        height="60" width="60" /></a>
+                                <h4>Registrar tutor</h4>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="b2-ver-recetas">
+                                <a href="{% url 'ver-recetas' %}"><img src="{% static 'imagenes/ver-recetas2.png' %}"
+                                        alt="ver recetas" height="60" width="60" /></a>
+                                <h4>Ver recetas</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--FIN Menú lateral-->
+
+            <!--FORMULARIO CREAR RECETA -->
+            <div class="col-xs-12 col-md-12 col-lg-10 center-xs backgroundrightside">
+                <div class="contenido">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12 center xs">
+                            <h4 id="encabezadoform" name="idreceta" value="{{recetapk.id_receta}}">Información de la
+                                receta</h4>
+                            <!--Número y fecha receta-->
+                            <div class="info-receta2">
+                                <div class="subtitulo-receta2">
+                                    <h4 name="idreceta" value="{{recetapk.id_receta}}">Número de receta:
+                                        {{recetapk.id_receta}} </h4>
+                                </div>
+                                <div class="subtitulo-receta2">
+                                    <h4 name="idreceta" value="{{recetapk.fecha_receta}}">Fecha emisión:
+                                        {{recetapk.fecha_receta}}</h4>
+                                </div>
+                            </div>
+
+                            <div class="area-receta2">
+                                <form method="GET">
+                                    {% csrf_token %}
+                                    <!--Buscar fármaco -->
+                                    <div class="contenedor-inputs-r2">
+                                        <input class="ancho-48 campo-buscar" type="search" name="q"
+                                            value="{{ request.GET.q }}" required placeholder="Buscar nombre fármaco " />
+                                        <button class="b-buscar" type="submit" name="submit" value="Search">
+                                            <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
+                                        </button>
+                                    </div>
+                                    <!-- Tabla resultado busqueda -->
+                                    <div class="ancho-100 tabla-receta2" id="main-container">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre medicamento</th>
+                                                    <th>Tipo</th>
+                                                    <th>Laboratorio</th>
+                                                    <!--<th>Stock</th>-->
+                                                    <th>Agregar</th>
+                                                </tr>
+                                            </thead>
+                                            {% if remedios%}
+                                            {% for n in remedios%}
+                                            <tr class="listar" id="{{n.codigo}}">
+                                                <td>{{n.nombre_medicamento}}</td>
+                                                <td>{{n.id_tipo_med.nombre_tipo_med}}</td>
+                                                <td>{{n.fabricante}}</td>
+                                                <!--<td>{{n.stock}}</td>-->
+                                                <td>
+                                                    <button class="btn-x" type="button" id="add">
+                                                        <i class="fa fa-plus fa-lg"> </i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            {%endif%}
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Espacio detalle receta-->
+                    <form method="POST" class="form-receta2">
+                        {% csrf_token %}
+                        <!--Código-->
+                        <div class="contenedor-inputs-r2">
+                            <input class="input-48" id="medicamentoadd" name="medicamentoadd"
+                                placeholder="Código medicamento" readonly>
+
+                            <!--Tipo tratamiento-->
+                            <select class="input-48" required name="tipo_tratamiento" required>
+                                <option value="" selected> Tipo de tratamiento</option>
+                                {% if tratamiento%}
+                                {% for i in tratamiento%}
+                                <option value="{{i.id_tipo_tratamiento}}">{{i.tipo_tratamiento}}
+                                </option>
+                                {% endfor %}
+                                {%endif%}
+                            </select>
+                            <!--Duración-->
+                            <input class="input-30" type="number" id="duracion" name="duracion" min="1"
+                                pattern="^[0-9]+" placeholder="Duración tratamiento" required />
+                            <select class="input-15" name="medida_tiempo" id="medida_tiempo">
+                                {% for tiempo in medidaTiempo %}
+                                <option value="{{ tiempo.id_medida_t }}" required>
+                                    {{ tiempo.nombre_med_tiempo }}</option>
+                                {% endfor %}
+                            </select>
+                            <!-- Dosis diaria-->
+                            <input class="input-48" type="number" id="dosis" name="dosis" min="1" pattern="^[0-9]+"
+                                placeholder="Dosis diaria" required />
+                            <!-- Posología-->
+                            <textarea class="texto-area" name="posologia" type="text" placeholder="Posología"
+                                maxlength="250" required></textarea>
+                            <div class="boton">
+                                <button class="b-agregar-r2" formmethod="POST">
+                                    <h4>AGREGAR <i class="fa fa-plus-circle fa-lg"></i></h4>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Mensajes al agregar medicamentos-->
+
+                    <div class="row center-xs mensajes">
+                        {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    <!-- Detalle medicamentos agregados-->
+
+                    <div class="detalle-receta">
+                        <thead class="tr-detalle">
+                            <tr>
+                                <hr class="hr-receta">
+                                <h4 class="subtitulo-detalle">Medicamentos prescritos:</h4>
+                                <hr class="hr-receta">
+                            </tr>
+                        </thead>
+                        {%if detallereceta%}
+                        {%for j in detallereceta%}
+                        <tr id="{{j.codigo}}">
+                            <li class="listar-agregados">
+                                <p><b>{{j.codigo.nombre_medicamento}}</b>
+                                    en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
+                                    unidades/dosis por {{j.duracion_tratamiento}} días - {{j.posologia}}
+                                    <p>
+                            </li>
+                        </tr>
+                        {%endfor%}
+                        {%endif%}
+                    </div>
+                    <div class="botones botones-r2">
+                        <!--
+                            <button class="btn b-guardar">
+                            <h4>Guardar <i class="fa fa-save fa-lg"></i></h4>
                         </button>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                    {%endif%}
-                  </table>
+                        -->
+                        <button class="btn b-receta">
+                            <a href="{% url 'ver-receta' recetapk.id_receta %}" target="popup"
+                                onClick="window.open(this.href, this.target, 'toolbar=no , location=no ,scrollbars=yes, status=no , menubar=no , resizable=1 ,left=250pt,width=740px,height=760'); return false;">
+                                <h4>VER RECETA <i class="fas fa-file-prescription fa-lg"></i></h4>
+                            </a>
+                        </button>
+
+                        <button class="btn b-terminar">
+                            <a href="{% url 'home_medico' %}">
+                                <h4>TERMINAR <i class="fas fa-sign-out-alt fa-lg"></i></h4>
+                            </a>
+                        </button>
+                    </div>
                 </div>
-
-              </form>
             </div>
-          </div>
-          <div class="row">
-            <!--Espacio detalle receta-->
-            <div class="col-xs-12 col-md-12 col-lg-5 start-lg">
+        </section>
+    </div>
 
-              <div class="container">
-                <form class="area-receta2 formulario-receta2 " method="POST">
-                  {% csrf_token %}
-                  <div class="receta2">
-                    <label>Código medicamento:</label>
-                    <input class="input-30" id="medicamentoadd" name="medicamentoadd">
-                  </div>
-                  <div class="receta2">
-                    <label>Tipo de tratamiento:</label>
-                    <select class="input-30" required name="tipo_tratamiento">
-                      {% if tratamiento%}
-                      {% for i in tratamiento%}
-                      <option value="{{i.id_tipo_tratamiento}}">{{i.tipo_tratamiento}}</option>
-                      {% endfor %}
-                      {%endif%}
-                    </select>
-                  </div>
-                  <div class="receta2">
-                    <span class="nombre-campo"> Duración: </span>
-                    <input class="input-30" type="number" id="duracion" name="duracion" min="1" pattern="^[0-9]+" />
-                    <select class="input-30" name="medida_tiempo" id="medida_tiempo">
-                      {% for tiempo in medidaTiempo %}
-                      <option value="{{ tiempo.id_medida_t }}">{{ tiempo.nombre_med_tiempo }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                  <div class="receta2">
-                    <span class="nombre-campo"> Dosis diaria: </span>
-                    <input class="input-30" type="number" id="dosis" name="dosis" min="1" pattern="^[0-9]+" />
-                  </div>
-                  <div class="receta2">
-                    <span class="nombre-campo"> Posología </span>
-                    <h4>
-                      <textarea class="texto-area" name="posologia" type="text"></textarea>
-                    </h4>
-                  </div>
-                  <div class="receta2">
-                    <span class="nombre-campo"> Detalle prescripción </span>
-                    <h4>
-                      <textarea class="texto-area" name="detalle" type="text"></textarea>
-                    </h4>
-                  </div>
-                  <div class="botones">
-                    <button class="btn b-guardar" formmethod="POST">
-                      <h4>AGREGAR <i class="fa fa-save fa-lg"></i></h4>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <!--Espacio buscar receta-->
-            <div class="col-xs-12 col-md-12 col-lg-5 start-lg">
-              <div class="row center-xs mensajes">
-                {% if messages %}
-                <ul>
-                  {% for message in messages %}
-                  <li class="{{ message.tags }}">{{ message }}</li>
-                  {% endfor %}
-                </ul>
-                {% endif %}
-              </div>
-              <!--Listview medicamentos agregados-->
-              <div class="prueba">
-                <div class="ancho-100" id="main-container">
-                  <!--PRUEBA PARA LA TABLA -->
-                  <div class="tabla-prueba">
-                    <thead>
-                      <tr>
-                        <h3>Medicamentos prescritos:</h3>
-                      </tr>
-                    </thead>
-                    {%if detallereceta%}
-                    {%for j in detallereceta%}
-                    <tr class="listarAgregados" id="{{j.codigo}}">
-                      <li>
-                        <h4><b>{{j.codigo.nombre_medicamento}}</b> en {{j.codigo.id_tipo_med.nombre_tipo_med}}:
-                          {{j.dosis_diaria}}
-                          unidades/dosis por {{j.duracion_tratamiento}} días</h4>
-                      </li>
-                    </tr>
-                    {%endfor%}
-                    {%endif%}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+    <script>
+        $(document).ready(function () {
 
-  <script>
-    $(document).ready(function () {
-
-      $(".listar").click(function () {
-        //alert("fue presionado");
+            $(".listar").click(function () {
+                //alert("fue presionado");
 
 
-        var id_receta = $(this).attr('id');
-        alert("Código medicamento: " + id_receta)
-        $("#medicamentoadd").val(id_receta);
-      });
-    });
-  </script>
-
+                var id_receta = $(this).attr('id');
+                alert("Código medicamento: " + id_receta)
+                $("#medicamentoadd").val(id_receta);
+            });
+        });
+    </script>
 </body>
+
 </html>
 
 
