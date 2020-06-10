@@ -158,6 +158,7 @@ class EntregaMedicamento(models.Model):
     codigo = models.ForeignKey(DetalleReceta, models.DO_NOTHING, db_column='codigo', related_name='+')
     id_receta = models.ForeignKey(DetalleReceta, models.DO_NOTHING, db_column='id_receta', related_name='+')
     rut_col_farmacia = models.ForeignKey(ColaboradorFarmacia, models.DO_NOTHING, db_column='rut_col_farmacia')
+    id_tipo_entrega = models.ForeignKey(TipoEntrega, models.DO_NOTHING, db_column='id_tipo_entrega')
 
     class Meta:
         managed = False
@@ -293,6 +294,13 @@ class TipoComponente(models.Model):
         managed = False
         db_table = 'tipo_componente'
 
+class TipoEntrega(models.Model):
+    id_tipo_entrega = models.BigIntegerField(primary_key=True)
+    nombre_tipo_entrega = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'tipo_entrega'
 
 class TipoEmpleado(models.Model):
     id_tipo_empleado = models.BigIntegerField(primary_key=True)
@@ -302,7 +310,6 @@ class TipoEmpleado(models.Model):
         managed = False
         db_table = 'tipo_empleado'
 
-
 class TipoInforme(models.Model):
     id_tipo_inf = models.BigIntegerField(primary_key=True)
     nombre_tipo_inf = models.CharField(max_length=50)
@@ -310,7 +317,6 @@ class TipoInforme(models.Model):
     class Meta:
         managed = False
         db_table = 'tipo_informe'
-
 
 class TipoMedicamento(models.Model):
     id_tipo_med = models.BigIntegerField(primary_key=True)
