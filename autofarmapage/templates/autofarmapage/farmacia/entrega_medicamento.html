@@ -273,11 +273,11 @@
             <div class="col-xs-6 center-xs">
                 <form action="#" method="POST">
                     {% csrf_token %}
-                    <input type="hidden" name="codigo_medicamento_3" 
+                    <input type="hidden" name="codigo_medicamento_particular" 
                         value="{{ detalle.CODIGO_MED }}">
                     <!--<input type="hidden" name="id_receta" id="id_receta"
                         value="{{ receta.id_receta }}">-->
-                    <button class="btn" type="submit" name="boton" value="3">Adquirir Particular</button>
+                    <button class="btn" type="submit" name="boton_particular" value="3">Adquirir Particular</button>
                 </form>
             </div>
         </div>

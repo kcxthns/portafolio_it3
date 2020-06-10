@@ -659,20 +659,27 @@ def entregaMedicamento(request, id_receta):
             opcForm = 2
             codMed = request.POST['codigo_medicamento_2_1']
             cantidadReserva = int(request.POST['cantidad_reserva_2_1'])
+            tipoEntrega = 1
         if 'boton_reserva_2' in request.POST:
             opcForm = 2
             codMed = request.POST['codigo_medicamento_2_2']
             cantidadReserva = int(request.POST['cantidad_reserva_2_2'])
+            tipoEntrega = 1
         if 'boton_entrega_1' in request.POST:
             opcForm = 1
             codMed = request.POST['codigo_medicamento_1_1']
             cantidadEntrega = int(request.POST['cantidad_entrega_1_1'])
+            tipoEntrega = 1
         if 'boton_entrega_2' in request.POST:
             opcForm = 1
             codMed = request.POST['codigo_medicamento_1_2']
+            tipoEntrega = 1
             cantidadEntrega = int(request.POST['cantidad_entrega_1_2'])
-        print(opcForm)
-        print(codMed)
+        if 'boton_particular' in request.POST:
+            opcForm = 3
+            codMed = request.POST['codigo_medicamento_particular']
+            cantidadEntrega = 0
+            tipoEntrega = 2
         if opcForm == 1:
             #cantidadEntrega = request.POST['cantidad_entrega_1']
             bd = ConexionBD()
@@ -680,7 +687,7 @@ def entregaMedicamento(request, id_receta):
             cursor = con.cursor()
             #existeStock = cursor.var(bool)
             existeStock = cursor.callfunc('pkg_farmacia.fn_stock_suficiente', bool, [codMed, request.user.rut.id_centro.id_centro, cantidadEntrega])
-            print(existeStock)
+            #print(existeStock)
             if existeStock:
                 resultado = cursor.var(int)
                 cursor.callproc('pkg_farmacia.sp_entregar_medicamento', [cantidadEntrega, codMed, id_receta, request.user.rut.rut, resultado])
@@ -703,6 +710,15 @@ def entregaMedicamento(request, id_receta):
                 return redirect('resultado-entrega', id_receta=id_receta, codigo_med=codMed, cantidad=0, numMensaje=4)
             if resultado.getvalue() == 0:
                 return redirect('resultado-entrega', id_receta = id_receta, codigo_med=0, cantidad=0, numMensaje=0)
+        #Adquisición Particular
+        if opcForm == 3:
+            bd = ConexionBD()
+            con = bd.conectar()
+            cursor = con.cursor()
+            resultado = cursor.var(int)
+            cursor.callproc('pkg_farmacia.sp_entregar_medicamento', [cantidadEntrega, codMed, id_receta, request.user.rut.rut, tipoEntrega, resultado])
+            if resultado.getvalue() == 1:
+                return redirect('resultado-entrega', id_receta = id_receta, codigo_med=codMed, cantidad=0, numMensaje=6)
     return render(request, 'autofarmapage/farmacia/entrega_medicamento.html', datos)
 
 def entregaResultado(request, id_receta, codigo_med, cantidad, numMensaje):
@@ -752,6 +768,15 @@ def entregaResultado(request, id_receta, codigo_med, cantidad, numMensaje):
             'cantidad' : cantidad,
             'medicamento' : medicamento,
             'id_receta' : id_receta,
+        }
+    elif numMensaje == 6:
+        medicamento = Medicamento.objects.get(codigo=codigo_med)
+        mensaje = 'El Medicamento ' + medicamento.nombre_medicamento + ' ha sido marcado para Adquirir Particularmente.'
+        datos = {
+            'numero_mensaje': numMensaje,
+            'mensaje': mensaje,
+            'medicamento': medicamento,
+            'id_receta': id_receta
         }
     return render(request, 'autofarmapage/farmacia/entrega_resultado.html', datos)
 

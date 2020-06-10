@@ -113,5 +113,11 @@
         <a href="{% url 'reservas-listar' %}">Volver</a>
     </button>
 </div>
+{% elif numero_mensaje == 6 %}
+<div class="col-xs-12">
+    <div class="center-xs">
+        <p>{{ mensaje }}</p>
+    </div>
+</div>
 {% endif %}
 {% endblock %}
