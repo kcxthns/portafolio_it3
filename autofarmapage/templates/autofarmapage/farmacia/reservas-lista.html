@@ -5,6 +5,22 @@
 Farmacia - Reservas Medicamentos
 {% endblock %}
 
+{% block busqueda_reserva %}
+<!--BUSCAR RESERVA POR RUT DEL PACIENTE-->
+<div>
+    <br>
+    <form method="GET">
+        {% csrf_token %}
+        <input class="ancho-30" type="search" value="{{ request.GET.q }}"
+            name="q" required placeholder="RUT Paciente" maxlength="12"
+            oninput="checkRut(this)" onkeypress="return isNumber(event)">
+        <button class="b-buscar" name="submit" type="submit" value="Search">
+            <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;" ></i>
+        </button>
+    </form>
+</div>
+{% endblock %}
+
 {% block reservas_lista %}
 <div>
     <table>

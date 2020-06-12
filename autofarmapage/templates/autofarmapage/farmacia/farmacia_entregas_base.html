@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}" />
     <!--Enlace iconos-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
     <!--  Enlace a fuentes-->
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet" />
@@ -85,7 +86,11 @@
             <!--FIN Menú lateral-->
             <div class="col-xs-12 col-md-10 col-lg-10 center-xs">
                 <!-- CONTENIDO de cada HTML -->
+                <!--Búsqueda de recetas pendientes-->
                 {% block busqueda %}
+                {% endblock %}
+                <!--Búsqueda de medicamentos reservados-->
+                {% block busqueda_reserva %}
                 {% endblock %}
                 <div class="row">
                     <!--ENCABEZADO ENTREGA MEDICAMENTOS-->

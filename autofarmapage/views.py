@@ -26,17 +26,30 @@ from rest_framework import generics
 
 # Create your views here.
 
+#CREA UN DICCIONARIO A PARTIR DEL RESULTADO DE UNA CONSULTA SQL
+def fabricaDiccionario(cursor):
+        columnNames = [d[0] for d in cursor.description]
+        def createRow(*args):
+            return dict(zip(columnNames, args))
+        return createRow
+#DEVUELVE EL RUT SIN PUNTOS, GUION NI DIGITO VERIFICADOR
+def soloCuerpoRut(rut):
+    rutFormateado = rut.replace('-', '')
+    rutFormateado = rutFormateado.replace('.','')
+    rutFormateado = rutFormateado[0 : len(rutFormateado) - 1]
+    return rutFormateado
+
+def soloDigitoVerificador(rut):
+    dv = rut[-1]
+    return dv
 # Vista del login
 def index(request):
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
         # datos para autenticar al usuario
         username = request.POST['rut']
-        username = username.replace('.', '')
-        username = username.replace('-', '')
-        dv = username[-1]
-        username = username[0 : len(username) - 1]
-        print(dv)
+        dv = soloDigitoVerificador(username)
+        username = soloCuerpoRut(username)
         password = request.POST['password']
         # se autentica el usuario
         user = authenticate(username=username, password=password)
@@ -79,10 +92,8 @@ def agregarusuario(request):
         rut = request.POST['rut']
         #dv = request.POST['dv']
         #Formatea el RUT quitando puntos, guión y digito verificador
-        rut = rut.replace('.', '')
-        rut = rut.replace('-', '')
-        dv = rut[-1]
-        rut = rut[0 : len(rut) - 1]
+        dv = soloDigitoVerificador(rut)
+        rut = soloCuerpoRut(rut)
         nombres = request.POST['nombres']
         app_paterno = request.POST['apellido_paterno']
         app_materno = request.POST['apellido_materno']
@@ -101,7 +112,6 @@ def agregarusuario(request):
         # Llamado al procedimiento almacenado para crear persona (no crea usuario)
         cursor.callproc('pkg_crear_usuario.sp_crear_persona', [
                         rut, dv, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, rut_tutor, realizado])
-
         if int(realizado.getvalue()) == 1:
             #Crea el usuario
             usuario = Usuario.objects.create_user(rut, id_tipo_empleado)
@@ -497,7 +507,48 @@ def inicioEntregas(request):
 
 def entregasPendientes(request):
     centroSalud = request.user.rut.id_centro.id_centro
-    print(centroSalud)
+    if request.method == 'GET':
+        criterioSearch = request.GET.get('q')
+        if criterioSearch is not None:
+            rutSearch = soloCuerpoRut(criterioSearch)
+            query = (
+            "SELECT * FROM "
+            "(SELECT rec.id_receta AS id, " 
+            "rec.fecha_receta AS fecha, " 
+            "(SELECT rut||'-'||dv FROM persona pers WHERE pers.rut = rec.rut_medico) AS rut_medico, "
+            "(SELECT nombres||' '||apellido_paterno FROM persona pers WHERE pers.rut = rec.rut_medico) AS nombre_medico, "
+            "(SELECT rut||'-'||dv FROM persona pers WHERE pers.rut = rec.rut_paciente) AS rut_paciente, "
+            "(SELECT nombres||' '||apellido_paterno FROM persona pers WHERE pers.rut = rec.rut_paciente) AS nombre_paciente "
+            "FROM receta rec INNER JOIN detalle_receta det_rec ON rec.id_receta = det_rec.id_receta "
+            "INNER JOIN entrega_medicamento entr_medi ON rec.id_receta = entr_medi.id_receta "
+            "INNER JOIN persona pers on rec.rut_paciente = pers.rut "
+            "WHERE det_rec.id_tipo_tratamiento = 1 AND pers.id_centro = :centroSalud "
+            "AND pers.rut = :rutSearch "
+            "UNION "
+            "SELECT rec.id_receta, " 
+            "rec.fecha_receta, "
+            "(SELECT rut||'-'||dv FROM persona pers WHERE pers.rut = rec.rut_medico), "
+            "(SELECT nombres||' '||apellido_paterno FROM persona pers WHERE pers.rut = rec.rut_medico), "
+            "(SELECT rut||'-'||dv FROM persona pers WHERE pers.rut = rec.rut_paciente), "
+            "(SELECT nombres||' '||apellido_paterno FROM persona pers WHERE pers.rut = rec.rut_paciente) "
+            "FROM receta rec INNER JOIN detalle_receta det_rec ON rec.id_receta = det_rec.id_receta "
+            "LEFT JOIN entrega_medicamento entr_medi ON rec.id_receta = entr_medi.id_receta "
+            "INNER JOIN persona pers on rec.rut_paciente = pers.rut "
+            "WHERE pers.id_centro = :centroSalud "
+            "AND pers.rut = :rutSearch "
+            "AND entr_medi.id_receta IS NULL) "
+            "ORDER BY fecha DESC " 
+            )
+            bd = ConexionBD()
+            con = bd.conectar()
+            cursor = con.cursor()
+            cursor.execute(query, [centroSalud, rutSearch])
+            cursor.rowfactory = fabricaDiccionario(cursor)
+            filas = cursor.fetchall()
+            datos = {
+                'recetasPendientes' : filas,
+            }
+            return render(request, 'autofarmapage/farmacia/entregas_pendientes.html', datos)
     bd = ConexionBD()
     con = bd.conectar()
     cursor = con.cursor()
@@ -527,18 +578,11 @@ def entregasPendientes(request):
             "ORDER BY fecha DESC "  
             )
     cursor.execute(query, [centroSalud])
-    def fabricaDiccionario(cursor):
-        columnNames = [d[0] for d in cursor.description]
-        def createRow(*args):
-            return dict(zip(columnNames, args))
-        return createRow
     cursor.rowfactory = fabricaDiccionario(cursor)
     filas = cursor.fetchall()
     datos = {
         'recetasPendientes' : filas,
     }
-    #for row in cursor.execute(query):
-        #print(row)
     return render(request, 'autofarmapage/farmacia/entregas_pendientes.html', datos)
 
 def entregaMedicamento(request, id_receta):
@@ -549,7 +593,6 @@ def entregaMedicamento(request, id_receta):
     con = bd.conectar()
     cursor = con.cursor()
     medicPermanente = cursor.callfunc("pkg_farmacia.fn_permanente_entrega", int, [id_receta])
-    #print(medicPermanente)
     if medicPermanente == 1:
         bd = ConexionBD()
         con = bd.conectar()
@@ -584,11 +627,6 @@ def entregaMedicamento(request, id_receta):
                 "NVL(st.stock, 0) - NVL(cadu.cantidad, 0) "
                 "ORDER BY MAX(entr.fecha_entrega)")
         cursor.execute(query, [id_receta])
-        def fabricaDiccionario(cursor):
-            columnNames = [d[0] for d in cursor.description]
-            def createRow(*args):
-                return dict(zip(columnNames, args))
-            return createRow
         cursor.rowfactory = fabricaDiccionario(cursor)
         recetaDetalle = cursor.fetchall()  
         permanenteEntregadoAnterior = True
@@ -641,11 +679,6 @@ def entregaMedicamento(request, id_receta):
             "ORDER BY detalle.codigo ASC"
         )
         cursor.execute(query, [id_receta])
-        def fabricaDiccionario(cursor):
-            columnNames = [d[0] for d in cursor.description]
-            def createRow(*args):
-                return dict(zip(columnNames, args))
-            return createRow
         cursor.rowfactory = fabricaDiccionario(cursor)
         recetaDetalle = cursor.fetchall()
         permanenteEntregadoAnterior = False
@@ -781,6 +814,26 @@ def entregaResultado(request, id_receta, codigo_med, cantidad, numMensaje):
     return render(request, 'autofarmapage/farmacia/entrega_resultado.html', datos)
 
 def reservaLista(request):
+    if request.method == 'GET':
+        criterioSearch = request.GET.get('q')
+        if criterioSearch is not None:
+            rutSearch = soloCuerpoRut(criterioSearch)
+            query = (
+                "SELECT reserva.fecha_reserva, "
+                "pers.rut, "
+                "pers.nombres ||' '|| pers.apellido_paterno ||' '|| pers.apellido_materno as NOMBRE_PACIENTE, "
+                "med.nombre_medicamento, "
+                "reserva.stock_disponible, "
+                "(CASE WHEN reserva.stock_disponible = 1 THEN 'Sí' ELSE 'No' END) AS LISTO_ENTREGAR, "
+                "reserva.id_reserva "
+                "FROM reserva_medicamento reserva "
+                "INNER JOIN receta rec ON reserva.id_receta = rec.id_receta "
+                "INNER JOIN persona pers ON rec.rut_paciente = pers.rut "
+                "INNER JOIN medicamento med ON reserva.codigo = med.codigo "
+                "WHERE entregado = 0 "
+                "AND pers.rut = :rutSearch "
+                "ORDER BY reserva.fecha_reserva"
+            )
     bd = ConexionBD()
     con = bd.conectar()
     cursor = con.cursor()
@@ -795,14 +848,10 @@ def reservaLista(request):
             "INNER JOIN receta rec ON reserva.id_receta = rec.id_receta "
             "INNER JOIN persona pers ON rec.rut_paciente = pers.rut "
             "INNER JOIN medicamento med ON reserva.codigo = med.codigo "
-            "WHERE entregado = 0"
+            "WHERE entregado = 0 "
+            "ORDER BY reserva.fecha_reserva"
     )
     cursor.execute(query)
-    def fabricaDiccionario(cursor):
-        columnNames = [d[0] for d in cursor.description]
-        def createRow(*args):
-            return dict(zip(columnNames, args))
-        return createRow
     cursor.rowfactory = fabricaDiccionario(cursor)
     reservas = cursor.fetchall()
     datos = {
@@ -835,11 +884,6 @@ def reservaDetalle(request, id_reserva):
     con = bd.conectar()
     cursor = con.cursor()
     cursor.execute(query, [id_reserva])
-    def fabricaDiccionario(cursor):
-        columnNames = [d[0] for d in cursor.description]
-        def createRow(*args):
-            return dict(zip(columnNames, args))
-        return createRow
     cursor.rowfactory = fabricaDiccionario(cursor)
     reserva = cursor.fetchall()
     datos ={
@@ -855,12 +899,12 @@ def reservaDetalle(request, id_reserva):
         cursor = con.cursor()
         resultado = cursor.var(int)
         cursor.callproc('pkg_farmacia.sp_entregar_medicamento_reserva', [spIdReserva, request.user.rut.rut, resultado])
-        print(resultado.getvalue())
         if resultado.getvalue() == 1:
             return redirect('resultado-entrega', id_receta = id_receta, codigo_med=codigo_med, cantidad=cantidad, numMensaje=5)
         else:
             return redirect('resultado-entrega', id_receta = spIdReserva, codigo_med=0, cantidad=0, numMensaje=0)
     return render(request, 'autofarmapage/farmacia/reservas-detalle.html', datos)
+
 #################
 # VISTAS MÉDICO #
 #################
