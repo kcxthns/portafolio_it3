@@ -10,29 +10,33 @@
     <header>
         <hr>
         <h2 align="center">INFORME STOCK MEDICAMENTOS</h2>
+        {%if data1.informe_stock %}
+        {% for datos in data1.informe_stock %}
         <br>
-        <h3>Centro de salud: adfasdfas</h3>
+        <h3>Centro de salud: {{ datos.CENTRO_SALUD}}</h3>
     
-        <h3>aqui va la region</h3>
+        <h3>{{ datos.COMUNA}}</h3>
+        <h3>Fecha Emisión: {{ now }}</h3>
         <hr>
         <br>
     </header>
 
     <div>
-        <h4>Nombre médicamento: asdfasdf</h4> 
+        <h4>Nombre médicamento: {{ datos.NOMBRE_MEDICAMENTO}}</h4> 
         <br>
-        <h4>Fabricante: </h4>
+        <h4>Fabricante: {{ datos.FABRICANTE}}</h4>
         <br>
-        <h4>Presentación: </h4> 
+        <h4>Presentación: {{ datos.NOMBRE_TIPO_MED}}</h4> 
         <br>
-        <h4>Stock: </h4> 
+        <h4>Stock: {{datos.STOCK}} </h4> 
         <br>
-        <h4>Médicamentos caducados: </h4>
+        <h4>Médicamentos caducados: {{ datos.CANT_CADUCADOS}}</h4>
         <br>
-        <h4>Total disponibles: </h4>
+        <h4>Total disponibles: {{ datos.TOTAL_DISPONIBLE}}</h4>
         <br>
         <hr>
     </div>
-    
+    {%endfor%}
+    {% endif%}
 </body>
 </html>

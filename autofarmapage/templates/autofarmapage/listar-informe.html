@@ -75,7 +75,20 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                 </div>
+                
             
                 <!-- seccion lista informes-->
 
@@ -110,33 +123,43 @@
 
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                <form id="formulario-card-informe" method="POST"
-                                    action="#" class="formularioCardInforme">
-                                    {% if informe %}
-                                    {% for i in informe%}
-                                    <div class="backgroundCard">
-                                        <div class="row">
-                                            <div class="col-xs-6 col-md-6 col-lg-6 start-xs">
-                                                <h5>NOMBRE INFORME:</h5>
-                                                <input class="inputCard"
-                                                    type="text" name="name"
-                                                    required
-                                                    placeholder="Nombre">
-                                            </div>
+                               
+                                
+                    
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre medicamento</th>
+                                                <th>Total disponibles</th>
+                                                <th>Centro de salud</th>
+                                                <th>Ver pdf</th>
+                                                <th>Descargar</th>
+                                            </tr>
+                                        </thead>
+                                        {% if informe_stock %}
+                                        {% for i in informe_stock %}
+                                        <tr>
+                                            <td>{{ i.NOMBRE_MEDICAMENTO }}</td>
+                                            <td>{{ i.TOTAL_DISPONIBLE }} </td>
+                                            <td>{{ i.COMUNA }}</td>
+                                            <td>
+                                                <button class="btn-x" type="button">
+                                                   <a href="{% url 'pdf_stock' i.NOMBRE_MEDICAMENTO %}" target="_blank">ABRIR</a>
+                                                </button>
+                                            </td>
 
-                                            <div class="col-xs-6 col-md-6
-                                                col-lg-6 end-xs">
-                                                <button class="buttonVer">VER
-                                                    INFORME</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor%}
-                                    {%else%}
-                                    <h2>No existen datos :(</h2>
-                                    {%endif%}
-                                </form>
-                            </div>
+                                            <td>
+                                                <button class="btn-x" type="button">
+                                                   <a href="{% url 'pdf_download' i.NOMBRE_MEDICAMENTO %}" target="_blank">DESCARGAR</a>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </table>
+                              
+                            
+        
                         </div>
                     </div>
                 </div>

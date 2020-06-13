@@ -192,14 +192,7 @@ def listarusuario(request):
     }
     return render(request, 'autofarmapage/listar-usuario.html', data5)
 
-#Vista de la Lista de Informes
-def listarinforme(request):
-    #Obtiene todos los informes
-    informe = RegistroInformes.objects.all()
-    datainfo = {
-        'informe': informe
-    }
-    return render(request, 'autofarmapage/listar-informe.html', datainfo)
+
 
 #Vista de Modificar Usuario Exitosamente (Administrador)
 def modificarUsuarioExito(request):
@@ -1173,6 +1166,13 @@ class ApiUsuario(generics.ListAPIView):
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('rut',)
 
+#vista informe stock
+def render_informestock_html(request):
+    centroSalud = request.user.rut.id_centro.id_centro
+    dataInforme = listar_informe_stock(centroSalud)
+    
+    return render(request, 'autofarmapage/formatoInforme.html', dataInforme)     
+
 # VISTA PDF INFORME STOCK
 def renderizar_pdf(template_src, datos_informe={}):
     template = get_template(template_src)
@@ -1183,30 +1183,41 @@ def renderizar_pdf(template_src, datos_informe={}):
         return HttpResponse(result.getvalue(), content_type='aplication/pdf')
     return None
 
-#class ViewPDF(View):
-#    def get(self, request, id_centro):
-#
-def data_informe_stock(id_centro):
-    query=(
-        "SELECT me.nombre_medicamento, "
-        "me.fabricante, "
-        "tm.nombre_tipo_med, "
-        "st.stock, "
-        "ca.cantidad AS CANT_CADUCADOS"
-        "st.stock - ca.cantidad AS TOTAL_DISPONIBLE"
-        "(SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD"
-        "(SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA"
-        "FROM stock_medicamento st"
-        "JOIN medicamento me ON st.codigo = me.codigo"
-        "JOIN caducado ca ON ca.codigo = me.codigo"
-        "JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med"
-        "WHERE st.id_centro = :id_centro"
-        "ORDER BY TOTAL_DISPONIBLE"
-        )
+class MostrarPDFSTOCK(View):
+    def get(self, request, nombre_medicamento):
+        conexion = ConexionBD()
+        centroSalud = request.user.rut.id_centro.id_centro
+        data1 = stock_informe(centroSalud, nombre_medicamento, conexion)
+        now = datetime.now()
+        data = { 'now': now,
+                 'data1':data1, }
+        pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+class DescargarPDF(View):
+    def get(self, request, nombre_medicamento):
+        conexion = ConexionBD()
+        centroSalud = request.user.rut.id_centro.id_centro
+        data1 = stock_informe(centroSalud, nombre_medicamento, conexion)
+        now = datetime.now()
+        data = { 'now': now,
+                 'data1':data1, }
+        pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
+
+
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Informe_stock_%s.pdf" %("centro_N-" + str(centroSalud))
+        content = "attachment; filename='%s'" %(filename)
+        response['Content-Disposition'] = content
+        return response
+    
+def listar_informe_stock(id_centro):
     bd = ConexionBD()
     con = bd.conectar()
     cursor = con.cursor()
-    cursor.execute(query, [id_centro])
+    cursor.prepare("SELECT me.nombre_medicamento,  me.fabricante, tm.nombre_tipo_med, st.stock, ca.cantidad AS CANT_CADUCADOS, st.stock - ca.cantidad AS TOTAL_DISPONIBLE, (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo JOIN caducado ca ON ca.codigo = me.codigo JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med WHERE st.id_centro = :id_centro")
+    cursor.execute(None, id_centro = id_centro)   
+    #cursor.execute(query, id_centro=301)
     def fabricarDiccionario(cursor):
         columnNames = [d[0] for d in cursor.description]
         def createRow(*args):
@@ -1217,7 +1228,37 @@ def data_informe_stock(id_centro):
     datos ={
             'informe_stock': informe_stock,
         }             
-    return datos       
+    return datos
+
+def stock_informe(id_centro, nombre_medicamento, conexion):
+    con = conexion.conectar()
+    cursor = con.cursor()
+    cursor.prepare("SELECT me.nombre_medicamento,  me.fabricante, tm.nombre_tipo_med, st.stock, ca.cantidad AS CANT_CADUCADOS, st.stock - ca.cantidad AS TOTAL_DISPONIBLE, (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo JOIN caducado ca ON ca.codigo = me.codigo JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med WHERE st.id_centro = :id_centro AND me.nombre_medicamento = :nombre_medicamento")
+    cursor.execute(None, id_centro = id_centro, nombre_medicamento = nombre_medicamento)
+    def fabricarDiccionario(cursor):
+        columnNames = [d[0] for d in cursor.description]
+        def createRow(*args):
+            return dict(zip(columnNames, args))
+        return createRow
+    cursor.rowfactory = fabricarDiccionario(cursor)
+    informe_stock = cursor.fetchall()
+    datos ={
+            'informe_stock': informe_stock,
+        }
+    return datos
+
+#Vista de la Lista de Informes
+def listarinforme(request):
+    #Obtiene todos los informes
+    """informe = RegistroInformes.objects.all()
+    datainfo = {
+        'informe': informe
+    }"""
+    centroSalud = request.user.rut.id_centro.id_centro
+    dataInforme = listar_informe_stock(centroSalud)
+
+    return render(request, 'autofarmapage/listar-informe.html', dataInforme)    
+
 
 # este es la forma con el form de django en el html la vista
 # de html que deben usar es la llamada editarpage
