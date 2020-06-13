@@ -1203,20 +1203,20 @@ def data_informe_stock(id_centro):
         "WHERE st.id_centro = :id_centro"
         "ORDER BY TOTAL_DISPONIBLE"
         )
-        bd = ConexionBD()
-        con = bd.conectar()
-        cursor = con.cursor()
-        cursor.execute(query, [id_centro])
-        def fabricarDiccionario(cursor):
-            columnNames = [d[0] for d in cursor.description]
-            def createRow(*args):
-                return dict(zip(columnNames, args))
-            return createRow
-        cursor.rowfactory = fabricarDiccionario(cursor)
-        informe_stock = cursor.fetchall()
-        datos ={
+    bd = ConexionBD()
+    con = bd.conectar()
+    cursor = con.cursor()
+    cursor.execute(query, [id_centro])
+    def fabricarDiccionario(cursor):
+        columnNames = [d[0] for d in cursor.description]
+        def createRow(*args):
+            return dict(zip(columnNames, args))
+        return createRow
+    cursor.rowfactory = fabricarDiccionario(cursor)
+    informe_stock = cursor.fetchall()
+    datos ={
             'informe_stock': informe_stock,
-        }         
+        }             
     return datos       
 
 # este es la forma con el form de django en el html la vista
