@@ -23,6 +23,9 @@ from rest_framework.generics import ListAPIView
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
+from autofarmapage.serializers import ReservaSerializer
+from django.http import HttpResponse, JsonResponse
+from rest_framework.parsers import JSONParser
 
 # Create your views here.
 
@@ -1210,6 +1213,33 @@ class ApiUsuario(generics.ListAPIView):
     pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('rut',)
+
+def listaReservasMovil(request, rut_paciente):
+    if request.method == 'GET':
+        query = (
+            "SELECT reserva.id_reserva AS ID_RESERVA, "
+            "reserva.codigo AS CODIGO, "
+            "med.nombre_medicamento AS NOMBRE_MEDICAMENTO, "
+            "reserva.cantidad AS CANTIDAD, "
+            "reserva.stock_disponible AS DISPONIBLE_ENTREGA, "
+            "reserva.id_receta AS ID_RECETA, "
+            "reserva.fecha_reserva AS FECHA_RESERVA "
+            "FROM reserva_medicamento reserva "
+            "INNER JOIN detalle_receta detalle ON reserva.id_receta = detalle.id_receta AND reserva.codigo = detalle.codigo "
+            "INNER JOIN medicamento med ON detalle.codigo = med.codigo "
+            "INNER JOIN receta ON detalle.id_receta = receta.id_receta "
+            "INNER JOIN persona ON receta.rut_paciente = persona.rut "
+            "WHERE entregado = 0 AND persona.rut = :rut_paciente"
+        )
+        bd = ConexionBD()
+        con = bd.conectar()
+        cursor = con.cursor()
+        cursor.execute(query, [rut_paciente])
+        cursor.rowfactory = fabricaDiccionario(cursor)
+        reserva = cursor.fetchall()
+        serializer = ReservaSerializer(reserva,many=True)
+        return JsonResponse(serializer.data, safe=False)
+
 
 # este es la forma con el form de django en el html la vista
 # de html que deben usar es la llamada editarpage

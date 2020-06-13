@@ -78,6 +78,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api-token-auth/', obtain_auth_token, name='api-token-auth'),
     path('ListReceta', ApiRecetaListView.as_view(), name='ListReceta'),
-    path('GetPersona', ApiUsuario.as_view(), name='GetPersona')
-
+    path('GetPersona', ApiUsuario.as_view(), name='GetPersona'),
+    path('reservas/<int:rut_paciente>', views.listaReservasMovil)
 ]
