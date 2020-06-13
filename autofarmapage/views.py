@@ -23,6 +23,12 @@ from rest_framework.generics import ListAPIView
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
+#pdf imports
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.views import View
 
 # Create your views here.
 
@@ -1166,6 +1172,52 @@ class ApiUsuario(generics.ListAPIView):
     pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('rut',)
+
+# VISTA PDF INFORME STOCK
+def renderizar_pdf(template_src, datos_informe={}):
+    template = get_template(template_src)
+    html = template.render(datos_informe)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='aplication/pdf')
+    return None
+
+#class ViewPDF(View):
+#    def get(self, request, id_centro):
+#
+def data_informe_stock(id_centro):
+    query=(
+        "SELECT me.nombre_medicamento, "
+        "me.fabricante, "
+        "tm.nombre_tipo_med, "
+        "st.stock, "
+        "ca.cantidad AS CANT_CADUCADOS"
+        "st.stock - ca.cantidad AS TOTAL_DISPONIBLE"
+        "(SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD"
+        "(SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA"
+        "FROM stock_medicamento st"
+        "JOIN medicamento me ON st.codigo = me.codigo"
+        "JOIN caducado ca ON ca.codigo = me.codigo"
+        "JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med"
+        "WHERE st.id_centro = :id_centro"
+        "ORDER BY TOTAL_DISPONIBLE"
+        )
+        bd = ConexionBD()
+        con = bd.conectar()
+        cursor = con.cursor()
+        cursor.execute(query, [id_centro])
+        def fabricarDiccionario(cursor):
+            columnNames = [d[0] for d in cursor.description]
+            def createRow(*args):
+                return dict(zip(columnNames, args))
+            return createRow
+        cursor.rowfactory = fabricarDiccionario(cursor)
+        informe_stock = cursor.fetchall()
+        datos ={
+            'informe_stock': informe_stock,
+        }         
+    return datos       
 
 # este es la forma con el form de django en el html la vista
 # de html que deben usar es la llamada editarpage

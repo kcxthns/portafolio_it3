@@ -80,4 +80,7 @@ urlpatterns = [
     path('ListReceta', ApiRecetaListView.as_view(), name='ListReceta'),
     path('GetPersona', ApiUsuario.as_view(), name='GetPersona')
 
+    #generador pdf
+    #path('pdf_vista/<int:id_centro>', views.ViewPDF.as_view(), name="pdf_vista")
+
 ]
