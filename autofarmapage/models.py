@@ -158,7 +158,7 @@ class EntregaMedicamento(models.Model):
     codigo = models.ForeignKey(DetalleReceta, models.DO_NOTHING, db_column='codigo', related_name='+')
     id_receta = models.ForeignKey(DetalleReceta, models.DO_NOTHING, db_column='id_receta', related_name='+')
     rut_col_farmacia = models.ForeignKey(ColaboradorFarmacia, models.DO_NOTHING, db_column='rut_col_farmacia')
-    id_tipo_entrega = models.ForeignKey(TipoEntrega, models.DO_NOTHING, db_column='id_tipo_entrega')
+    #id_tipo_entrega = models.ForeignKey(TipoEntrega, models.DO_NOTHING, db_column='id_tipo_entrega')
 
     class Meta:
         managed = False
