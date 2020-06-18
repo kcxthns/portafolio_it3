@@ -22,61 +22,307 @@
 </head>
 
 <body>
-    <div class="receta-prescrita">
-        <div class="receta-contenido">
-            <div class="receta-cabecera">
-                <div class="receta-logo1">
-                    <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco" height="40" width="200" />
-                </div>
-                <div class="receta-medico1">
-                    <h4>N° de receta: {{receta.id_receta}}</h4>
-                    <p>{{ user.rut.id_centro.nombre_centro }}</p>
-                    <h4 class="nombre-medico1">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
-                        {{user.rut.apellido_materno}}</h4>
-                    <h4>RUT: {{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}}</h4>
-                </div>
-            </div>
-            <div class="receta-paciente1">
-                <div class="n-paciente1">
-                    <h4><b>Nombre paciente: </b>
-                        {{receta.rut_paciente.nombres}}
-                        {{receta.rut_paciente.apellido_paterno}}
-                        {{receta.rut_paciente.apellido_materno}}
-                    </h4>
-                </div>
-                <div class="r-paciente1">
-                    <h4> <b> RUT paciente: </b> {{receta.rut_paciente.rut}} - {{receta.rut_paciente.dv}} </h4>
-                </div>
-                <br>
-            </div>
-            <div class="receta-detalle1">
-                <hr class="hr-receta">
-                <h4> <b>RECETA MÉDICA</b></h4>
-                <hr class="hr-receta">
-                <div class="receta ancho-100">
-                    {%if detallereceta%}
-                    {%for j in detallereceta%}
-                    <li class="receta-remedios">
-                        <p><b>{{j.codigo.nombre_medicamento}}</b>
-                            en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
-                            unidades/dosis por {{j.duracion_tratamiento}} días
-                            <p>
-                        <p>{{j.posologia}}</p>
-                    </li>
-                    {%endfor%}
-                    {%endif%}
-                </div>
-            </div>
-            <div class="receta-pie">
-                <div class="receta-fecha1">
-                    <h4>Fecha: {{receta.fecha_receta}} </h4>
-                </div>
-                <div class="receta-firma1">
-                    <h4> Firma médico</h4>
+
+    <div id="botones">
+        <button class="btn-receta" id="generarPDF">
+            <h4>Descargar
+                <i class="icon-print fas fa-file-download fa-3x"></i></h4>
+        </button>
+        <button onclick="javascript:window.print()" class="btn-print btn-receta">
+            <h4>Imprimir
+                <i class="icon-print fas fa-print fa-3x"></i></h4>
+        </button>
+    </div>
+
+    <div id="recetaMedica">
+        <div class="print">
+            <div class="receta-prescrita">
+                <div class="receta-contenido">
+                    <div class="receta-cabecera">
+                        <div class="receta-logo1">
+                            <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco" height="40"
+                                width="200" />
+                        </div>
+                        <div class="receta-medico1">
+                            <h4>N° de receta: {{receta.id_receta}}</h4>
+                            <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                            <h4 class="nombre-medico1">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
+                                {{user.rut.apellido_materno}}</h4>
+                            <h4>RUT: {{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}}</h4>
+                        </div>
+                    </div>
+                    <div class="receta-paciente1">
+                        <div class="n-paciente1">
+                            <h4><b>Nombre paciente: </b>
+                                {{receta.rut_paciente.nombres}}
+                                {{receta.rut_paciente.apellido_paterno}}
+                                {{receta.rut_paciente.apellido_materno}}
+                            </h4>
+                        </div>
+                        <div class="r-paciente1">
+                            <h4> <b> RUT paciente: </b> {{receta.rut_paciente.rut}} - {{receta.rut_paciente.dv}} </h4>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="receta-detalle1">
+                        <hr class="hr-receta">
+                        <h4> <b>RECETA MÉDICA</b></h4>
+                        <hr class="hr-receta">
+                        <div class="receta ancho-100">
+                            {%if detallereceta%}
+                            {%for j in detallereceta%}
+                            <li class="receta-remedios">
+                                <p><b>{{j.codigo.nombre_medicamento}}</b>
+                                    en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
+                                    unidades/dosis por {{j.duracion_tratamiento}} días
+                                <p>
+                                <p>{{j.posologia}}</p>
+                            </li>
+                            {%endfor%}
+                            {%endif%}
+                        </div>
+                    </div>
+                    <div class="receta-pie">
+                        <div class="receta-fecha1">
+                            <h4>Fecha: {{receta.fecha_receta}} </h4>
+                        </div>
+                        <div class="receta-firma1">
+                            <h4> Firma médico</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </body>
+
+<!--Librerias externas de Jquery y JSPDF -->
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
+
+<script>
+    var downPdf = document.getElementById("generarPDF");
+
+    downPdf.onclick = function () {
+        var w = document.getElementById("recetaMedica").offsetWidth;
+        var h = document.getElementById("recetaMedica").offsetHeight;
+        html2canvas(document.getElementById("recetaMedica"), {
+            dpi: 300,
+            quality: 1,
+            scale: 2,
+            pixelRatio: 2,
+            onrendered: function (canvas) {
+                var context = canvas.getContext('2d');
+                context.scale(2, 2);
+                context["imageSmoothingEnabled"] = false;
+                context["mozImageSmoothingEnabled"] = false
+                context["oImageSmoothingEnabled"] = false
+                context["webkitImageSmoothingEnabled"] = false
+                context["msImageSmoothingEnabled"] = false
+
+                var pageData = canvas.toDataURL("image/png", 1.0);
+                var pdf = new jsPDF('', 'pt', 'a4');
+                pdf.addImage(pageData, 'PNG', 0, 0, 595.28, 592.28 / canvas.width * canvas.height);
+                pdf.save('RecetaPaciente.pdf');
+            }
+        });
+    };
+</script>
+
+<!--Para enviar a imprimir -->
+<style>
+    @media print {
+        .print {
+            display: block
+        }
+
+        .btn-print {
+            display: none;
+        }
+    }
+
+    .icon-print {
+        vertical-align: middle;
+        font-size: 40px;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+    .btn-receta {
+        cursor: pointer;
+        cursor: hand;
+    }
+
+    #botones {
+        width: 820px;
+        z-index: 10;
+        position: fixed;
+        margin-top: 600px;
+        padding-left: 160px;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    #recetaMedica {
+        z-index: 1;
+    }
+
+    .receta-prescrita {
+        /* display:none;       ----> Con esto no se ve el div en la pag crear-receta2 */
+        width: 800x;
+        min-height: 500px;
+        height: 900px;
+        justify-content: left;
+        text-align: left;
+    }
+
+    .receta-contenido {
+        max-width: 720px;
+        min-width: 600px;
+        margin: auto;
+        height: 100%;
+        background-color: #fff;
+        border: none;
+    }
+
+    .receta-cabecera {
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: -o-flex;
+        display: flex;
+        width: 100%;
+        padding: 5% 0;
+        align-items: center;
+    }
+
+    .receta-logo1 {
+        width: 45%;
+        padding-left: 5%;
+        margin: 10px;
+    }
+
+    .receta-medico1 {
+        width: 55%;
+        padding-left: 10%;
+        margin: 10px;
+    }
+
+    .nombre-medico1 {
+        color: #1290cb;
+        font-weight: normal;
+        font-size: 16px;
+    }
+
+    .receta-paciente1 {
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: -o-flex;
+        display: flex;
+        width: 90%;
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 15px;
+        margin: auto;
+    }
+
+    .n-paciente1 {
+        width: 65%;
+        margin-left: 3%;
+        text-align: left;
+    }
+
+    .r-paciente1 {
+        width: 35%;
+        margin-left: 2%;
+        text-align: left;
+    }
+
+    .receta-detalle1 {
+        width: 86%;
+        color: #666;
+        padding-top: 20px;
+        padding-bottom: 30px;
+        margin: auto;
+        height: 69%;
+    }
+
+    .receta-detalle1 h4 {
+        text-align: center;
+    }
+
+    .receta {
+        padding-top: 20px;
+    }
+
+    .receta-remedios {
+        padding: 3px 0;
+        width: 88%;
+        margin: auto;
+        text-align: left;
+        margin-bottom: 6px;
+        font-size: 15px;
+        font-weight: lighter;
+        color: #000;
+        list-style: none;
+    }
+
+    .receta-pie {
+        width: 86%;
+        margin: auto;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: -o-flex;
+        display: flex;
+    }
+
+    .receta-fecha1 {
+        width: 45%;
+        text-align: center;
+    }
+
+    .receta-firma1 {
+        width: 55%;
+        text-align: center;
+    }
+
+    .receta-firma1 h4 {
+        width: 70%;
+        border-top: 1px solid #000;
+        margin: auto;
+    }
+
+    .btn-receta {
+        border: none;
+        background: #1290cb;
+        height: 70px;
+        width: 160px;
+        color: #ffffff;
+        font-family: "Roboto", sans-serif;
+        font-size: medium;
+        transition: 1s;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    .btn-receta:hover {
+        border: #1290cb 5px solid;
+        background: #f2f5fa;
+        color: #1290cb;
+    }
+
+    .btn-print {
+        align-content: center;
+    }
+
+    .btn-receta {
+        margin: 0 40px;
+    }
+</style>
 
 </html>
