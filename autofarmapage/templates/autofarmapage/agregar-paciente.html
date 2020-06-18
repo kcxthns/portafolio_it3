@@ -14,54 +14,48 @@
   </div>
   <!--Formulario agregar paciente -->
 
-  <form id="formulario-paciente" method="POST" action="#" class="formulario-paciente">
+  <form id="formulario-tutor" method="POST" action="#" class="formulario-tutor">
     {% csrf_token %}
-
     <div class="contenedor-inputs">
       <!-- Nombres  -->
-      <input class="input-100" id="nombres" type="text" name="nombres" required placeholder="Nombres" value="" />
+      <input class="input-100" id="nombres" type="text" name="nombres" maxlength="50" required placeholder="Nombres"
+        value="" />
       <!-- Apellido paterno -->
-      <input class="input-48" id="apellido_paterno" type="text" name="apellido_paterno" required
+      <input class="input-48" id="apellido_paterno" type="text" name="apellido_paterno" maxlength="50" required
         placeholder="Apellido Paterno" />
       <!-- Apellido materno -->
-      <input class="input-48" id="apellido_materno" type="text" name="apellido_materno" required
+      <input class="input-48" id="apellido_materno" type="text" name="apellido_materno" maxlength="50" required
         placeholder="Apellido Materno" />
       <!-- RUT -->
-
-      <div class="input-48-s rut-v">
-        <input class="input-90" 
-          id="rut" 
-          type="text" 
-          name="rut" 
-          required 
-          placeholder="RUT" 
-          maxlength="12" 
-          oninput="checkRut(this)"
-          onkeypress="return isNumber(event)"/>
-        <!--<input class=" input-8" id="dv" type="text" name="dv" required maxlength="1" placeholder="K">-->
-      </div>
+      <input class="input-48" id="rut" type="text" name="rut" required placeholder="RUT" maxlength="12"
+        oninput="checkRut(this)" onkeypress="return isNumber(event)" />
+      <!--<input class=" input-8" id="dv" type="text" name="dv" required maxlength="1" placeholder="K">-->
       <!-- Teléfono -->
-      <input class="input-48" id="telefono" type="tel" pattern="[0-9]{9}" name="telefono" required
-        placeholder="Teléfono celular" />
+      <input class="input-48" id="telefono" type="tel" pattern="[0-9]{9}" maxlength="9" name="telefono" required
+        placeholder="Celular (9 dígitos)" />
       <!-- Email -->
       <input class="input-100" id="correo_electronico" type="email" name="correo_electronico" required
-        placeholder="Correo electrónico" />
+        placeholder="Correo electrónico" maxlength="50" />
       <!-- Dirección -->
-      <input class="input-100" id="direccion" type="text" name="direccion" required placeholder="Dirección" />
+      <input class="input-100" id="direccion" type="text" name="direccion" maxlength="50" required
+        placeholder="Dirección" />
       <!-- Comuna -->
       <select class="input-48" required name="id_comuna" id="id_comuna">
+        <option value="" selected> Seleccione Comuna</option>
         {% for ciudad in ciudades %}
         <option value="{{ ciudad.id_comuna }}">{{ ciudad.nombre_comuna }}</option>
         {% endfor %}
       </select>
       <!-- Región -->
       <select class="input-48" required name="nombre_region" id="nombre_region">
+        <option value="" selected> Seleccione Región</option>
         {% for region in regiones %}
         <option value="{{ region.id_region }}">{{ region.nombre_region }}</option>
         {% endfor %}
       </select>
       <!-- Centro de salud -->
       <select class="input-48" required name="id_centro" id="id_centro">
+        <option value="" selected> Seleccione Centro de Salud </option>
         {% for centro in centro_salud %}
         <option value="{{ centro.id_centro }}">{{ centro.nombre_centro }}</option>
         {% endfor %}
@@ -81,8 +75,8 @@
       <button class="btn b-guardar">
         <h4>Guardar <i class="fa fa-save fa-lg"></i></h4>
       </button>
-      <button class="btn b-cancelar">
-        <h4>Cancelar <i class="fa fa-times fa-lg"></i></h4>
+      <button type="reset" class="btn b-cancelar">
+        <h4>Limpiar<i class="fa fa-eraser fa-lg"></i></h4>
       </button>
     </div>
   </form>
