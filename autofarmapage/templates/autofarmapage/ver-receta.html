@@ -15,15 +15,17 @@
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <!--  Enlace a fuentes-->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet" />
+    <!-- jQuery library -->
+    <script src="js/jquery.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- jsPDF library -->
+    <script src="js/jsPDF/dist/jspdf.min.js"></script>
 
     <title>Receta médica</title>
 </head>
 
 <body>
-
-    <div id="botones">
+    <<<<<<< Updated upstream <div id="botones">
         <button class="btn-receta" id="generarPDF">
             <h4>Descargar
                 <i class="icon-print fas fa-file-download fa-3x"></i></h4>
@@ -32,69 +34,149 @@
             <h4>Imprimir
                 <i class="icon-print fas fa-print fa-3x"></i></h4>
         </button>
-    </div>
-
-    <div id="recetaMedica">
-        <div class="print">
-            <div class="receta-prescrita">
-                <div class="receta-contenido">
-                    <div class="receta-cabecera">
-                        <div class="receta-logo1">
-                            <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco" height="40"
-                                width="200" />
-                        </div>
-                        <div class="receta-medico1">
-                            <h4>N° de receta: {{receta.id_receta}}</h4>
-                            <p>{{ user.rut.id_centro.nombre_centro }}</p>
-                            <h4 class="nombre-medico1">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
-                                {{user.rut.apellido_materno}}</h4>
-                            <h4>RUT: {{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}}</h4>
-                        </div>
-                    </div>
-                    <div class="receta-paciente1">
-                        <div class="n-paciente1">
-                            <h4><b>Nombre paciente: </b>
-                                {{receta.rut_paciente.nombres}}
-                                {{receta.rut_paciente.apellido_paterno}}
-                                {{receta.rut_paciente.apellido_materno}}
-                            </h4>
-                        </div>
-                        <div class="r-paciente1">
-                            <h4> <b> RUT paciente: </b> {{receta.rut_paciente.rut}} - {{receta.rut_paciente.dv}} </h4>
-                        </div>
-                        <br>
-                    </div>
-                    <div class="receta-detalle1">
-                        <hr class="hr-receta">
-                        <h4> <b>RECETA MÉDICA</b></h4>
-                        <hr class="hr-receta">
-                        <div class="receta ancho-100">
-                            {%if detallereceta%}
-                            {%for j in detallereceta%}
-                            <li class="receta-remedios">
-                                <p><b>{{j.codigo.nombre_medicamento}}</b>
-                                    en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
-                                    unidades/dosis por {{j.duracion_tratamiento}} días
-                                <p>
-                                <p>{{j.posologia}}</p>
-                            </li>
-                            {%endfor%}
-                            {%endif%}
-                        </div>
-                    </div>
-                    <div class="receta-pie">
-                        <div class="receta-fecha1">
-                            <h4>Fecha: {{receta.fecha_receta}} </h4>
-                        </div>
-                        <div class="receta-firma1">
-                            <h4> Firma médico</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-    </div>
+        <div id="recetaMedica">
+            <div class="print">
+                <div class="receta-prescrita">
+                    <div class="receta-contenido">
+                        <div class="receta-cabecera">
+                            <div class="receta-logo1">
+                                <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco" height="40"
+                                    width="200" />
+                            </div>
+                            <div class="receta-medico1">
+                                <h4>N° de receta: {{receta.id_receta}}</h4>
+                                <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                                <h4 class="nombre-medico1">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
+                                    {{user.rut.apellido_materno}}</h4>
+                                <h4>RUT: {{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}}</h4>
+                            </div>
+                        </div>
+                        <div class="receta-paciente1">
+                            <div class="n-paciente1">
+                                <h4><b>Nombre paciente: </b>
+                                    {{receta.rut_paciente.nombres}}
+                                    {{receta.rut_paciente.apellido_paterno}}
+                                    {{receta.rut_paciente.apellido_materno}}
+                                </h4>
+                            </div>
+                            <div class="r-paciente1">
+                                <h4> <b> RUT paciente: </b> {{receta.rut_paciente.rut}} - {{receta.rut_paciente.dv}}
+                                </h4>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="receta-detalle1">
+                            <hr class="hr-receta">
+                            <h4> <b>RECETA MÉDICA</b></h4>
+                            <hr class="hr-receta">
+                            <div class="receta ancho-100">
+                                {%if detallereceta%}
+                                {%for j in detallereceta%}
+                                <li class="receta-remedios">
+                                    <p><b>{{j.codigo.nombre_medicamento}}</b>
+                                        en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
+                                        unidades/dosis por {{j.duracion_tratamiento}} días
+                                    <p>
+                                    <p>{{j.posologia}}</p>
+                                </li>
+                                {%endfor%}
+                                {%endif%}
+                            </div>
+                        </div>
+                        <div class="receta-pie">
+                            <div class="receta-fecha1">
+                                <h4>Fecha: {{receta.fecha_receta}} </h4>
+                            </div>
+                            <div class="receta-firma1">
+                                <h4> Firma médico</h4>
+                            </div>
+                        </div>
+                        =======
+                        <div id="content" class="receta-prescrita">
+                            <div class="receta-contenido">
+                                <div class="receta-cabecera">
+                                    <div class="receta-logo1">
+                                        <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco"
+                                            height="40" width="200" />
+                                    </div>
+                                    <div class="receta-medico1">
+                                        <h4>N° de receta: {{receta.id_receta}}</h4>
+                                        <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                                        <h4 class="nombre-medico1">Dr/Dra. {{user.rut.nombres}}
+                                            {{user.rut.apellido_paterno}}
+                                            {{user.rut.apellido_materno}}</h4>
+                                        <h4>RUT: {{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}}</h4>
+                                    </div>
+                                </div>
+                                <div class="receta-paciente1">
+                                    <div class="n-paciente1">
+                                        <h4><b>Nombre paciente: </b>
+                                            {{receta.rut_paciente.nombres}}
+                                            {{receta.rut_paciente.apellido_paterno}}
+                                            {{receta.rut_paciente.apellido_materno}}
+                                        </h4>
+                                    </div>
+                                    <div class="r-paciente1">
+                                        <h4> <b> RUT paciente: </b> {{receta.rut_paciente.rut}} -
+                                            {{receta.rut_paciente.dv}} </h4>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div class="receta-detalle1">
+                                    <hr class="hr-receta">
+                                    <h4> <b>RECETA MÉDICA</b></h4>
+                                    <hr class="hr-receta">
+                                    <div class="receta ancho-100">
+                                        {%if detallereceta%}
+                                        {%for j in detallereceta%}
+                                        <li class="receta-remedios">
+                                            <p><b>{{j.codigo.nombre_medicamento}}</b>
+                                                en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
+                                                unidades/dosis por {{j.duracion_tratamiento}} días
+                                            <p>
+                                            <p>{{j.posologia}}</p>
+                                        </li>
+                                        {%endfor%}
+                                        {%endif%}
+                                    </div>
+                                </div>
+                                <div class="receta-pie">
+                                    <div class="receta-fecha1">
+                                        <h4>Fecha: {{receta.fecha_receta}} </h4>
+                                    </div>
+                                    <div class="receta-firma1">
+                                        <h4> Firma médico</h4>
+                                        >>>>>>> Stashed changes
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="elementH"></div>
+
+
+
+                        <script>
+
+                            var doc = new jsPDF();
+                            var elementHTML = $('#content').html();
+                            var specialElementHandlers = {
+                                '#elementH': function (element, renderer) {
+                                    return true;
+                                }
+                            };
+                            doc.fromHTML(elementHTML, 15, 15, {
+                                'width': 170,
+                                'elementHandlers': specialElementHandlers
+                            });
+
+                            // Save the PDF
+                            doc.save('sample-document.pdf');
+
+
+                        </script>
 </body>
 
 <!--Librerias externas de Jquery y JSPDF -->
