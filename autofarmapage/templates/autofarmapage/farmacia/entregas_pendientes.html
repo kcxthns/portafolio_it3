@@ -9,11 +9,13 @@ Farmacia - Prescripciones Pendientes de Entrega
 <!--BUSCAR RECETA POR RUT DEL PACIENTE-->
 <div>
     <br>
+    <div>
+        <h4 id="encabezadoform">Entregas pendientes</h4>
+    </div>
     <form method="GET">
         {% csrf_token %}
-        <input class="ancho-30" type="search" value="{{ request.GET.q }}"
-            name="q" required placeholder="RUT Paciente" maxlength="12"
-            oninput="checkRut(this)" onkeypress="return isNumber(event)">
+        <input class="ancho-30" type="search" value="{{ request.GET.q }}" name="q" required placeholder="RUT Paciente"
+            maxlength="12" oninput="checkRut(this)" onkeypress="return isNumber(event)">
         <button class="b-buscar" name="submit" type="submit" value="Search">
             <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
         </button>

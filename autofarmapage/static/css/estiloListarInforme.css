@@ -28,7 +28,8 @@ padding: 55px;}
     display: flex;
     flex-direction: column;
     /*min-height: 100vh;*/
-    min-height: 100%;
+    /*min-height: 100%;*/
+    min-height: 700px;
 }
 .button_usuario{
   

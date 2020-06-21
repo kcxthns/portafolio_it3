@@ -181,3 +181,12 @@ h4{
 
 
 
+.circulo {
+    width: 110px;
+    height: 96px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: #Fff;
+  }
+

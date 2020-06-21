@@ -212,10 +212,10 @@
                         {%for j in detallereceta%}
                         <tr id="{{j.codigo}}">
                             <li class="listar-agregados">
-                                <p><b>{{j.codigo.nombre_medicamento}}</b>
+                                <p><b class="MayusName">{{j.codigo.nombre_medicamento}}</b>
                                     en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
                                     unidades/dosis por {{j.duracion_tratamiento}} días - {{j.posologia}}
-                                    <p>
+                                <p>
                             </li>
                         </tr>
                         {%endfor%}
@@ -261,5 +261,3 @@
 </body>
 
 </html>
-
-

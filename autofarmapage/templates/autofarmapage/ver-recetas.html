@@ -41,8 +41,9 @@
             {% if receta %}
             {% for i in receta %}
             <tr>
-                <td>{{ i.rut_paciente.rut }}</td>
-                <td>{{ i.rut_paciente.nombres }} {{ i.rut_paciente.apellido_paterno }}</td>
+                <td>{{ i.rut_paciente.rut }} - {{ i.rut_paciente.dv }}</td>
+                <td>{{ i.rut_paciente.nombres }} {{ i.rut_paciente.apellido_paterno }}
+                    {{ i.rut_paciente.apellido_materno }}</td>
                 <td>{{ i.fecha_receta }}</td>
                 <td>
                     <button class="btn-x" type="button">

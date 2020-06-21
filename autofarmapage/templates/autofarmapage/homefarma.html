@@ -1,23 +1,24 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!--Enlace flexbox-->
-    <link rel="stylesheet"  href="{% static 'css/flexboxgrid.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
     <!--Enlace css-->
-    <link rel="stylesheet"  href="{% static 'css/estilohomeadmi.css' %}">
-    
+    <link rel="stylesheet" href="{% static 'css/estilohomeadmi.css' %}">
+
     <!--Enlaces fonts-->
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
-    
+
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
-    
+
     <title>Farmacia</title>
 </head>
 
@@ -27,7 +28,8 @@
             <div class="col-xs-12 col-lg-12">
                 <div class="header">
                     <div>
-                      <img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="60" width="300"> 
+                        <img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="60"
+                            width="300">
                     </div>
                 </div>
             </div>
@@ -35,16 +37,16 @@
     </div>
 
     <section class="row section">
-        <div class="col-xs-12 col-lg-2 start-lg backgroundleft">          
+        <div class="col-xs-12 col-lg-2 start-lg backgroundleft">
             <div class="sideleft">
                 <img src="{% static 'imagenes/User-Profile.png' %}" alt="LogoUsuario" width="90" height="90">
                 <div class="row">
                     <div class="col-xs-12 col-lg-12 center-xs">
                         <h4 id="encabezado1">{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>
-                                
+
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-xs-12 col-lg-12 center-xs">
                         <h4 id="parrafo1">{{ user.id_tipo_empleado.tipo_empleado|upper }}</h4>
@@ -63,40 +65,47 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-xs-12 col-lg-12 center-xs">                      
-                        <a href="{% url 'password_change' %}">Cambiar Contraseña</a> 
-                        <a href="/logout" ><img  class="a-imagen" src="{% static 'imagenes/Close1.png' %}" alt="cerrar_Sesion" height="auto" width="150"></a>
+                    <div class="col-xs-12 col-lg-12 center-xs">
+                        <a href="{% url 'password_change' %}">Cambiar Contraseña</a>
+                        <a href="/logout"><img class="a-imagen" src="{% static 'imagenes/Close1.png' %}"
+                                alt="cerrar_Sesion" height="auto" width="150"></a>
                     </div>
-                </div>       
+                </div>
             </div>
         </div>
 
         <div class="col-xs-12 col-lg-10 center-xs backgroundright">
             <div class="sideright">
                 <div class="row">
-                    <div class="col-xs-12 col-lg-6 center-lg">                              
+                    <div class="col-xs-12 col-lg-6 center-lg">
                         <div class="button_usuario">
-                            <a href="{% url 'agregar-medicamento' %}"><img src="{% static 'imagenes/icono_agregar_medicamento.png' %}" alt="agregarMedicamento"  height="100" width="100"></a>
+                            <a href="{% url 'agregar-medicamento' %}"><img
+                                    src="{% static 'imagenes/icono_agregar_medicamento.png' %}" alt="agregarMedicamento"
+                                    height="100" width="100"></a>
                             <h4>Agregar Medicamento</h4>
-                        </div>                                     
+                        </div>
                     </div>
 
-                    <div class="col-xs-12 col-lg-6 center-lg">    
+                    <div class="col-xs-12 col-lg-6 center-lg">
                         <div class="button_listarusuarios">
-                            <a href="{% url 'listar-medicamento' %}"><img src="{% static 'imagenes/icono_listar_medicamento.png' %}" alt="listarMedicametos"  height="100" width="100"></a>
-                             <h4>Listar Medicamentos</h4>
-                        </div>                      
+                            <a href="{% url 'listar-medicamento' %}"><img
+                                    src="{% static 'imagenes/icono_listar_medicamento.png' %}" alt="listarMedicametos"
+                                    height="100" width="100"></a>
+                            <h4>Listar Medicamentos</h4>
+                        </div>
                     </div>
 
-                    <div class="col-xs-12 col-lg-12">                                                       
+                    <div class="col-xs-12 col-lg-12">
                         <div class="button_listarinformes">
-                            <a href="#"><img src="{% static 'imagenes/icono-listar_informes.png' %}" alt="informes" height="100" width="100"></img></a>
+                            <a href="#"><img src="{% static 'imagenes/icono-listar_informes.png' %}" alt="informes"
+                                    height="100" width="100"></img></a>
                             <h4 id="h4listarinformes">Informes</h4>
-                        </div>           
-                    </div> 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 </body>
+
 </html>

@@ -59,8 +59,9 @@
                         </div>
                         <div class="col-xs-12 col-lg-12 center-lg">
                             <div class="b2-agregar-paciente">
-                                <a href="{% url 'reservas-lista' %}"><img src="{% static 'imagenes/agregarUsuario.png' %}"
-                                        alt="Reservas_Medicamentos" height="60" width="60" /></a>
+                                <a href="{% url 'reservas-lista' %}"><img
+                                        src="{% static 'imagenes/agregarUsuario.png' %}" alt="Reservas_Medicamentos"
+                                        height="60" width="60" /></a>
                                 <h4>Medicamentos Reservados</h4>
                             </div>
                         </div>
@@ -84,7 +85,9 @@
             </div>
 
             <!--FIN Menú lateral-->
-            <div class="col-xs-12 col-md-10 col-lg-10 center-xs">
+
+            <div class="col-xs-12 col-md-10 col-lg-10 center-xs contenidoFarma">
+
                 <!-- CONTENIDO de cada HTML -->
                 <!--Búsqueda de recetas pendientes-->
                 {% block busqueda %}

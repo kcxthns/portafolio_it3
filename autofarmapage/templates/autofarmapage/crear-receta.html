@@ -121,7 +121,7 @@
 
                     <!-- Datos si encuentra al paciente -->
                     <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                        <form method="POST">{% csrf_token %}
+                        <form name="formularioCR2" method="POST">{% csrf_token %}
                             <fieldset class="cuadro-datos">
                                 <legend class="st-datos">
                                     <h4>Datos del paciente</h4>
@@ -136,10 +136,10 @@
                             </fieldset>
                             <div class="checkbox-tutor">
                                 <label class="casilla input-60-s">
-                                    <input class="campo-casilla" type="checkbox" name="casilla" value="no" />
+                                    <input class="campo-casilla" type="checkbox" name="casilla" value="true" />
                                     Necesita de un tutor para retiro de medicamentos </label>
                                 <a href="{% url 'agregar-tutor' rutpat %}">
-                                    <button class="b-tutor" type="button">
+                                    <button id="addTutor" class="b-tutor" type="button">
                                         <h4>Agregar tutor</h4>
                                     </button></a>
                             </div>
@@ -169,5 +169,25 @@
         </section>
     </div>
 </body>
+
+<!-- Para validar el agregar tutor -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#addTutor').click(function () {
+            if ($('input[name=casilla]').is(':checked')) {
+
+                return true;
+            }
+            else {
+                alert('Debe de aceptar que necesita tutor para retiro de medicamentos');
+                return false;
+            }
+        });
+    });
+
+</script>
 
 </html>
