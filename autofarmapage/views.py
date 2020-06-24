@@ -97,7 +97,7 @@ def agregarusuario(request):
         direccion = request.POST['direccion']
         comuna = int(request.user.rut.id_comuna.id_comuna)
         centro_s = int(request.user.rut.id_centro.id_centro)
-        id_tipo_empleado = int(request.POST['id_tipo_empleado'])
+        id_tipo_empleado = int(request.POST['id_tipo_empleado'])   
         rut_tutor = None
         # conexión a la bd
         bd = ConexionBD()
@@ -147,32 +147,83 @@ def guardadoUsuarioExito(request):
 def guardadoTutorExito(request):
     return render(request, 'autofarmapage/exito-guardar-tutor.html', {})
 
+#obtiene las personas filtradas por el id del centro
+def get_personas(id_centro):
+    bd = ConexionBD()
+    con = bd.conectar()
+    cursor = con.cursor()
+    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, t.tipo_empleado 
+                      FROM persona p 
+                      JOIN usuario u ON p.rut=u.rut 
+                      JOIN tipo_empleado t ON t.id_tipo_empleado = u.id_tipo_empleado 
+                      WHERE p.id_centro = :id_centro""")
+    cursor.execute(None, id_centro = id_centro)   
+    #cursor.execute(query, id_centro=301)
+    def fabricarDiccionario(cursor):
+        columnNames = [d[0] for d in cursor.description]
+        def createRow(*args):
+            return dict(zip(columnNames, args))
+        return createRow
+    cursor.rowfactory = fabricarDiccionario(cursor)
+    personas = cursor.fetchall()
+    data5 ={
+            'personas': personas,
+        }             
+    return data5
+#Obtiene la persona por el criterio de busqueda    
+def search_persona(id_centro, rut):
+    bd = ConexionBD()
+    con = bd.conectar()
+    cursor = con.cursor()
+    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, t.tipo_empleado 
+                      FROM persona p 
+                      JOIN usuario u ON p.rut=u.rut 
+                      JOIN tipo_empleado t ON t.id_tipo_empleado = u.id_tipo_empleado 
+                      WHERE p.id_centro = :id_centro AND p.rut=:rut""")
+    cursor.execute(None, id_centro = id_centro, rut = rut)
+    def fabricarDiccionario(cursor):
+        columnNames = [d[0] for d in cursor.description]
+        def createRow(*args):
+            return dict(zip(columnNames, args))
+        return createRow
+    cursor.rowfactory = fabricarDiccionario(cursor)
+    personas = cursor.fetchall()
+    data5 ={
+            'personas': personas,
+        }             
+    return data5  
+
+
 #Vista de Listar Usuarios (Administrador)
 def listarusuario(request):
     #Obtiene las personas de la base de datos que pertenecen al centro de salud del Administrador
-    person = Persona.objects.filter(id_centro=request.user.rut.id_centro).order_by('rut')
+    #person = Persona.objects.filter(id_centro=request.user.rut.id_centro).order_by('rut')
+    id_centro = request.user.rut.id_centro.id_centro
+    data5 = get_personas(id_centro)
     #Búsqueda del Usuario por RUT
     if request.method == 'GET':
         criterio_busqueda = request.GET.get('q')
         submitBtn = request.GET.get('submit')
         if criterio_busqueda is not None:
-            person = Persona.objects.filter(id_centro=request.user.rut.id_centro).filter(rut=criterio_busqueda)
+            #person = Persona.objects.filter(id_centro=request.user.rut.id_centro).filter(rut=criterio_busqueda)
             #Pagina los resultados de la búsqueda
-            paginador = Paginator(person, 20)
-            pagina = request.GET.get('page')
-            person = paginador.get_page(pagina)
-            data5 = {
-                'person': person,
-            }
-            parametros = request.GET.copy()
-            if 'page' in parametros:
-                del parametros['page']
-            data5['parametros'] = parametros
+            #paginador = Paginator(person, 20)
+            #pagina = request.GET.get('page')
+            #person = paginador.get_page(pagina)
+            #parametros = request.GET.copy()
+            #if 'page' in parametros:
+            #    del parametros['page']
+            #data5['parametros'] = parametros
+            id_centro = request.user.rut.id_centro.id_centro
+            data5 = search_persona(id_centro, criterio_busqueda)
             return render(request, 'autofarmapage/listar-usuario.html', data5)
     #Agrega un tutor al Usuario seleccionado
     if request.method == 'POST':
         rut_tutor = request.POST['rutTutor']
         rut_paciente = request.POST['rutPaciente']
+        rut_paciente = rut_paciente.replace('-', '')
+        rut_paciente = rut_paciente[0 : len(rut_paciente) - 1]
+        print(rut_paciente)
         #Conexión a la bd
         bd = ConexionBD()
         con = bd.conectar()
@@ -184,12 +235,6 @@ def listarusuario(request):
         if realizado.getvalue() == 1:
             return redirect('exito-guardar-tutor')
     #Pagina el listado de Usuarios
-    paginador = Paginator(person, 20)
-    pagina = request.GET.get('page')
-    person = paginador.get_page(pagina)
-    data5 = {
-        'person': person,
-    }
     return render(request, 'autofarmapage/listar-usuario.html', data5)
 
 

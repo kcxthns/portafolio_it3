@@ -109,93 +109,41 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
 
-                                {% if person %}
-                                {% for i in person %}
+                               
 
-                                <div class="backgroundCard" id="{{ i.rut }}">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-md-6 col-lg-6 start-xs">
-                                            <input class="inputCard"
-                                                disabled="true" value="{{ i.nombres }} {{ i.apellido_paterno }}"
-                                                type="text" name="name" required
-                                                placeholder="nombre">
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-xs-12 col-md-6 col-lg-6 start-xs">
-                                            <input class="inputCard"
-                                                disabled="true" value="{{ i.rut }}" 
-                                                type="text" name="rut"
-                                                required placeholder="Rut">
-                                            <p id="mensaje"></p>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-xs-12 col-md-12 col-lg-12 end-xs">
-                                            <a id="edit" href="{% url 'editarPersona' i.rut %}">EDITAR</a>
-                                        </div>
-                                    </div>
-
-                                    <div class="rowe" id="{{ i.rut}}">
-                                        <div id="buttomIcon" class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                            <a id="arrowe"><img id="flechaimg"
-                                                src="{% static 'imagenes/arrow.svg' %}"
-                                                alt="lstar_usuario"
-                                                height="15" width="15"></a>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre usuario</th>
+                                            <th>Rut usuario</th>
+                                            <th>Tipo usuario</th>
+                                            <th>Editar</th>
+                                            <th>Campo tutor</th>
+                                            <th>Agregar tutor</th>
+                                        </tr>
+                                    </thead>
+                                    {% if personas %}
+                                    {% for i in personas %}
+                                    <tr>
+                                        <td>{{ i.NOMBRES}} {{i.APELLIDO_PATERNO}}</td>
+                                        <form method="POST" action="#">
+                                        {% csrf_token %} 
+                                        <td><input name="rutPaciente" value="{{i.RUT}}-{{i.DV}}" id="inputlistusuario" readonly></td>
+                                        <td>{{i.TIPO_EMPLEADO}}</td>
+                                        <td><button class="btn-x" type="button">
+                                            <a href="{% url 'editarPersona' i.RUT %}">Editar</a>
+                                         </button></td>
+                                        <td><input name="rutTutor" required placeholder="ej. 17808528" id="inputlistusuario"></td>
+                                        <td>
+                                            <button class="btn-x" type="submit">Agregar</button>
+                                        </td>
+                                        </form>
+                                    </tr>
+                                    
                                 {% endfor %}
                                 {% endif%}
-
-                                <div class="buttomCard">
-                                    <form id="formulario-card" method="POST"
-                                        action="#" class="formularioCard">
-                                        {% csrf_token %}
-                                        <div class="row">
-                                            <div class="col-xs-12 col-md-6 col-lg-6 start-xs">
-                                                <p>AGREGAR TUTOR</p>
-                                                <h6>rut paciente:</h6>
-                                                <input type="text"
-                                                    class="inputCard"
-                                                    id="onInput"
-                                                    name="rutPaciente" required readonly
-                                                    placeholder="Rut Paciente">
-                                            </div>
-
-                                            <div class="col-xs-12 col-md-6 col-lg-6 start-xs">
-                                                <br>
-                                                <h6>rut tutor:</h6>
-                                                <input type="text"
-                                                    class="inputCard"
-                                                    id="onInput" name="rutTutor"
-                                                    required placeholder="Rut
-                                                    tutor">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-12 col-md-12 col-lg-12 end-xs">
-                                            <button class="buttonAddTutor">AGREGAR</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                {% if person %}
-                                <div class="row">
-                                    <div class="col-xs-12 center-xs">
-                                        <div class="col-xs-12 col-md-12 center-xs">
-                                            {% if person.has_previous %}
-                                            <a href="?page={{ person.previous_page_number }}">Anterior</a>
-                                            {% endif %}
-                                            {% if person.has_next %}
-                                            <a href="?page={{ person.next_page_number }}">Siguiente</a>
-                                            {% endif %} 
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endif %}
+                                   
+                                </table>
                             </div>
                         </div>
                     </div>

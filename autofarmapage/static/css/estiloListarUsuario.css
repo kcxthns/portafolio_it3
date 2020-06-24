@@ -100,6 +100,12 @@ input{
     border-bottom: 1px solid #666666;
 }
 
+#inputlistusuario{
+    border: none;
+    background: #FFFFFF;
+    margin-bottom: 0px;
+}
+
 .buttonBuscar{
     border: none;
     background: #1290cb;
@@ -259,4 +265,54 @@ input{
     margin-top: 2px;
     font-weight: lighter;
 }
+
+
+table {
+    background-color: #fff;
+    text-align: center;
+    border-collapse: collapse;
+    width: 100%;
+    font-weight: lighter;
+    font-size: 0.9rem;
+  }
+  
+  th,
+  td {
+    padding: 6px 0;
+    font-weight: lighter;
+  }
+  
+  thead {
+    background-color: #666;
+    text-transform: uppercase;
+    color: white;
+    padding: 10px;
+  }
+  
+  tr:nth-child(even) {
+    /* celda por medio */
+    background-color: #b9dcf0;
+    color: #000;
+  }
+  
+  tr:hover td {
+    background-color: #a5a5a5;
+    color: #fff;
+    font-weight: normal;
+  }
+  
+  .ancho-100 {
+    width: 100%;
+  }
+  .ancho-70 {
+    width: 70%;
+  }
+  
+  .ancho-48 {
+    width: 48%;
+  }
+  
+  .ancho-40 {
+    width: 40%;
+  }
 
