@@ -152,7 +152,8 @@ def get_personas(id_centro):
     bd = ConexionBD()
     con = bd.conectar()
     cursor = con.cursor()
-    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, t.tipo_empleado 
+    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, t.tipo_empleado,
+                      u.habilitado
                       FROM persona p 
                       JOIN usuario u ON p.rut=u.rut 
                       JOIN tipo_empleado t ON t.id_tipo_empleado = u.id_tipo_empleado 
@@ -233,7 +234,10 @@ def listarusuario(request):
         cursor.callproc('pkg_crear_usuario.sp_crear_tutor', [
                         rut_tutor, rut_paciente, realizado])
         if realizado.getvalue() == 1:
-            return redirect('exito-guardar-tutor')
+            messages.success(request, "<<¡TUTOR AGREGADO!>>")
+            
+        elif realizado.getvalue() == 0:
+            messages.success(request, "<<ATENCIÓN: OCURRIÓ UN ERROR>>")    
     #Pagina el listado de Usuarios
     return render(request, 'autofarmapage/listar-usuario.html', data5)
 

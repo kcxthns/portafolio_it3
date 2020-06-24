@@ -16,7 +16,7 @@
 
 .section{
     padding-top: 5.2rem;
-
+    min-height: 101vh;
     
 }
 .backgroundleftside{
@@ -104,6 +104,11 @@ input{
     border: none;
     background: #FFFFFF;
     margin-bottom: 0px;
+}
+
+button{
+    border: none;
+    background: #1290cb;
 }
 
 .buttonBuscar{

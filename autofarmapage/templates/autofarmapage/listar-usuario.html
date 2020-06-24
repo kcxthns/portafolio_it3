@@ -109,13 +109,20 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
 
-                               
+                                {% if messages %}
+                                <ul class="messages">
+                                       {% for message in messages %}
+                                       <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                       {% endfor %}
+                                </ul>
+                                {% endif %}
 
                                 <table>
                                     <thead>
                                         <tr>
                                             <th>Nombre usuario</th>
                                             <th>Rut usuario</th>
+                                            <th>Situación</th>
                                             <th>Tipo usuario</th>
                                             <th>Editar</th>
                                             <th>Campo tutor</th>
@@ -129,13 +136,18 @@
                                         <form method="POST" action="#">
                                         {% csrf_token %} 
                                         <td><input name="rutPaciente" value="{{i.RUT}}-{{i.DV}}" id="inputlistusuario" readonly></td>
+                                        {% if i.HABILITADO == 0 %}
+                                        <td>Deshabilitado</td>
+                                        {%elif i.HABILITADO == 1 %}
+                                        <td>Habilitado</td>
+                                        {% endif%}
                                         <td>{{i.TIPO_EMPLEADO}}</td>
                                         <td><button class="btn-x" type="button">
-                                            <a href="{% url 'editarPersona' i.RUT %}">Editar</a>
+                                            <a href="{% url 'editarPersona' i.RUT %}"><img src="{% static 'imagenes/editarbutt.png' %}" alt="search-listar" height="30" width="30"></a>
                                          </button></td>
                                         <td><input name="rutTutor" required placeholder="ej. 17808528" id="inputlistusuario"></td>
                                         <td>
-                                            <button class="btn-x" type="submit">Agregar</button>
+                                            <button class="btn-x" type="submit"><img src="{% static 'imagenes/addtut.png' %}" alt="search-listar" height="30" width="30"></button>
                                         </td>
                                         </form>
                                     </tr>
