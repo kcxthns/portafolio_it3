@@ -176,7 +176,8 @@ def search_persona(id_centro, rut):
     bd = ConexionBD()
     con = bd.conectar()
     cursor = con.cursor()
-    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, t.tipo_empleado 
+    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, t.tipo_empleado,
+                      u.habilitado
                       FROM persona p 
                       JOIN usuario u ON p.rut=u.rut 
                       JOIN tipo_empleado t ON t.id_tipo_empleado = u.id_tipo_empleado 
@@ -1264,7 +1265,16 @@ def listar_informe_stock(id_centro):
     bd = ConexionBD()
     con = bd.conectar()
     cursor = con.cursor()
-    cursor.prepare("SELECT me.nombre_medicamento,  me.fabricante, tm.nombre_tipo_med, st.stock, ca.cantidad AS CANT_CADUCADOS, st.stock - ca.cantidad AS TOTAL_DISPONIBLE, (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo JOIN caducado ca ON ca.codigo = me.codigo JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med WHERE st.id_centro = :id_centro")
+    cursor.prepare("""SELECT me.nombre_medicamento,  
+                      me.fabricante, tm.nombre_tipo_med, 
+                      st.stock, ca.cantidad AS CANT_CADUCADOS, 
+                      st.stock - ca.cantidad AS TOTAL_DISPONIBLE, 
+                      (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, 
+                      (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA 
+                      FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo 
+                      JOIN caducado ca ON ca.codigo = me.codigo 
+                      JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med 
+                      WHERE st.id_centro = :id_centro""")
     cursor.execute(None, id_centro = id_centro)   
     #cursor.execute(query, id_centro=301)
     def fabricarDiccionario(cursor):
