@@ -605,6 +605,10 @@ tr:hover td {
    width: 100%;
 }
 
+.ancho-90 {
+   width: 90%;
+}
+
 .ancho-70 {
    width: 70%;
 }
