@@ -25,7 +25,7 @@ SECRET_KEY = 'spgp9n@+!5$+no63hrfxkw2))t$xlgrgybm)rwo^qe45vv#&yw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.43.104', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.43.104', '127.0.0.1', '192.168.0.4']
 
 
 # Application definition
@@ -73,7 +73,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'autofarma.wsgi.application'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':[
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
@@ -132,7 +132,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-#MODELO UTILIZAZDO PARA EL CUSTOM USER
+# MODELO UTILIZAZDO PARA EL CUSTOM USER
 AUTH_USER_MODEL = 'autofarmapage.Usuario'
 
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
