@@ -125,7 +125,7 @@ body {
   background: #68c2dc;
   box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.1);
   display: flex;
-  position: relative;
+  position: fixed;
   padding: 20px;
   left: 0;
   right: 0;
@@ -168,6 +168,7 @@ body {
 .menu {
   background: #f2f5fa;
   flex-wrap: wrap;
+  padding-top: 80px;
 }
 
 .b-crear-receta {
@@ -289,6 +290,25 @@ h4 {
 
 }
 
+.linea h3 {
+  font-size: 16px;
+  font-weight: normal;
+  color: #666;
+}
+
+.linea h3:hover {
+  color: #fff;
+}
+
+.circulo {
+  width: 110px;
+  height: 110px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #Fff;
+}
+
 .linea:hover {
   color: #FFF;
 }
@@ -337,9 +357,7 @@ h4 {
   vertical-align: text-bottom;
   align-items: center;
   position: absolute;
-
   background-color: cornflowerblue;
-
   margin: 0 auto;
 }
 
@@ -444,15 +462,21 @@ input:disabled {
 
 .casilla {
   color: #666;
-  font-family: "Roboto", sans-serif;
-  font-weight: normal;
   font-size: 0.9rem;
+  text-align: left;
 }
 
 .campo-casilla {
   width: auto;
   height: auto;
   flex-wrap: nowrap;
+}
+
+.necesita-tutor {}
+
+.nt2 {
+  padding-left: 20px;
+  padding-right: 60px;
 }
 
 .filtro {
@@ -465,7 +489,6 @@ input:disabled {
 
 .nombre-campo {
   color: #666666;
-
   vertical-align: middle;
 }
 /* Campo + otros elementos */
@@ -588,6 +611,11 @@ tr:hover td {
 .ancho-100 {
   width: 100%;
 }
+
+.ancho-90 {
+  width: 90%;
+}
+
 .ancho-70 {
   width: 70%;
 }
@@ -790,12 +818,13 @@ subtitulo-receta {
 .checkbox-tutor {
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: center;
   flex-wrap: nowrap;
   align-items: baseline;
   /* Para controlar el espacio con lo de abajo*/
   height: 64px;
   padding-top: 20px;
+  text-align: center;
 }
 
 .subtitulo-receta1 {
@@ -957,6 +986,14 @@ subtitulo-receta {
 }
 
 /*------ AGREGAR TUTOR ---------*/
+
+.contenido {
+  padding: 80px 0;
+}
+
+.contenidoFarma {
+  padding: 60px 0;
+}
 
 .contenido2 {
   width: 1200px;
@@ -1142,7 +1179,7 @@ subtitulo-receta {
 }
 
 /*------ VER RECETA recién prescrita para imprimir ---------*/
-
+/*
 .receta-prescrita {
   width: 720px;
   height: 860px;
@@ -1264,4 +1301,9 @@ subtitulo-receta {
   width: 70%;
   border-top: 1px solid #000;
   margin: auto;
+}
+*/
+
+.MayusName {
+  text-transform: uppercase;
 }

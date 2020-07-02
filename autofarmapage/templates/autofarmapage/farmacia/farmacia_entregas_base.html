@@ -28,14 +28,15 @@
 <body>
     <div class="container">
         <header class="row backgroundheader">
-            <div class="col-xs-12 col-lg-12">
+            <div class="col-xs-12">
                 <div class="header">
                     <div class="logo2 col-xs-12 end-xs">
-                        <a href="{% url 'inicio-entregas' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}"
+                        <a href="{% url 'inicio-entregas' %}">
+                            <img src="{% static 'imagenes/LOGO_blanco.png' %}"
                                 alt="Logopaginablanco" height="40" width="200" />
                         </a>
                     </div>
-                    <div class="col-xs-12 star-xs">
+                    <div class="col-xs-12 start-xs">
                         <p>{{ user.rut.id_centro.nombre_centro }}</p>
                         <h4>{{user.rut.nombres}} {{user.rut.apellido_paterno}}</h4>
                     </div>
@@ -45,10 +46,10 @@
 
         <!--Menú lateral-->
         <section class="row">
-            <div class="col-xs-12 col-md-2 col-lg-2 star-large home-medico">
+            <div class="col-xs-12 col-md-2 start-large home-medico">
                 <div class="opciones">
                     <div class="row">
-                        <div class="col-xs-12 col-lg-12 center-lg">
+                        <div class="col-xs-12 center-lg">
                             <div class="b2-crear-receta">
                                 <a href="{% url 'entregas-pendientes' %}">
                                     <img src="{% static 'imagenes/crear-receta2.png' %}"
@@ -57,17 +58,18 @@
                                 <h4>Entregas Pendientes</h4>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-lg-12 center-lg">
+                        <div class="col-xs-12 center-lg">
                             <div class="b2-agregar-paciente">
-                                <a href="{% url 'reservas-lista' %}"><img src="{% static 'imagenes/agregarUsuario.png' %}"
+                                <a href="{% url 'reservas-lista' %}">
+                                    <img src="{% static 'imagenes/agregarUsuario.png' %}"
                                         alt="Reservas_Medicamentos" height="60" width="60" /></a>
                                 <h4>Medicamentos Reservados</h4>
                             </div>
                         </div>
-
                         <div class="col-xs-12 col-lg-12 center-lg">
                             <div class="b2-asignar-tutor">
-                                <a href="{% url 'inicio-farmacia' %}"><img src="{% static 'imagenes/icono-home.png' %}"
+                                <a href="{% url 'inicio-farmacia' %}">
+                                    <img src="{% static 'imagenes/icono-home.png' %}"
                                         alt="home_farmacia" height="60" width="60" /></a>
                                 <h4>Home Farmacia</h4>
                             </div>
@@ -84,7 +86,7 @@
             </div>
 
             <!--FIN Menú lateral-->
-            <div class="col-xs-12 col-md-10 col-lg-10 center-xs">
+            <div class="col-xs-12 col-md-10 center-xs contenidoFarma">
                 <!-- CONTENIDO de cada HTML -->
                 <!--Búsqueda de recetas pendientes-->
                 {% block busqueda %}

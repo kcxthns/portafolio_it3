@@ -28,11 +28,12 @@
             <div class="col-xs-12 col-lg-12">
                 <div class="header">
                     <div class="logo2 col-xs-12 end-xs">
-                        <a href="{% url 'home_medico' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}"
+                        <a href="{% url 'home_medico' %}">
+                            <img src="{% static 'imagenes/LOGO_blanco.png' %}"
                                 alt="Logopaginablanco" height="40" width="200" />
                         </a>
                     </div>
-                    <div class="col-xs-12 star-xs">
+                    <div class="col-xs-12 start-xs">
                         <p>{{ user.rut.id_centro.nombre_centro }}</p>
                         <h4>Nombre del Médico: {{user.rut.nombres}} {{user.rut.apellido_paterno}}</h4>
                     </div>
@@ -42,7 +43,7 @@
 
         <section class="row">
             <!--Menú lateral-->
-            <div class="col-xs-12 col-md-2 col-lg-2 star-large home-medico">
+            <div class="col-xs-12 col-md-2 col-lg-2 start-large home-medico">
                 <div class="opciones">
                     <div class="row">
                         <div class="col-xs-12 col-lg-12 center-lg">
@@ -56,24 +57,24 @@
                         </div>
                         <div class="col-xs-12 col-lg-12 center-lg">
                             <div class="b2-agregar-paciente">
-                                <a href="{% url 'agregar-paciente' %}"><img
-                                        src="{% static 'imagenes/agregarUsuario.png' %}" alt="agregar paciente"
+                                <a href="{% url 'agregar-paciente' %}">
+                                    <img src="{% static 'imagenes/agregarUsuario.png' %}" alt="agregar paciente"
                                         height="60" width="60" /></a>
                                 <h4>Agregar paciente</h4>
                             </div>
                         </div>
-
                         <div class="col-xs-12 col-lg-12 center-lg">
                             <div class="b2-asignar-tutor">
-                                <a href="{% url 'registrar-tutor' %}"><img
-                                        src="{% static 'imagenes/asignar-tutor2.png' %}" alt="listar_informes"
+                                <a href="{% url 'registrar-tutor' %}">
+                                    <img src="{% static 'imagenes/asignar-tutor2.png' %}" alt="registrar tutor"
                                         height="60" width="60" /></a>
                                 <h4>Registrar tutor</h4>
                             </div>
                         </div>
                         <div class="col-xs-12 col-lg-12 center-lg">
                             <div class="b2-ver-recetas">
-                                <a href="{% url 'ver-recetas' %}"><img src="{% static 'imagenes/ver-recetas2.png' %}"
+                                <a href="{% url 'ver-recetas' %}">
+                                    <img src="{% static 'imagenes/ver-recetas2.png' %}"
                                         alt="ver recetas" height="60" width="60" /></a>
                                 <h4>Ver recetas</h4>
                             </div>
@@ -212,7 +213,7 @@
                         {%for j in detallereceta%}
                         <tr id="{{j.codigo}}">
                             <li class="listar-agregados">
-                                <p><b>{{j.codigo.nombre_medicamento}}</b>
+                                <p><b class="MayusName">{{j.codigo.nombre_medicamento}}</b>
                                     en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
                                     unidades/dosis por {{j.duracion_tratamiento}} días - {{j.posologia}}
                                     <p>

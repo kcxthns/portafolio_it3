@@ -24,7 +24,7 @@
 <body>
     <div class="container">
         <header class="row backgroundheader-home">
-            <div class="col-xs-12 col-lg-12">
+            <div class="col-xs-12">
                 <div class="header">
                     <div>
                       <img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="60" width="300"> 
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-lg-12 center-xs">
+                    <div class="col-xs-12 center-xs">
                         <h4 id="parrafo1">{{ user.id_tipo_empleado.tipo_empleado|upper }}</h4>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                 </div>
                 <br>
                 <div class="row cambiar-pass">
-                    <div class="col-xs-12 col-lg-12 center-xs">                      
+                    <div class="col-xs-12 center-xs">                      
                         <a class="linea" href="{% url 'password_change' %}">Cambiar Contraseña</a> 
                     </div>
                 </div>
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div class="col-xs-12 col-lg-10 center-xs menu">
+        <div class="col-xs-12 col-lg-10 center-xs menu contenido">
             <div class="home-opciones">
                 <div class="row">
                     {% block inicio_menu %}

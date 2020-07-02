@@ -2,13 +2,16 @@
 {% load static %}
 
 {% block titulo %}
-Farmacia - Prescripciones Pendientes de Entrega
+Farmacia - Prescripciones Pendientes de Entregar
 {% endblock %}
 
 {% block busqueda %}
 <!--BUSCAR RECETA POR RUT DEL PACIENTE-->
 <div>
     <br>
+    <div>
+        <h4 id="encabezadoform">Entregas Pendientes</h4>
+    </div>
     <form method="GET">
         {% csrf_token %}
         <input class="ancho-30" type="search" value="{{ request.GET.q }}"

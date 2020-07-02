@@ -3,7 +3,7 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, rut, tipo_empleado=None ,password=None, is_active=True, is_staff=False, is_admin=False):
+    def create_user(self, rut, tipo_empleado=None ,password=None, is_active=True, is_staff=False, is_admin=False, email=None):
         from .models import Persona, TipoEmpleado
         if password is None:
             password = self.crear_contrasenna(rut)
@@ -33,6 +33,7 @@ class UserManager(BaseUserManager):
         user_obj.habilitado = is_active
         user_obj.admin = is_admin
         user_obj.staff = is_staff
+        user_obj.email = email
         user_obj.save(using=self._db)
         return user_obj
 

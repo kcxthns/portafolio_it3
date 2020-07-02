@@ -10,7 +10,7 @@ from autofarmapage.forms import EditarForm
 from autofarmapage.models import Caducado, Componente, DetalleReceta, EntregaMedicamento, Medicamento, MedidaComponente, MedidaTiempo, Receta, RegistroInformes, ReservaMedicamento, StockMedicamento, TipoComponente, TipoMedicamento, TipoTratamiento, TutorPaciente, Usuario
 from django.contrib import messages
 from autofarmapage.managers import UserManager
-from django.core.mail import send_mail
+#from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from .validacion import Validador
 from datetime import datetime
@@ -26,6 +26,10 @@ from rest_framework import generics
 from autofarmapage.serializers import ReservaSerializer
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
+try:
+    from autofarmapage.django_asynchronous_send_mail import send_mail
+except:
+    from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -69,8 +73,10 @@ def index(request):
                 # página del médico
                 return redirect('home_medico')
         else:
-            messages.error(
-                request, 'Tu nombre de usuario o contraseña no son correctos.')
+            #messages.error(
+                #request, 'Tu nombre de usuario o contraseña no son correctos.')
+            alerta = "Tu nombre de usuario o contraseña son incorrectos."
+            return render(request, 'autofarmapage/index.html', {'alerta': alerta})
     return render(request, 'autofarmapage/index.html', {})
 
 # Vista del Home del Administrador
@@ -117,7 +123,7 @@ def agregarusuario(request):
                         rut, dv, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, rut_tutor, realizado])
         if int(realizado.getvalue()) == 1:
             #Crea el usuario
-            usuario = Usuario.objects.create_user(rut, id_tipo_empleado)
+            usuario = Usuario.objects.create_user(rut, id_tipo_empleado, email=email)
             #Inserta el rut en la tabla de medicos o de colaboradores de farmacia
             if id_tipo_empleado == 1:
                 #Inserta RUT en la tabla Medico
@@ -198,6 +204,37 @@ def listarusuario(request):
         'person': person,
     }
     return render(request, 'autofarmapage/listar-usuario.html', data5)
+
+def cambiarCentroSalud(request):
+    datos = {}
+    if request.method == 'GET':
+        #btn_busqueda = request.GET['submit']
+        if 'submit' in request.GET:
+            rut_busqueda = soloCuerpoRut(request.GET['q'])
+            persona = Persona.objects.filter(rut=rut_busqueda).first()
+            datos = {
+                'persona': persona,
+            }
+    if request.method == 'POST':
+        rut_persona = request.POST['rut']
+        bd = ConexionBD()
+        con = bd.conectar()
+        cursor = con.cursor()
+        resultado = cursor.var(int)
+        cursor.callproc('sp_cambio_centro_salud', [rut_persona, request.user.rut.id_centro.id_centro, resultado])
+        if int(resultado.getvalue()) == 1:
+            msg = 'El cambio de Centro de Salud ha sido Realizado.'
+            datos = {
+                'msg': msg,
+            }
+            return render(request, 'autofarmapage/cambio_centro_salud.html', datos)
+        else:
+            msg = 'Se ha producido un error al procesar los datos, por favor intente nuevamente.'
+            datos = {
+                'msg': msg,
+            }
+            return render(request, 'autofarmapage/cambio_centro_salud.html', datos)
+    return render(request, 'autofarmapage/cambio_centro_salud.html', datos)
 
 #Vista de la Lista de Informes
 def listarinforme(request):
@@ -498,11 +535,54 @@ def listarMedicamento(request):
 
     return render(request, 'autofarmapage/listar-medicamento.html', datos)
 
+def editarMedicamento(request, codigoMed):
+    medicamento = Medicamento.objects.get(codigo=codigoMed)
+    return render(request, 'autofarmapage/editar-medicamento.html', {'medicamento': medicamento,})
+
 #################################
 # VISTA ENTREGA DE MEDICAMENTOS #
 #################################
 
 def inicioFarmacia(request):
+    bd = ConexionBD()
+    con = bd.conectar()
+    cursor = con.cursor()
+    respuesta = cursor.var(bool)
+    respuesta = cursor.callfunc('pkg_farmacia.fn_existe_mail_no_enviado', bool, [])
+    if respuesta:
+        query = (
+            "SELECT reserva.id_reserva AS id_reserva, "
+            "med.nombre_medicamento AS nombre_medicamento, "
+            "persona.rut || '-' || persona.dv AS rut_paciente, "
+            "upper(persona.nombres || ' ' || persona.apellido_paterno || ' ' || persona.apellido_materno) AS nombre_paciente, "
+            "persona.correo_electronico AS email "
+            "FROM reserva_medicamento reserva "
+            "INNER JOIN medicamento med ON reserva.codigo = med.codigo "
+            "INNER JOIN receta ON reserva.id_receta = receta.id_receta "
+            "INNER JOIN persona ON receta.rut_paciente = persona.rut "
+            "WHERE reserva.stock_disponible = 1 "
+            "AND reserva.email_enviado = 0 "
+            "AND reserva.entregado = 0"
+        )
+        cursor.execute(query)
+        cursor.rowfactory = fabricaDiccionario(cursor)
+        filas = cursor.fetchall()
+        for fila in filas:
+            paciente = fila['NOMBRE_PACIENTE']
+            rut_paciente = fila['RUT_PACIENTE']
+            id_reserva = fila['ID_RESERVA']
+            msg = 'Sr(a) ' + paciente + ' (' + rut_paciente + ') ' ' la reserva de medicamento N° ' + str(id_reserva) + ' se encuentra disponible para su retiro.'
+            subj = 'Reserva Medicamento'
+            email_paciente = fila['EMAIL']
+            send_mail(
+                subj,
+                msg,
+                'torpedo.page@gmail.com',
+                [email_paciente],
+                fail_silently=False,
+                html = ''
+            )
+            cursor.callproc('pkg_farmacia.sp_marcar_mail_enviado', [id_reserva])
     return render(request, 'autofarmapage/farmacia/inicio_farmacia.html', {})
 
 def inicioEntregas(request):
@@ -1015,7 +1095,7 @@ def crearreceta(request):
         if int(realizado.getvalue()) == 1:
             return redirect('crear-receta2', id_receta)
         elif int(realizado.getvalue()) == 0:
-            messages.error(request, 'Debe agregar un RUT de búsqueda')
+            messages.error(request, 'Debe realizar la búsqueda del paciente')
     return render(request, 'autofarmapage/crear-receta.html', {'nombrePaciente': nombrePaciente, 'rutpat': rutpat})
 
 #Crear Receta Paso 2: Guardado en Tabla Detalle_Receta
@@ -1179,7 +1259,7 @@ def verRecetas(request):
         if entrada is not None:
             receta = Receta.objects.filter(rut_paciente=entrada)
             data={
-                'receta':receta,
+                'receta':receta.order_by('-fecha_receta'),
             }
             return render(request, 'autofarmapage/ver-recetas.html', data)   
     return render(request, 'autofarmapage/ver-recetas.html', data) 
@@ -1209,7 +1289,7 @@ class ApiRecetaListView(generics.ListAPIView):
 
 class ApiUsuario(generics.ListAPIView):
     queryset = Persona.objects.all()
-    serializer_class =   PersonaSerializer
+    serializer_class =  PersonaSerializer
     pagination_class = PageNumberPagination
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('rut',)
@@ -1240,37 +1320,63 @@ def listaReservasMovil(request, rut_paciente):
         serializer = ReservaSerializer(reserva,many=True)
         return JsonResponse(serializer.data, safe=False)
 
+"""class ResetPasswordRequestView(FormView):
+    template_name = "registration/password_reset_formu.html"
+    success_url = "/"
+    form_class = PasswordResetRequestForm
 
-# este es la forma con el form de django en el html la vista
-# de html que deben usar es la llamada editarpage
-    #persona = get_object_or_404(Persona, rut=rut)
-    #persona = Persona.objects.get(rut=rut)
-    # if request.method == 'GET':
-    #    form = RegistrarForm(instance=persona)
-    # else:
-    #    form = RegistrarForm(request.POST, instance= persona)
-    #    if form.is_valid():
-    #        form.save()
-    #    return redirect('homeadmi')
-    # return render(request, 'autofarmapage/editarpage.html', {'form':form})
+    def form_valid(self, form):
+        form = super().form_valid(form)
+        data = form.cleaned_data["rut_usuario"]
+        user = Usuario.objects.filter(rut=data).first()
+        if user:
+            c = {
+                'email' : user.rut.correo_electronico,
+                'domain' : self.request.META['HTTP_HOST'],
+                'site_name' : 'Autofarma',
+                'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+                'user' : user,
+                'token' : default_token_generator.make_token(user),
+                'protocol' : self.request.scheme,
+            }
+            email_template_name='registration/password_reset_email.html'
+            subject="Reseteo Contraseña"
+            email=loader.render_to_string(email_template_name, c)
+            send_mail(subject, email, "torpedo.page@gmail.com", [user.rut.correo_electronico], fail_silently=False)
+        return form
 
-# no tomar atención a estas lineas
-    """bd = ConexionBD()
-    conn = bd.conectar()
-    cursor = conn.cursor()
-   # cursor.execute("select * from persona where rut = 17808528")
-    #res = cursor.fetchall()
-    #for row in res:
-     #   print(row)"""
-    """cursor.prepare("select * from persona where rut = :id") 
-    cursor.execute(None, id = 15075070)
-    res = cursor.
-    print(res)"""
-    """cursor.prepare("select * from persona where rut = :id")
-    cursor.execute(None, id = 15075070)
-    ver = cursor.split(".")
-    print(ver.index("1"))
-    
-    data = {
-        'res':res
-    }"""
+        form.send_email()
+        return super().form_valid(form)"""
+
+def resetPasswordRut(request):
+    if request.method == 'POST':
+        rut = soloCuerpoRut(request.POST['rut'])
+        usuario = Usuario.objects.filter(rut=rut).first()
+        if usuario is not None:
+            password = Usuario.objects.make_random_password(length=11)
+            print(password)
+            usuario.set_password(password)
+            usuario.save()
+            mensaje_mail = ('Se ha restablecido la contraseña para el usuario rut ' +
+                            request.POST['rut'] + ". "
+                            "Tu nueva contraseña es " + password
+            )
+            send_mail(
+                'Autofarma, Reset Contraseña.',
+                mensaje_mail,
+                'torpedo.page@gmail.com',
+                [usuario.email],
+                fail_silently=False,
+                html = ''
+            )
+            return render(request, 'registration/password_reset_success.html', {})
+        else:
+            alerta = (
+                "El usuario " + request.POST['rut'] + " no se encuentra registrado en "
+                "nuestra base de datos. Por favor verifique los datos y vuelva a intentarlo."
+            )
+            return render(request, 'registration/password_reset_run.html', {'alerta': alerta})
+    return render(request, 'registration/password_reset_run.html', {})
+
+def resetPasswordRutSuccess(request):
+    return render(request, 'registration/password_reset_success.html', {})

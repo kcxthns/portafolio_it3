@@ -28,21 +28,21 @@
         </button>
     </form>
 
-    <div class="ancho-70" id="main-container">
+    <div class="ancho-90" id="main-container">
         <table>
             <thead>
                 <tr>
                     <th>RUT paciente</th>
                     <th>Nombre paciente</th>
                     <th>Fecha emisión</th>
-                    <th></th>
+                    <th>Ver</th>
                 </tr>
             </thead>
             {% if receta %}
             {% for i in receta %}
             <tr>
-                <td>{{ i.rut_paciente.rut }}</td>
-                <td>{{ i.rut_paciente.nombres }} {{ i.rut_paciente.apellido_paterno }}</td>
+                <td>{{ i.rut_paciente.rut }} - {{ i.rut_paciente.dv }}</td>
+                <td>{{ i.rut_paciente.nombres }} {{ i.rut_paciente.apellido_paterno }} {{ i.rut_paciente.apellido_materno }}</td>
                 <td>{{ i.fecha_receta }}</td>
                 <td>
                     <button class="btn-x" type="button">

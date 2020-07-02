@@ -56,10 +56,3 @@ class RegistrarForm(forms.ModelForm):
     class Meta:
         model = Persona
         fields = ('rut', 'nombres', 'apellido_paterno', 'apellido_materno', 'telefono', 'correo_electronico', 'direccion', 'id_comuna', 'id_centro')
-        
-
-    
-
-
-
-        

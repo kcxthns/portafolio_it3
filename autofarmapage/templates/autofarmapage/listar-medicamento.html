@@ -8,7 +8,9 @@
         <link rel="stylesheet" href="{% static 'css/estiloListarUsuario.css' %}">
         <!--Enlace flexbox-->
         <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
-
+         <!--Enlace iconos-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
         <!--  Enlace a fuentes-->
         <link
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap"
@@ -138,14 +140,20 @@
                                         <p class="labelListaMed">Presentación</p>
                                         <p>{{ stock.codigo.id_tipo_med.nombre_tipo_med |capfirst }}</p>
                                     </div>
-                                    <div class="col-xs-10 col-md-9 start-xs">
+                                    <div class="col-xs-9 col-md-8 start-xs">
                                         <p class="labelListaMed">Descripción</p>
                                         <p>{{ stock.codigo.descripcion | capfirst }}</p>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <a href="{% url 'editar-medicamento' stock.codigo.codigo %}">
+                                            <i class="fa fa-edit fa-lg" style="font-size: 20px; color: #fff;"></i> 
+                                        </a>
                                     </div>
                                 </div>
 
                                 <div class="rowe" id="{{ stock.codigo.codigo }}">
                                     <div id="buttomIcon" class="col-xs-12 col-md-12 col-lg-12 center-xs">
+                                        <p style="font-size: small;">Gestión de Inventario</p>
                                         <a id="arrowe"><img id="flechaimg"
                                             src="{% static 'imagenes/arrow.svg' %}"
                                             alt="lstar_usuario"

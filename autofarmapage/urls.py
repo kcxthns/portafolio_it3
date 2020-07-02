@@ -21,6 +21,7 @@ urlpatterns = [
     path('exito-guardar-tutor', views.guardadoTutorExito, name='exito-guardar-tutor'),
     path('exito-modificar-usuario', views.modificarUsuarioExito, name='exito-modificar-usuario'),
     path('logout', views.logout),
+    path('cambio-centro-salud', views.cambiarCentroSalud, name='cambio-centro-salud'),
 
     #urls farmacia
     path('inicio-farmacia', views.inicioFarmacia, name='inicio-farmacia'),
@@ -35,6 +36,7 @@ urlpatterns = [
     path('resultado-entrega/<int:id_receta>/<int:codigo_med>/<int:cantidad>/<int:numMensaje>', views.entregaResultado, name='resultado-entrega'),
     path('reservas-lista', views.reservaLista, name='reservas-lista'),
     path('reservas-detalle/<int:id_reserva>', views.reservaDetalle, name='reservas-detalle'),
+    path('editar-medicamento/<int:codigoMed>', views.editarMedicamento, name='editar-medicamento'),
 
     # urls médico
     path('home_medico', views.home_medico, name='home_medico'),
@@ -69,10 +71,15 @@ urlpatterns = [
         name='password_reset_confirm'),
 
     path('password_reset/', auth_views.PasswordResetView.as_view(
-        template_name='registration/password_reset_formu.html'),
+        template_name='registration/password_reset_formu.html'
+    ),
         name='password_reset'),
 
     path('cambio_exitoso', views.passwordResetCompleto, name='reset_completo'),
+
+    path('reset_password', views.resetPasswordRut, name='reset_pass'),
+
+    path('reset_success', views.resetPasswordRutSuccess, name='reset_success'),
 
     #rest_framework
     path('api/', include(router.urls)),

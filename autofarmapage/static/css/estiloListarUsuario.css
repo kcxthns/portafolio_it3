@@ -109,9 +109,6 @@ input{
     font-family: 'Roboto', sans-serif;
     font-size: medium;
     margin-bottom: 30px;
-    
-    
-
 }
 
 .inputCard{
@@ -224,6 +221,7 @@ input{
 
 .backgroundrightside{
     background: #f2f5fa;
+    min-height: 700px;
 }
 
 
@@ -258,4 +256,39 @@ input{
     color: slategrey;
     margin-top: 2px;
     font-weight: lighter;
+}
+
+.fa {
+    margin-left: 2%;
+}
+
+.btn{
+    border: #1290cb 1px solid;
+    background: #1290cb;
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    padding: 2%;
+}
+
+.btn:hover{
+    border: #1290cb 1px solid;
+    background: #F2F5FA;
+    color: #1290cb;
+}
+
+.parrafo{
+    font-family: 'Roboto', sans-serif;
+    color: #666666;
+    font-size: small;
+}
+
+.buttonBuscar2{
+    border: none;
+    background: #1290cb;
+    /*height: 35px;
+    width: 35px;*/
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-size: medium;
+    /*margin-bottom: 30px;*/
 }

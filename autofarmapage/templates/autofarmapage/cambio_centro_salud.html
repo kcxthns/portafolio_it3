@@ -1,0 +1,178 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!--Enlace css-->
+        <link rel="stylesheet" href="{% static 'css/estiloListarUsuario.css' %}">
+        <!--Enlace flexbox-->
+        <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
+
+        <!--  Enlace a fuentes-->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap"
+            rel="stylesheet">
+
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap"
+            rel="stylesheet">
+
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        
+        <!--Script Validar Rut-->
+        <script src="{% static 'js/validarRut.js' %}"></script>
+
+        <title>Cambiar Centro Salud</title>
+
+    </head>
+
+    <body>
+        <div class="container">
+            <header class="row backgroundheader">
+                <div class="col-xs-12 col-lg-12" >
+                   <div class="header"> 
+                       <div class="col-xs-12 end-xs">
+                            <a href="{% url 'homeadmi' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="40" width="200"> </a>
+                            <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                            <div class="col-xs-12 star-xs">
+                                <h4>{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>
+                            </div>
+                       </div>
+                   </div>
+                </div>
+            </header>
+
+            <section class="row section">
+                <div class="col-xs-12 col-md-2 col-lg-2 star-large backgroundleftside">
+                    <div class="sideleft">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-12 center-lg">
+                                <div class="button_usuario">
+                                    <a href="{% url 'agregar-usuario' %}"><img
+                                            src="{% static 'imagenes/agregarUsuario.png' %}"
+                                            alt="agregar_Usuario" height="60"
+                                            width="60"></a>
+                                    <h4>Crear Usuario</h4>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-lg-12 center-lg">
+                                <div class="button_listarusuarios">
+                                    <a href="{% url 'listar-usuario' %}"><img
+                                            src="{% static 'imagenes/listarusuarios.png' %}"
+                                            alt="lstar_usuario" height="60"
+                                            width="60"></a>
+                                    <h4>Listar Usuarios</h4>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-lg-12 center-lg">
+                                <div class="button_listarinformes">
+                                    <a href="{% url 'listar-informe' %}"><img
+                                            src="{% static 'imagenes/listarInformes.png' %}"
+                                            alt="listar_informes" height="60"
+                                            width="60"></a>
+                                    <h4>Informes</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-10 center-xs backgroundrightside">
+                    <div class="sideright">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
+                                <h4 id="encabezadoform">Cambio de Centro de Salud</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 center-xs">
+                                <p class="parrafo">Aquí podrás cambiar a un Usuario del Sistema a tu Centro de Salud, solo ingresa el RUT de la persona a continuación.</p>
+                            </div>
+                        </div>
+                        <br>
+                        <form id="formulario-buscar" method="GET" action="#" class="formulariobuscar">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xs-12 center-xs">
+                                    <input type="search"
+                                        name="q" required placeholder="Buscar por rut" maxlength="12"
+                                        oninput="checkRut(this)" onkeypress="return isNumber(event)">
+
+                                    <button class="buttonBuscar2" name="submit" type="submit" value="Busqueda">
+                                        <img src="{% static 'imagenes/search.png' %}"
+                                            alt="search-listar" height="30"
+                                            width="30">
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12 center-xs">
+                                {% if msg %}
+                                <br>
+                                <p style="color: crimson; font-weight: bold;">{{ msg }}</p>
+                                {% endif %}
+                                {% if persona %}
+                                <div class="backgroundCard">
+                                    <div class="row">
+                                        <div class="col-xs-1 end-xs">
+                                            <p class="parrafo">RUT:</p>
+                                        </div>
+                                        <div class="col-xs-2 start-xs">
+                                            <p> {{ persona.rut }}-{{ persona.dv }}</p>
+                                        </div>
+                                        <div class="col-xs-1 end-xs">
+                                            <p class="parrafo">Nombre:</p>
+                                        </div>
+                                        <div class="col-xs-8 start-xs">
+                                            <p>{{ persona.nombres }} {{ persona.apellido_paterno }} {{ persona.apellido_materno }}</p>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-xs-2 end-xs">
+                                            <p class="parrafo">Centro Médico:</p>
+                                        </div>
+                                        <div class="col-xs-5 start-xs">
+                                            <p>{{ persona.id_centro.nombre_centro }}</p>
+                                        </div>
+                                        <div class="col-xs-2 end-xs">
+                                            <p class="parrafo">Ciudad: </p>
+                                        </div>
+                                        <div class="col-xs-3 start-xs">
+                                            {{ persona.id_comuna.nombre_comuna }}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-xs-12 center-xs">
+                                            {% if persona.id_centro.id_centro == user.rut.id_centro.id_centro %}
+                                            <p style="color: crimson; font-weight: bold;">El Usuario ya pertenece al Centro de Salud</p>
+                                            {% else %}
+                                            <form action="#" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="rut" value="{{ persona.rut }}">
+                                                <button class="btn" type="submit">
+                                                    Cambiar a {{ user.rut.id_centro.nombre_centro }}
+                                                </button>
+                                            </form>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </body>

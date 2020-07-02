@@ -260,6 +260,7 @@ class ReservaMedicamento(models.Model):
     fecha_reserva = models.DateField()
     entregado = models.BigIntegerField()
     stock_disponible = models.BigIntegerField()
+    email_enviado = models.BigIntegerField()
     
     class Meta:
         managed = False
@@ -352,8 +353,10 @@ class Usuario(AbstractBaseUser):
     last_login = models.DateField(blank=True, null=True)
     admin = models.BooleanField(default=True)
     staff = models.BooleanField(default=True)
+    email = models.CharField(null=True, max_length=128)
 
     USERNAME_FIELD = 'rut'
+    EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()

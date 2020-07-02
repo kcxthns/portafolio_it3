@@ -9,6 +9,9 @@ Farmacia - Reservas Medicamentos
 <!--BUSCAR RESERVA POR RUT DEL PACIENTE-->
 <div>
     <br>
+    <div>
+        <h4 id="encabezadoform">Medicamentos Reservados</h4>
+    </div>
     <form method="GET">
         {% csrf_token %}
         <input class="ancho-30" type="search" value="{{ request.GET.q }}"

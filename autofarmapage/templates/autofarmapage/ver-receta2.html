@@ -5,7 +5,7 @@
 <div class="contenido">
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-            <h4 id="encabezadoform">Información receta: {{receta.id_receta}}</h4>
+            <h4 id="encabezadoform">Información receta</h4>
         </div>
     </div>
     <div class="receta-elegida">
@@ -15,6 +15,7 @@
                     <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco" height="40" width="200" />
                 </div>
                 <div class="receta-medico">
+                    <h4>N° receta: {{ receta.id_receta }}</h4>
                     <p>{{ user.rut.id_centro.nombre_centro }}</p>
                     <h4 class="nombre-medico">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
                         {{user.rut.apellido_materno}}</h4>
@@ -41,7 +42,7 @@
                     {%if detallereceta%}
                     {%for j in detallereceta%}
                     <li class="receta-remedios">
-                        <p><b>{{j.codigo.nombre_medicamento}}</b>
+                        <p><b class="MayusName">{{j.codigo.nombre_medicamento}}</b>
                             en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
                             unidades/dosis por {{j.duracion_tratamiento}} días
                             <p>

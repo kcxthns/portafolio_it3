@@ -9,6 +9,7 @@
     <link rel="stylesheet"  href="{% static 'css/flexboxgrid.css' %}">
     <!--Enlace css-->
     <link rel="stylesheet"  href="{% static 'css/estilohomeadmi.css' %}">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     
     <!--Enlaces fonts-->
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
@@ -36,7 +37,8 @@
         <section class="row section">
             <div class="col-xs-12 col-lg-2 start-lg backgroundleft">          
                 <div class="sideleft">
-                    <img src="{% static 'imagenes/User-Profile.png' %}" alt="LogoUsuario" width="90" height="90">
+                    <i class="circulo fas fa-user-cog" 
+                        style="font-size: 70px; color: #666; padding-top: 17px; padding-left: 4px;"></i>
                     <div class="row">
                         <div class="col-xs-12 col-lg-12 center-xs">
                             <h4 id="encabezado1">{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>      
@@ -74,21 +76,25 @@
                     <div class="row">
                         <div class="col-xs-12 col-lg-6 center-lg">                              
                             <div class="button_usuario">
-                                <a href="{% url 'agregar-usuario' %}"><img src="{% static 'imagenes/icono-agregar_usuario.png' %}" alt="agregarUsuario"  height="100" width="100"></a>
+                                <a href="{% url 'agregar-usuario' %}">
+                                    <img src="{% static 'imagenes/icono-agregar_usuario.png' %}" 
+                                        alt="agregarUsuario"  height="100" width="100"></a>
                                 <h4>Agregar Usuario</h4>
                             </div>                                     
                         </div>
-
                         <div class="col-xs-12 col-lg-6 center-lg">    
                             <div class="button_listarusuarios">
-                                <a href="{% url 'listar-usuario' %}"><img src="{% static 'imagenes/icono-listar_usuarios.png' %}" alt="listarUsuarios"  height="100" width="100"></a>
+                                <a href="{% url 'listar-usuario' %}">
+                                    <img src="{% static 'imagenes/icono-listar_usuarios.png' %}" 
+                                        alt="listarUsuarios"  height="100" width="100"></a>
                                  <h4>Listar Usuarios</h4>
                             </div>                      
                         </div>
-
                         <div class="col-xs-12 col-lg-12">                                                       
                             <div class="button_listarinformes">
-                                <a href="{% url 'listar-informe' %}"><img src="{% static 'imagenes/icono-listar_informes.png' %}" alt="listarinformes" height="100" width="100"></img></a>
+                                <a href="{% url 'listar-informe' %}">
+                                    <img src="{% static 'imagenes/icono-listar_informes.png' %}" 
+                                        alt="listarinformes" height="100" width="100"></img></a>
                                 <h4 id="h4listarinformes">Listar Informes</h4>
                             </div>           
                         </div> 

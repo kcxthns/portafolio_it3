@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <!--Formulario agregar paciente -->
+    <!--Formulario agregar tutor -->
     <form id="formulario-tutor" method="POST" action="#" class="formulario-tutor">
         {% csrf_token %}
         <div class="contenedor-inputs">
@@ -36,18 +36,18 @@
             <!-- Dirección -->
             <input class="input-100" id="direccion" type="text" name="direccion" maxlength="50" required
                 placeholder="Dirección" />
-            <!-- Comuna -->
-            <select class="input-48" required name="id_comuna" id="id_comuna">
-                <option value="" selected> Seleccione Comuna</option>
-                {% for ciudad in ciudades %}
-                <option value="{{ ciudad.id_comuna }}">{{ ciudad.nombre_comuna }}</option>
-                {% endfor %}
-            </select>
             <!-- Región -->
             <select class="input-48" required name="nombre_region" id="nombre_region">
                 <option value="" selected> Seleccione Región</option>
                 {% for region in regiones %}
                 <option value="{{ region.id_region }}">{{ region.nombre_region }}</option>
+                {% endfor %}
+            </select>
+            <!-- Comuna -->
+            <select class="input-48" required name="id_comuna" id="id_comuna">
+                <option value="" selected> Seleccione Comuna</option>
+                {% for ciudad in ciudades %}
+                <option value="{{ ciudad.id_comuna }}">{{ ciudad.nombre_comuna }}</option>
                 {% endfor %}
             </select>
             <!-- Centro de salud -->

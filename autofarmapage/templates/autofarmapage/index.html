@@ -53,10 +53,10 @@
                     {% csrf_token %}
                     <input id='rut' class="intputs" type="text" name="rut" required maxlength="12" placeholder="Usuario"
                         oninput="checkRut(this)" onkeypress="return isNumber(event)">
-                    <input class="intputs" type="password" id="password" name="password" minlength="4"
+                    <input class="intputs" type="password" id="password" name="password" minlength="4" maxlength="20"
                         placeholder="Contraseña" required>
                     <div class="logeo-opcion">
-                        <span class="olvidaste"><a class="enlace" href="#" target="_blank"> ¿Olvidaste tu contraseña?
+                        <span class="olvidaste"><a class="enlace" href="{% url 'reset_pass' %}" target="_blank"> ¿Olvidaste tu contraseña?
                             </a>
                         </span>
                         <button class="btn">
@@ -64,6 +64,12 @@
                         </button>
                     </div>
                 </form>
+                <div>
+                    {% if alerta %}
+                    <br>
+                    <span style="color: red;">{{ alerta }}</span>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </section>
@@ -110,7 +116,7 @@
                 <p>Ver los medicamentos que tiene en reserva para ser retirarados</p>
             </li>
             <li>
-                <img src="{% static 'imagenes/celular.svg' %}" alt="imagen app celular" height=" auto" width="250">
+                <img src="{% static 'imagenes/celular.png' %}" alt="imagen app celular" height=" auto" width="250">
             </li>
             <li class="movil-caracteristicas">
                 <i class="fas fa-bullhorn"></i>

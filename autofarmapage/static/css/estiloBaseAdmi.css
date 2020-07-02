@@ -28,6 +28,7 @@
 
 .backgroundrightside{
     background: #f2f5fa;
+    min-height: 700px;
 }
 
 .button_usuario{
