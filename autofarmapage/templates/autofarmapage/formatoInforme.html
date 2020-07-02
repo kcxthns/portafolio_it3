@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <header>
+        <hr>
+        <h2 align="center">INFORME STOCK MEDICAMENTOS</h2>
+        {%if data1.informe_stock %}
+        {% for datos in data1.informe_stock %}
+        <br>
+        <h3>Centro de salud: {{ datos.CENTRO_SALUD}}</h3>
+
+        <h3>{{ datos.COMUNA}}</h3>
+        <h3>Fecha Emisión: {{ now }}</h3>
+        <hr>
+        <br>
+    </header>
+
+    <div>
+        <h4>Nombre médicamento: {{ datos.NOMBRE_MEDICAMENTO}}</h4> 
+        <br>
+        <h4>Fabricante: {{ datos.FABRICANTE}}</h4>
+        <br>
+        <h4>Presentación: {{ datos.NOMBRE_TIPO_MED}}</h4> 
+        <br>
+        <h4>Stock: {{datos.STOCK}} </h4> 
+        <br>
+        <h4>Médicamentos caducados: {{ datos.CANT_CADUCADOS}}</h4>
+        <br>
+        <h4>Total disponibles: {{ datos.TOTAL_DISPONIBLE}}</h4>
+        <br>
+        <hr>
+    </div>
+    {%endfor%}
+    {% endif%}
+</body>
+</html>

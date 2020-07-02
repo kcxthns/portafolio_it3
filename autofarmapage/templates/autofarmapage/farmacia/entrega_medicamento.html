@@ -142,7 +142,7 @@
         <div class="col-xs-12 center-xs">
             <form action="#" method="POST">
                 {% csrf_token %}
-                <input type="text" name="codigo_medicamento_1_1" id="codigo_medicamento_1_1"
+                <input type="hidden" name="codigo_medicamento_1_1" id="codigo_medicamento_1_1"
                 value="{{ detalle.CODIGO_MED }}">
                 <!--<input type="hidden" name="id_receta" id="id_receta" 
                 value="{{ receta.id_receta }}">-->

@@ -16,9 +16,9 @@
 
 .section{
     padding-top: 5.2rem;
-
-    
+    min-height: 101vh; 
 }
+
 .backgroundleftside{
     background: #b9dcf0;
     display: flex;
@@ -27,8 +27,7 @@
     min-height: 10vh;
 }
 
-.button_usuario{
-  
+.button_usuario{  
     background: #b9dcf0;
     border: #ffffff 1.3px solid;
     margin-top: 8px;
@@ -38,19 +37,13 @@
     padding-bottom: 26px;
     color: #1290cb ;
     transition: 1s;
-    
-
 }
 
 .button_usuario:hover{
     background: #f2f5fa;
-
 }
 
-
-
-.button_listarusuarios{
- 
+.button_listarusuarios{ 
     background: #b9dcf0;
     border: #ffffff 1.3px solid;
     margin-left: 8px;
@@ -63,11 +56,9 @@
 
 .button_listarusuarios:hover{
     background: #f2f5fa;
-
 }
 
 .button_listarinformes{
-
     background: #b9dcf0;
     border: #ffffff 1.3px solid;
     margin-left: 8px;
@@ -80,15 +71,13 @@
 
 .button_listarinformes:hover{
     background: #f2f5fa;
-
 }
-
 
 #encabezadoform{
     font-weight: lighter;
-    padding: 55px;
-    
+    padding: 55px;    
 }
+
 /*ESTILO CAMPOS*/
 input{
     border: none;
@@ -98,6 +87,17 @@ input{
     padding-left: 10px;
     margin-bottom: 30px;
     border-bottom: 1px solid #666666;
+}
+
+#inputlistusuario{
+    border: none;
+    background: #FFFFFF;
+    margin-bottom: 0px;
+}
+
+button{
+    border: none;
+    background: #1290cb;
 }
 
 .buttonBuscar{
@@ -122,7 +122,6 @@ input{
 }
 
 .buttonEditar{
-
     border: none;
     background: #1290cb;
     height: 35px;
@@ -131,9 +130,8 @@ input{
     font-family: 'Roboto', sans-serif;
     font-size: small;
     margin-bottom: 30px;
-
-
 }
+
 .backgroundCard a{
     text-decoration: none;
     background: #1290cb;
@@ -141,23 +139,17 @@ input{
     padding: 5px;
 }
 
-
-
 .backgroundCard #arrowe{
    text-decoration: none;
    background: none;
 }
-
 
 #buttomIcon{
     border:1px solid lightgray;
     left: 0px;
     right: 0px;
     margin-top: 8px;
-    border-radius: 10px 10px 10px 10px;
-    
-
-   
+    border-radius: 10px 10px 10px 10px;   
 }
 
 .buttomCard{
@@ -179,7 +171,6 @@ input{
 }
 
 .buttonAddTutor{
-
     border: none;
     background: #1290cb;
     height: 35px;
@@ -188,13 +179,9 @@ input{
     font-family: 'Roboto', sans-serif;
     font-size: small;
     margin-bottom: 5px;
-   
-
 }
 
-
 .buttonDeshabilitar{
-
     border: none;
     background: #1290cb;
     height: 35px;
@@ -202,13 +189,9 @@ input{
     color: #FFFFFF;
     font-family: 'Roboto', sans-serif;
     font-size: small;
-    
-
 }
 
-
 /*FIN ESTILO CAMPOS*/
-
 .backgroundCard{
     background: #ffffff;
     box-shadow: 0px 0px 3px rgba(0,0,0,.1);
@@ -218,38 +201,27 @@ input{
     margin-right: 20rem;
 }
 
-
 .backgroundrightside{
     background: #f2f5fa;
     min-height: 700px;
 }
 
-
-
 @media(max-width:1080px){
-
-
     .backgroundCard{
-
         margin: 15px;
-
     }
 
-
-    .button_usuario{
-  
-      
+    .button_usuario{      
         padding-left: 5px; 
     }
 
     .button_listarusuarios{
         padding-left: 5px;
     }
+
     .button_listarinformes{
         padding-left: 5px;
     }
-    
-
 }
 
 .labelListaMed{
@@ -291,4 +263,53 @@ input{
     font-family: 'Roboto', sans-serif;
     font-size: medium;
     /*margin-bottom: 30px;*/
+}
+
+table {
+    background-color: #fff;
+    text-align: center;
+    border-collapse: collapse;
+    width: 100%;
+    font-weight: lighter;
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 6px 0;
+    font-weight: lighter;
+}
+
+thead {
+    background-color: #666;
+    text-transform: uppercase;
+    color: white;
+    padding: 10px;
+}
+
+tr:nth-child(even) {
+    /* celda por medio */
+    background-color: #b9dcf0;
+    color: #000;
+}
+
+tr:hover td {
+    background-color: #a5a5a5;
+    color: #fff;
+    font-weight: normal;
+}
+
+.ancho-100 {
+    width: 100%;
+}
+
+.ancho-70 {
+    width: 70%;
+}
+
+.ancho-48 {
+    width: 48%;
+}
+
+.ancho-40 {
+    width: 40%;
 }

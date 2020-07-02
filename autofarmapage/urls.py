@@ -86,5 +86,12 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token, name='api-token-auth'),
     path('ListReceta', ApiRecetaListView.as_view(), name='ListReceta'),
     path('GetPersona', ApiUsuario.as_view(), name='GetPersona'),
-    path('reservas/<int:rut_paciente>', views.listaReservasMovil)
+    path('reservas/<int:rut_paciente>', views.listaReservasMovil),
+
+    #generador pdf
+    path('pdf_stock/<slug:nombre_medicamento>', views.MostrarPDFSTOCK.as_view(), name='pdf_stock'),
+    path('pdf_download/<slug:nombre_medicamento>', views.DescargarPDF.as_view(), name='pdf_download'),
+
+    #url informe stock
+    path('informeStock', views.render_informestock_html, name='informeStock')
 ]

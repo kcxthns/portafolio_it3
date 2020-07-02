@@ -3,29 +3,32 @@
 
 {% block entrega_resultado %}
 {% if numero_mensaje == 1 %}
+<br>
 <div class="col-xs-12">
     <div class="center-xs">
-        <p>{{ mensaje }}</p>
+        <h4>{{ mensaje }}</h4>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-xs-6 end-xs">
+        <p class="labelListar">Cantidad a Entregar: </p>
+    </div>
+    <div class="col-xs-6 start-xs">
+        <h4>{{ cantidad }}</h4>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-6 end-xs">
-        <p>Cantidad a Entregar: </p>
+        <p class="labelListar">Presentación: </p>
     </div>
     <div class="col-xs-6 start-xs">
-        <p>{{ cantidad }}</p>
+        <h4>{{ medicamento.id_tipo_med.nombre_tipo_med | upper }}</h4>
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-6 end-xs">
-        <p>Presentación: </p>
-    </div>
-    <div class="col-xs-6 start-xs">
-        <p>{{ medicamento.id_tipo_med.nombre_tipo_med | upper }}</p>
-    </div>
-</div>
-<div class="row">
-    <button type="button">
+<br>
+<div class="row center-xs">
+    <button class="btn-x" type="button">
         <a href="{% url 'entrega-medicamento' id_receta %}">Volver</a>
     </button>
 </div>
@@ -47,25 +50,27 @@
 <div>
     <br>
     <div class="col-xs-12 center-xs">
-        <h3>{{ mensaje }}</h3>
+        <h4>{{ mensaje }}</h4>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-6 end-xs">
+            <p class="labelListar">Cantidad Reserva: </p>
+        </div>
+        <div class="col-xs-6 start-xs">
+            <h4>{{ cantidad }}</h4>
+        </div>
     </div>
     <div class="row">
         <div class="col-xs-6 end-xs">
-            <p>Cantidad Reserva: </p>
+            <p class="labelListar">Presentación: </p>
         </div>
         <div class="col-xs-6 start-xs">
-            <p>{{ cantidad }}</p>
+            <h4>{{ medicamento.id_tipo_med.nombre_tipo_med | upper }}</h4>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-6 end-xs">
-            <p>Presentación: </p>
-        </div>
-        <div class="col-xs-6 start-xs">
-            <p>{{ medicamento.id_tipo_med.nombre_tipo_med | upper }}</p>
-        </div>
-    </div>
-    <div class="row">
+    <br>
+    <div class="row center-xs">
         <button class="btn" type="button">
             <a href="{% url 'entrega-medicamento' id_receta %}">Volver</a>
         </button>
@@ -75,48 +80,51 @@
 <div>
 <br>
 <div class="col-xs-12 center-xs">
-    <h3>{{ mensaje }}</h3>
+    <h4>{{ mensaje }}</h4>
 </div>
 {% for reserva in reserva %}
 <div class="col-xs-12 center-xs">
-    <p>Fecha Reserva: {{ reserva.fecha_reserva }}</p>
+    <p class="labelListar">Fecha Reserva: {{ reserva.fecha_reserva }}</p>
 </div>
 <div class="col-xs-12 center-xs">
-    <p>Cantidad Reservada: {{ reserva.cantidad }}</p>
+    <p class="labeListar">Cantidad Reservada: {{ reserva.cantidad }}</p>
 </div>
 {% endfor %}
 </div>
 {% elif numero_mensaje == 5 %}
 <div class="col-xs-12">
     <div class="center-xs">
-        <p>{{ mensaje }}</p>
+        <h4>{{ mensaje }}</h4>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-xs-6 end-xs">
+        <p class="labelListar">Cantidad a Entregar: </p>
+    </div>
+    <div class="col-xs-6 start-xs">
+        <h4>{{ cantidad }}</h4>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-6 end-xs">
-        <p>Cantidad a Entregar: </p>
+        <p class="labelListar">Presentación: </p>
     </div>
     <div class="col-xs-6 start-xs">
-        <p>{{ cantidad }}</p>
+        <h4>{{ medicamento.id_tipo_med.nombre_tipo_med | upper }}</h4>
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-6 end-xs">
-        <p>Presentación: </p>
-    </div>
-    <div class="col-xs-6 start-xs">
-        <p>{{ medicamento.id_tipo_med.nombre_tipo_med | upper }}</p>
-    </div>
-</div>
-<div class="row">
+<br>
+<div class="row center-xs">
     <button type="button">
         <a href="{% url 'reservas-listar' %}">Volver</a>
     </button>
 </div>
 {% elif numero_mensaje == 6 %}
+<br>
 <div class="col-xs-12">
     <div class="center-xs">
-        <p>{{ mensaje }}</p>
+        <h4>{{ mensaje }}</h4>
     </div>
 </div>
 {% endif %}

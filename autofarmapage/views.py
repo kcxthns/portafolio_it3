@@ -14,7 +14,6 @@ from autofarmapage.managers import UserManager
 from django.core.paginator import Paginator
 from .validacion import Validador
 from datetime import datetime
-#import rest_framework
 from rest_framework import viewsets
 from .serializers import RecetaSerializer, PersonaSerializer
 from rest_framework.response import Response
@@ -30,6 +29,12 @@ try:
     from autofarmapage.django_asynchronous_send_mail import send_mail
 except:
     from django.core.mail import send_mail
+#pdf imports
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.views import View
 
 # Create your views here.
 
@@ -160,32 +165,82 @@ def guardadoUsuarioExito(request):
 def guardadoTutorExito(request):
     return render(request, 'autofarmapage/exito-guardar-tutor.html', {})
 
+#obtiene las personas filtradas por el id del centro
+def get_personas(id_centro):
+    bd = ConexionBD()
+    con = bd.conectar()
+    cursor = con.cursor()
+    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, NVL(t.tipo_empleado, 'Paciente') AS TIPO_EMPLEADO,
+                      u.habilitado, 
+                      (CASE WHEN p.rut_tutor IS NULL THEN 'Sin Registro'
+                      ELSE (SELECT rut||'-'||dv FROM persona WHERE rut = p.rut_tutor)
+                      END) AS RUT_TUTOR
+                      FROM persona p 
+                      JOIN usuario u ON p.rut=u.rut 
+                      FULL OUTER JOIN tipo_empleado t ON t.id_tipo_empleado = u.id_tipo_empleado 
+                      WHERE p.id_centro = :id_centro""")
+    cursor.execute(None, id_centro = id_centro)   
+   
+    cursor.rowfactory = fabricaDiccionario(cursor)
+    personas = cursor.fetchall()
+    data5 ={
+            'personas': personas,
+        }             
+    return data5
+
+#Obtiene la persona por el criterio de busqueda    
+def search_persona(id_centro, rut):
+    bd = ConexionBD()
+    con = bd.conectar()
+    cursor = con.cursor()
+    cursor.prepare("""SELECT p.nombres, p.dv, p.apellido_paterno, p.rut, NVL(t.tipo_empleado, 'Paciente') AS TIPO_EMPLEADO,
+                      u.habilitado,
+                      (CASE WHEN p.rut_tutor IS NULL THEN 'Sin Registro'
+                      ELSE (SELECT rut||'-'||dv FROM persona WHERE rut = p.rut_tutor)
+                      END) AS RUT_TUTOR
+                      FROM persona p 
+                      JOIN usuario u ON p.rut=u.rut 
+                      FULL OUTER JOIN tipo_empleado t ON t.id_tipo_empleado = u.id_tipo_empleado 
+                      WHERE p.id_centro = :id_centro AND p.rut=:rut""")
+    cursor.execute(None, id_centro = id_centro, rut = rut)
+    cursor.rowfactory = fabricaDiccionario(cursor)
+    personas = cursor.fetchall()
+    data5 ={
+            'personas': personas,
+        }             
+    return data5  
+
 #Vista de Listar Usuarios (Administrador)
 def listarusuario(request):
     #Obtiene las personas de la base de datos que pertenecen al centro de salud del Administrador
     person = Persona.objects.filter(id_centro=request.user.rut.id_centro).order_by('rut')
+    id_centro = request.user.rut.id_centro.id_centro
+    data5 = get_personas(id_centro)
     #Búsqueda del Usuario por RUT
     if request.method == 'GET':
         criterio_busqueda = request.GET.get('q')
         submitBtn = request.GET.get('submit')
         if criterio_busqueda is not None:
-            person = Persona.objects.filter(id_centro=request.user.rut.id_centro).filter(rut=criterio_busqueda)
+            #person = Persona.objects.filter(id_centro=request.user.rut.id_centro).filter(rut=criterio_busqueda)
             #Pagina los resultados de la búsqueda
-            paginador = Paginator(person, 20)
-            pagina = request.GET.get('page')
-            person = paginador.get_page(pagina)
-            data5 = {
-                'person': person,
-            }
-            parametros = request.GET.copy()
-            if 'page' in parametros:
-                del parametros['page']
-            data5['parametros'] = parametros
+            #paginador = Paginator(person, 20)
+            #pagina = request.GET.get('page')
+            #person = paginador.get_page(pagina)
+            #data5 = {
+                #'person': person,
+            #}
+            #parametros = request.GET.copy()
+            #if 'page' in parametros:
+                #del parametros['page']
+            #data5['parametros'] = parametros
+            id_centro = request.user.rut.id_centro.id_centro
+            data5 = search_persona(id_centro, criterio_busqueda)
             return render(request, 'autofarmapage/listar-usuario.html', data5)
     #Agrega un tutor al Usuario seleccionado
     if request.method == 'POST':
         rut_tutor = request.POST['rutTutor']
         rut_paciente = request.POST['rutPaciente']
+        rut_paciente = soloCuerpoRut(rut_paciente)
         #Conexión a la bd
         bd = ConexionBD()
         con = bd.conectar()
@@ -195,14 +250,10 @@ def listarusuario(request):
         cursor.callproc('pkg_crear_usuario.sp_crear_tutor', [
                         rut_tutor, rut_paciente, realizado])
         if realizado.getvalue() == 1:
-            return redirect('exito-guardar-tutor')
-    #Pagina el listado de Usuarios
-    paginador = Paginator(person, 20)
-    pagina = request.GET.get('page')
-    person = paginador.get_page(pagina)
-    data5 = {
-        'person': person,
-    }
+            #return redirect('exito-guardar-tutor')
+            messages.success(request, "<<¡TUTOR AGREGADO!>>")
+        elif realizado.getvalue() == 0:
+            messages.success(request, "<<ATENCIÓN: OCURRIÓ UN ERROR>>")
     return render(request, 'autofarmapage/listar-usuario.html', data5)
 
 def cambiarCentroSalud(request):
@@ -235,15 +286,6 @@ def cambiarCentroSalud(request):
             }
             return render(request, 'autofarmapage/cambio_centro_salud.html', datos)
     return render(request, 'autofarmapage/cambio_centro_salud.html', datos)
-
-#Vista de la Lista de Informes
-def listarinforme(request):
-    #Obtiene todos los informes
-    informe = RegistroInformes.objects.all()
-    datainfo = {
-        'informe': informe
-    }
-    return render(request, 'autofarmapage/listar-informe.html', datainfo)
 
 #Vista de Modificar Usuario Exitosamente (Administrador)
 def modificarUsuarioExito(request):
@@ -771,6 +813,7 @@ def entregaMedicamento(request, id_receta):
             'receta' : receta,
         }
     if request.method == 'POST':
+        print(request.POST)
         if 'boton_reserva_1' in request.POST:
             opcForm = 2
             codMed = request.POST['codigo_medicamento_2_1']
@@ -783,6 +826,7 @@ def entregaMedicamento(request, id_receta):
             tipoEntrega = 1
         if 'boton_entrega_1' in request.POST:
             opcForm = 1
+            print('*')
             codMed = request.POST['codigo_medicamento_1_1']
             cantidadEntrega = int(request.POST['cantidad_entrega_1_1'])
             tipoEntrega = 1
@@ -798,15 +842,19 @@ def entregaMedicamento(request, id_receta):
             tipoEntrega = 2
         if opcForm == 1:
             #cantidadEntrega = request.POST['cantidad_entrega_1']
+            print('**')
             bd = ConexionBD()
             con = bd.conectar()
             cursor = con.cursor()
             #existeStock = cursor.var(bool)
+            print(request.user.rut.id_centro.id_centro)
+            print(codMed)
+            print(cantidadEntrega)
             existeStock = cursor.callfunc('pkg_farmacia.fn_stock_suficiente', bool, [codMed, request.user.rut.id_centro.id_centro, cantidadEntrega])
-            #print(existeStock)
+            print(existeStock)
             if existeStock:
                 resultado = cursor.var(int)
-                cursor.callproc('pkg_farmacia.sp_entregar_medicamento', [cantidadEntrega, codMed, id_receta, request.user.rut.rut, resultado])
+                cursor.callproc('pkg_farmacia.sp_entregar_medicamento', [cantidadEntrega, codMed, id_receta, request.user.rut.rut, tipoEntrega, resultado])
                 print(resultado.getvalue())
                 if resultado.getvalue() == 1:
                     return redirect('resultado-entrega', id_receta = id_receta, codigo_med=codMed, cantidad=cantidadEntrega, numMensaje=1)
@@ -1348,6 +1396,10 @@ def listaReservasMovil(request, rut_paciente):
         form.send_email()
         return super().form_valid(form)"""
 
+##################
+#RESET CONTRASEÑA#
+##################
+
 def resetPasswordRut(request):
     if request.method == 'POST':
         rut = soloCuerpoRut(request.POST['rut'])
@@ -1380,3 +1432,94 @@ def resetPasswordRut(request):
 
 def resetPasswordRutSuccess(request):
     return render(request, 'registration/password_reset_success.html', {})
+
+#####################
+#VISTA INFORME STOCK#
+#####################
+
+def render_informestock_html(request):
+    centroSalud = request.user.rut.id_centro.id_centro
+    dataInforme = listar_informe_stock(centroSalud)
+    return render(request, 'autofarmapage/formatoInforme.html', dataInforme)     
+
+# VISTA PDF INFORME STOCK
+def renderizar_pdf(template_src, datos_informe={}):
+    template = get_template(template_src)
+    html = template.render(datos_informe)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='aplication/pdf')
+    return None
+
+class MostrarPDFSTOCK(View):
+    def get(self, request, nombre_medicamento):
+        conexion = ConexionBD()
+        centroSalud = request.user.rut.id_centro.id_centro
+        data1 = stock_informe(centroSalud, nombre_medicamento, conexion)
+        now = datetime.now()
+        data = { 'now': now,
+                 'data1':data1, }
+        pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+class DescargarPDF(View):
+    def get(self, request, nombre_medicamento):
+        conexion = ConexionBD()
+        centroSalud = request.user.rut.id_centro.id_centro
+        data1 = stock_informe(centroSalud, nombre_medicamento, conexion)
+        now = datetime.now()
+        data = { 'now': now,
+                 'data1':data1, }
+        pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Informe_stock_%s.pdf" %("centro_N-" + str(centroSalud))
+        content = "attachment; filename='%s'" %(filename)
+        response['Content-Disposition'] = content
+        return response
+
+def listar_informe_stock(id_centro):
+    bd = ConexionBD()
+    con = bd.conectar()
+    cursor = con.cursor()
+    cursor.prepare("""SELECT me.nombre_medicamento,  
+                      me.fabricante, tm.nombre_tipo_med, 
+                      st.stock, ca.cantidad AS CANT_CADUCADOS, 
+                      st.stock - ca.cantidad AS TOTAL_DISPONIBLE, 
+                      (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, 
+                      (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA 
+                      FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo 
+                      JOIN caducado ca ON ca.codigo = me.codigo 
+                      JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med 
+                      WHERE st.id_centro = :id_centro""")
+    cursor.execute(None, id_centro = id_centro)   
+    #cursor.execute(query, id_centro=301)
+    cursor.rowfactory = fabricaDiccionario(cursor)
+    informe_stock = cursor.fetchall()
+    datos ={
+            'informe_stock': informe_stock,
+        }             
+    return datos
+
+def stock_informe(id_centro, nombre_medicamento, conexion):
+    con = conexion.conectar()
+    cursor = con.cursor()
+    cursor.prepare("SELECT me.nombre_medicamento,  me.fabricante, tm.nombre_tipo_med, st.stock, ca.cantidad AS CANT_CADUCADOS, st.stock - ca.cantidad AS TOTAL_DISPONIBLE, (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo JOIN caducado ca ON ca.codigo = me.codigo JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med WHERE st.id_centro = :id_centro AND me.nombre_medicamento = :nombre_medicamento")
+    cursor.execute(None, id_centro = id_centro, nombre_medicamento = nombre_medicamento)
+    cursor.rowfactory = fabricaDiccionario(cursor)
+    informe_stock = cursor.fetchall()
+    datos ={
+            'informe_stock': informe_stock,
+        }
+    return datos
+
+#Vista de la Lista de Informes
+def listarinforme(request):
+    #Obtiene todos los informes
+    """informe = RegistroInformes.objects.all()
+    datainfo = {
+        'informe': informe
+    }"""
+    centroSalud = request.user.rut.id_centro.id_centro
+    dataInforme = listar_informe_stock(centroSalud)
+    return render(request, 'autofarmapage/listar-informe.html', dataInforme)    
