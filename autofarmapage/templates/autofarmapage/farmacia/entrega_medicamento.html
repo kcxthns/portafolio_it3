@@ -8,7 +8,12 @@
     <p>{{ receta.id_receta }}</p>
     <h4>Paciente</h4>
     <p>{{ receta.rut_paciente.rut }}-{{ receta.rut_paciente.dv }}</p>
-    <p>{{ receta.rut_paciente.nombres | capfirst }} {{receta.rut_paciente.apellido_paterno | capfirst }} {{receta.rut_paciente.apellido_materno | capfirst }}</p>
+    <p>{{ receta.rut_paciente.nombres | capfirst }} {{ receta.rut_paciente.apellido_paterno | capfirst }} {{ receta.rut_paciente.apellido_materno | capfirst }}</p>
+    {% if tutor %}
+    <h4>Tutor</h4>
+    <p>{{ tutor.rut }}-{{ tutor.dv }}</p>
+    <p>{{ tutor.nombres | capfirst }} {{ tutor.apellido_paterno | capfirst }} {{ tutor.apellido_materno | capfirst }}</p>
+    {% endif %}
 </div>
 {% endfor %}
 {% endblock %}

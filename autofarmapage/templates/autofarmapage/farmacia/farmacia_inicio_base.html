@@ -10,6 +10,7 @@
     <!--Enlace css-->
     <!--<link rel="stylesheet"  href="{% static 'css/estilohomeadmi.css' %}">-->
     <link rel="stylesheet" href="{% static 'css/styleMedico.css' %}">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <!--Enlaces fonts-->
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
 
@@ -32,12 +33,13 @@
                 </div>
             </div>
         </header>
-    </div>
+    
 
     <section class="row">
-        <div class="col-xs-12 col-lg-2 start-lg home-medico">          
+        <div class="home-medico col-xs-12 col-lg-2 start-lg">          
             <div class="b-lateral">
-                <img src="{% static 'imagenes/User-Profile.png' %}" alt="LogoUsuario" width="90" height="90">
+                <!--<img src="{% static 'imagenes/User-Profile.png' %}" alt="LogoUsuario" width="90" height="90">-->
+                <i class="circulo fas fa-user" style="font-size: 76px; color: #666; padding-top: 12px; margin-top: 100px;"></i>
                 <div class="row">
                     <div class="col-xs-12 col-lg-12 center-xs">
                         <h4 id="encabezado1">{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>          
@@ -90,5 +92,6 @@
             </div>
         </div>
     </section>
+</div>
 </body>
 </html>

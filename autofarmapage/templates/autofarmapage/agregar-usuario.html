@@ -180,6 +180,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center xs">
                                 <select required name="id_tipo_empleado" id="id_tipo_empleado">
+                                    <option value="0">Paciente</option>
                                     {% for tipo in tipo_empleado %}
                                     <option value="{{ tipo.id_tipo_empleado }}">{{ tipo.tipo_empleado }}</option>
                                     {% endfor %}

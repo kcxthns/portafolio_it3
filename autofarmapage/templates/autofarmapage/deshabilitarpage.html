@@ -85,76 +85,65 @@
                     <div class="sideright">
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                <h4 id="encabezadoform">DESHABILITAR USUARIO:</h4>
+                                <h4 id="encabezadoform">HABILITAR/DESHABILITAR USUARIO:</h4>
                             </div>
                         </div>
 
                         <!--Formulario-->
-                     
-                                       <div class="row">
-                                           <div class="col-xs-12 col-lg-12 center-xs">
-                                               <div class="backgroundCard"> 
-                                                    <!--formulario deshabilitar-->     
-                                        <form  class="deshabilitar" method="POST" action="#">
-                                            {% csrf_token %}
-                                    
-                                            <div class="row">
-       
-                                               <div class="col-xs-12 col-md-6 col-lg-6 start-xs">
-                                                   {%for n in persona%}
-                                                   <p>Deshabilitar Usuario: {{n.nombres}} {{n.apellido_paterno}}</p>
-
-                                                   {%endfor%}
-                                                   <h6>rut usuario:</h6>
-                                                   {%for i in persona%}
-                                                   <input type="text"
-                                                       class="inputCard"
-                                                       id="inputrut"
-                                                       name="rutUsuario" required readonly
-                                                       placeholder="Rut usuario" value="{{i.rut}}">
-                                                       {% endfor %}
-                                               </div>
-       
-                                               <div class="col-xs-12 col-md-6 col-lg-6 start-xs">
-                                                   <br>
-                                                   <h6>Opción:</h6>
-                                                   <select required name="opcion">
-                                                       <option></option>
-                                                       <option value="0">Deshabilitar</option>
-                                                       <option value="1">Habilitar</option>
-                                                   </select>
-
-                                                   
-                                               </div>
-
-                                               <div class="row center-xs mensajes">
-                                                {% if messages %}
-                                                <ul>
-                                                    {% for message in messages %} 
-                                                    <li class="{{ message.tags }}">{{ message }}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                                {% endif %}
-                                                </div>
-       
-                                               <div class="col-xs-12 col-md-12 col-lg-12 end-xs">
-                                                   <button class="buttonDeshabilitar" value="deshabilitar">ENVIAR</button>
-                                               </div>
-       
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-12 center-xs">
+                                <div class="backgroundCard"> 
+                                    <!--formulario deshabilitar-->     
+                                    <form  class="deshabilitar" method="POST" action="#">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-6 col-lg-6 start-xs">
+                                                {%for n in persona%}
+                                                <p>Deshabilitar Usuario: {{n.nombres}} {{n.apellido_paterno}}</p>
+                                                {%endfor%}
                                             </div>
-                                           
-                                           </form>
-                                               </div>
-                                           </div>
-                                       </div>
-                    
-
-                   
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-xs-6 start-xs">
+                                                <h6>rut usuario:</h6>
+                                                {%for i in persona%}
+                                                <input type="text"
+                                                    class="inputCard"
+                                                    id="inputrut"
+                                                    name="rutUsuario" required readonly
+                                                    placeholder="Rut usuario" value="{{i.rut}}-{{i.dv}}">
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col-xs-6 start-xs">
+                                                <h6>Opción:</h6>
+                                                <select required name="opcion">
+                                                    <option></option>
+                                                    <option value="0">Deshabilitar</option>
+                                                    <option value="1">Habilitar</option>
+                                                </select>
+                                            </div>
+                                        </div> 
+                                        <div class="row center-xs mensajes">
+                                            {% if messages %}
+                                            <ul>
+                                                {% for message in messages %} 
+                                                <li class="{{ message.tags }}">{{ message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            {% endif %}
+                                        </div>
+       
+                                        <div class="col-xs-12 col-md-12 col-lg-12 end-xs">
+                                            <button class="buttonDeshabilitar" value="deshabilitar">ENVIAR</button>
+                                        </div>                                        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         </div>
-
-        
     </body>
 </html>

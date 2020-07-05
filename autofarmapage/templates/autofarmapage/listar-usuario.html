@@ -18,6 +18,8 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+        <script src="{% static 'js/validarRut.js' %}"></script>
+
         <title>Listar Usuarios</title>
 
     </head>
@@ -120,7 +122,7 @@
                                        {% endfor %}
                                 </ul>
                                 {% endif %}
-
+                                <br>
                                <table>
                                    <thead>
                                        <tr>
@@ -138,6 +140,7 @@
                                    <tr>
                                        <td>{{ i.NOMBRES }} {{ i.APELLIDO_PATERNO }}</td>
                                        <form action="#" method="POST">
+                                           {% csrf_token %}
                                            <td>{{ i.RUT }}-{{ i.DV }}</td>
                                            <input type="hidden" name="rutPaciente" value="{{ i.RUT }}-{{i.DV }}" id="inputlistusuario">
                                            {% if i.HABILITADO == 1 %}
@@ -151,7 +154,9 @@
                                                     <i class="fa fa-edit fa-lg" style="font-size: 20px; color: #fff;"></i>
                                                 </a>
                                            </button></td>
-                                           <td><input name="rutTutor" type="text" required value="{{ i.RUT_TUTOR }}" id="inputlistusuario"></td>
+                                           <td><input name="rutTutor" type="text" required placeholder="{{ i.RUT_TUTOR }}" id="inputlistusuario"
+                                                maxlength="12", oninput="checkRut(this)" onkeypress="return isNumber(event)">
+                                            </td>
                                            <td>
                                                <button class="btn-x" type="submit">
                                                    <i class="fa fa-user-plus fa-lg" style="font-size: 20px; color: #fff;"></i>

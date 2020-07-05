@@ -117,6 +117,8 @@ def agregarusuario(request):
         comuna = int(request.user.rut.id_comuna.id_comuna)
         centro_s = int(request.user.rut.id_centro.id_centro)
         id_tipo_empleado = int(request.POST['id_tipo_empleado'])
+        if id_tipo_empleado == 0:
+            id_tipo_empleado = None
         rut_tutor = None
         # conexión a la bd
         bd = ConexionBD()
@@ -212,48 +214,46 @@ def search_persona(id_centro, rut):
 
 #Vista de Listar Usuarios (Administrador)
 def listarusuario(request):
-    #Obtiene las personas de la base de datos que pertenecen al centro de salud del Administrador
-    person = Persona.objects.filter(id_centro=request.user.rut.id_centro).order_by('rut')
-    id_centro = request.user.rut.id_centro.id_centro
-    data5 = get_personas(id_centro)
     #Búsqueda del Usuario por RUT
     if request.method == 'GET':
         criterio_busqueda = request.GET.get('q')
         submitBtn = request.GET.get('submit')
         if criterio_busqueda is not None:
-            #person = Persona.objects.filter(id_centro=request.user.rut.id_centro).filter(rut=criterio_busqueda)
-            #Pagina los resultados de la búsqueda
-            #paginador = Paginator(person, 20)
-            #pagina = request.GET.get('page')
-            #person = paginador.get_page(pagina)
-            #data5 = {
-                #'person': person,
-            #}
-            #parametros = request.GET.copy()
-            #if 'page' in parametros:
-                #del parametros['page']
-            #data5['parametros'] = parametros
             id_centro = request.user.rut.id_centro.id_centro
             data5 = search_persona(id_centro, criterio_busqueda)
             return render(request, 'autofarmapage/listar-usuario.html', data5)
     #Agrega un tutor al Usuario seleccionado
     if request.method == 'POST':
         rut_tutor = request.POST['rutTutor']
+        dv_tutor = soloDigitoVerificador(rut_tutor)
+        rut_tutor = soloCuerpoRut(rut_tutor)
         rut_paciente = request.POST['rutPaciente']
         rut_paciente = soloCuerpoRut(rut_paciente)
-        #Conexión a la bd
-        bd = ConexionBD()
-        con = bd.conectar()
-        cursor = con.cursor()
-        realizado = cursor.var(int)
-        #Procedimiento de creación del tutor
-        cursor.callproc('pkg_crear_usuario.sp_crear_tutor', [
-                        rut_tutor, rut_paciente, realizado])
-        if realizado.getvalue() == 1:
-            #return redirect('exito-guardar-tutor')
-            messages.success(request, "<<¡TUTOR AGREGADO!>>")
-        elif realizado.getvalue() == 0:
-            messages.success(request, "<<ATENCIÓN: OCURRIÓ UN ERROR>>")
+        if rut_tutor == rut_paciente:
+            messages.success(request, "El Rut del tutor y del usuario no pueden ser el mismo.")
+        else:
+            #Conexión a la bd
+            bd = ConexionBD()
+            con = bd.conectar()
+            cursor = con.cursor()
+            realizado = cursor.var(int)
+            existe_tutor_tabla_persona = cursor.var(bool)
+            cursor.callfunc('pkg_crear_usuario.fn_existe_persona', existe_tutor_tabla_persona, [rut_tutor])
+            if existe_tutor_tabla_persona == False:
+                messages.success(request, "<<¡No existe registro del rut del tutor en nuestro sistema, por favor ingresa sus datos en el apartado Crear Usuario.")
+            else:
+                #Procedimiento de creación del tutor
+                cursor.callproc('pkg_crear_usuario.sp_crear_tutor', [
+                            rut_tutor, rut_paciente, realizado])
+                if realizado.getvalue() == 1:
+                    #return redirect('exito-guardar-tutor')
+                    messages.success(request, "<<¡TUTOR AGREGADO!>>")
+                elif realizado.getvalue() == 0:
+                    messages.success(request, "<<ATENCIÓN: OCURRIÓ UN ERROR>>")
+    #Obtiene las personas de la base de datos que pertenecen al centro de salud del Administrador
+    person = Persona.objects.filter(id_centro=request.user.rut.id_centro).order_by('rut')
+    id_centro = request.user.rut.id_centro.id_centro
+    data5 = get_personas(id_centro)
     return render(request, 'autofarmapage/listar-usuario.html', data5)
 
 def cambiarCentroSalud(request):
@@ -310,6 +310,7 @@ def editarPersona(request, rut):
     #Modifica la Persona en la bd
     if request.method == 'POST':
         rut = request.POST['rut']
+        rut = soloCuerpoRut(rut)
         nombres = request.POST['nombres']
         app_paterno = request.POST['apellido_paterno']
         app_materno = request.POST['apellido_materno']
@@ -317,11 +318,11 @@ def editarPersona(request, rut):
         email = request.POST['correo_electronico']
         direccion = request.POST['direccion']
         comuna = int(request.POST['id_comuna'])
-        centro_s = int(request.POST['id_centro'])
+        #centro_s = int(request.POST['id_centro'])
         # lo hice para probar :(
-        sql = ('update persona '
-               'set nombres = :nombres '
-               'where rut = :rut')
+        #sql = ('update persona '
+               #'set nombres = :nombres '
+               #'where rut = :rut')
         bd = ConexionBD()
 
         try:
@@ -335,7 +336,7 @@ def editarPersona(request, rut):
                     # ejecutar el procedimiento
                     realizado = cursor.var(int)
                     cursor.callproc('pkg_administrar_usuario.sp_editar_persona', [
-                                    rut, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, realizado])
+                                    rut, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, realizado])
 
                     if int(realizado.getvalue()) == 1:
                         return redirect('exito-modificar-usuario')
@@ -712,6 +713,12 @@ def entregasPendientes(request):
 
 def entregaMedicamento(request, id_receta):
     receta = Receta.objects.filter(id_receta=id_receta)
+    receta_2 = Receta.objects.get(id_receta=id_receta)
+    paciente = Persona.objects.get(rut=receta_2.rut_paciente.rut)
+    if paciente.rut_tutor is None:
+        tutor = None
+    else:
+        tutor = Persona.objects.get(rut=paciente.rut_tutor.rut.rut)
     datos = {}
     permanenteEntregadoAnterior = None
     bd = ConexionBD()
@@ -759,6 +766,7 @@ def entregaMedicamento(request, id_receta):
             'recetaDetalle' : recetaDetalle,
             'entregadoAnterior' : permanenteEntregadoAnterior,
             'receta' : receta,
+            'tutor' : tutor,
         }
     elif medicPermanente == 0:
         bd = ConexionBD()
@@ -811,9 +819,9 @@ def entregaMedicamento(request, id_receta):
             'recetaDetalle' : recetaDetalle,
             'entregadoAnterior' : permanenteEntregadoAnterior,
             'receta' : receta,
+            'tutor' : tutor,
         }
     if request.method == 'POST':
-        print(request.POST)
         if 'boton_reserva_1' in request.POST:
             opcForm = 2
             codMed = request.POST['codigo_medicamento_2_1']
@@ -826,7 +834,6 @@ def entregaMedicamento(request, id_receta):
             tipoEntrega = 1
         if 'boton_entrega_1' in request.POST:
             opcForm = 1
-            print('*')
             codMed = request.POST['codigo_medicamento_1_1']
             cantidadEntrega = int(request.POST['cantidad_entrega_1_1'])
             tipoEntrega = 1
@@ -842,20 +849,14 @@ def entregaMedicamento(request, id_receta):
             tipoEntrega = 2
         if opcForm == 1:
             #cantidadEntrega = request.POST['cantidad_entrega_1']
-            print('**')
             bd = ConexionBD()
             con = bd.conectar()
             cursor = con.cursor()
             #existeStock = cursor.var(bool)
-            print(request.user.rut.id_centro.id_centro)
-            print(codMed)
-            print(cantidadEntrega)
             existeStock = cursor.callfunc('pkg_farmacia.fn_stock_suficiente', bool, [codMed, request.user.rut.id_centro.id_centro, cantidadEntrega])
-            print(existeStock)
             if existeStock:
                 resultado = cursor.var(int)
                 cursor.callproc('pkg_farmacia.sp_entregar_medicamento', [cantidadEntrega, codMed, id_receta, request.user.rut.rut, tipoEntrega, resultado])
-                print(resultado.getvalue())
                 if resultado.getvalue() == 1:
                     return redirect('resultado-entrega', id_receta = id_receta, codigo_med=codMed, cantidad=cantidadEntrega, numMensaje=1)
                 elif resultado.getvalue() == 2:
@@ -1047,22 +1048,17 @@ def home_medico(request):
 #Vista de Agregar Paciente (Médico)
 def agregarpaciente(request):
     # Querys para poblar los select del formulario de creacion de persona
-    regiones = Region.objects.all()
-    ciudades = Comuna.objects.all().order_by('nombre_comuna')
-    centro_salud = CentroSalud.objects.all().order_by('id_comuna')
+    #regiones = Region.objects.all()
+    regiones = Region.objects.filter(id_region=request.user.rut.id_comuna.id_region.id_region)
+    #ciudades = Comuna.objects.all().order_by('nombre_comuna')
+    ciudades = Comuna.objects.filter(id_region=request.user.rut.id_comuna.id_region).order_by("nombre_comuna")
+    #centro_salud = CentroSalud.objects.all().order_by('id_comuna')
+    centro_salud = CentroSalud.objects.filter(id_centro=request.user.rut.id_centro.id_centro)
 
     if request.method == 'POST':
         rut = request.POST['rut']
-        rut = rut.replace('.', '')
-        rut = rut.replace('-', '')
-        dv = rut[-1]
-        rut = rut[0 : len(rut) - 1]
-        #dv = request.POST['dv']
-        #validador = Validador()
-        #if validador.validarRut(rut, dv) == False:
-            #messages.error(request, "El rut " + rut +
-                           #"- " + dv + " no es válido")
-        #rut = request.POST['rut']
+        dv = soloDigitoVerificador(rut)
+        rut = soloCuerpoRut(rut)
         nombres = request.POST['nombres']
         app_paterno = request.POST['apellido_paterno']
         app_materno = request.POST['apellido_materno']
@@ -1078,32 +1074,36 @@ def agregarpaciente(request):
         conn = bd.conectar()
         cursor = conn.cursor()
         realizado = cursor.var(int)
+        existe_persona = cursor.var(bool)
+        cursor.callfunc('pkg_crear_usuario.fn_existe_persona', existe_persona, [rut])
+        #Comprueba si el rut ya está registrado en la bd
+        if existe_persona:
+            messages.error(request, 'El rut ' + rut + '-' + dv + ' ya está registrado en el sistema.')
+        else:
+            # Llamado al procedimiento almacenado para crear persona (no crea usuario)
+            cursor.callproc('pkg_crear_usuario.sp_crear_persona', [
+                            rut, dv, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, rut_tutor, realizado])
 
-        # Llamado al procedimiento almacenado para crear persona (no crea usuario)
-        cursor.callproc('pkg_crear_usuario.sp_crear_persona', [
-                        rut, dv, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, rut_tutor, realizado])
-
-        if int(realizado.getvalue()) == 1:
-            # mensaje exito
-            messages.success(request, 'Datos agregados al Sistema.')
-            # ----------------ACÁ SERIA CREAR PERSONA
-            usuario = Usuario.objects.create_user(rut)
-            mensaje_email = 'Tu usuario es ' + \
-                rut + ' .Tu contraseña es ' + rut[0:4]
+            if int(realizado.getvalue()) == 1:
+                # mensaje exito
+                messages.success(request, 'Datos agregados al Sistema.')
+                # ----------------ACÁ SERIA CREAR PERSONA
+                usuario = Usuario.objects.create_user(rut)
+                mensaje_email = 'Tu usuario es ' + \
+                    rut + ' .Tu contraseña es ' + rut[0:4]
 
                 # envío de mail con el usuario y la contraseña
-            send_mail(
-                'Bienvenido a Autofarma.',
-                mensaje_email,
-                'torpedo.page@gmail.com',
-                [email],
-                fail_silently=False
-            )
-
-        elif int(realizado.getvalue()) == 0:
-            # mesaje error
-            messages.error(
-                request, 'Se ha producido un problema y los datos no han sido almacenados. Por Favor intente nuevamente.')
+                send_mail(
+                    'Bienvenido a Autofarma.',
+                    mensaje_email,
+                    'torpedo.page@gmail.com',
+                    [email],
+                    fail_silently=False
+                )
+            elif int(realizado.getvalue()) == 0:
+                # mesaje error
+                messages.error(
+                    request, 'Se ha producido un problema y los datos no han sido almacenados. Por Favor intente nuevamente.')
     return render(request, 'autofarmapage/agregar-paciente.html', {'regiones': regiones, 'ciudades': ciudades, 'centro_salud': centro_salud, })
 
 #Crear Receta Paso 1: Guardado en Tabla Receta
@@ -1206,18 +1206,17 @@ def verReceta(request, id_receta):
 
 #Vista Registrar Tutor (Se Registra una nueva Persona y Usuario) (Médico)
 def registrartutor(request):
-    # Querys para poblar los select del formulario de creacion de persona
-    regiones = Region.objects.all()
-    ciudades = Comuna.objects.all().order_by('nombre_comuna')
-    centro_salud = CentroSalud.objects.all().order_by('id_comuna')
+    #regiones = Region.objects.all()
+    regiones = Region.objects.filter(id_region=request.user.rut.id_comuna.id_region.id_region)
+    #ciudades = Comuna.objects.all().order_by('nombre_comuna')
+    ciudades = Comuna.objects.filter(id_region=request.user.rut.id_comuna.id_region).order_by("nombre_comuna")
+    #centro_salud = CentroSalud.objects.all().order_by('id_comuna')
+    centro_salud = CentroSalud.objects.filter(id_centro=request.user.rut.id_centro.id_centro)
 
     if request.method == 'POST':
         rut = request.POST['rut']
-        #Quita los puntos, guión y el digito verificador
-        rut = rut.replace('.', '')
-        rut = rut.replace('-', '')
-        dv = rut[-1]
-        rut = rut[0 : len(rut) - 1]
+        dv = soloDigitoVerificador(rut)
+        rut = soloCuerpoRut(rut)
         nombres = request.POST['nombres']
         app_paterno = request.POST['apellido_paterno']
         app_materno = request.POST['apellido_materno']
@@ -1233,33 +1232,34 @@ def registrartutor(request):
         conn = bd.conectar()
         cursor = conn.cursor()
         realizado = cursor.var(int)
+        existe_persona = cursor.var(bool)
+        if existe_persona:
+            messages.error(request, 'El rut ' + rut + '-' + dv + ' ya está registrado en el sistema.')
+        else:
+            # Llamado al procedimiento almacenado para crear persona (no crea usuario)
+            cursor.callproc('pkg_crear_usuario.sp_crear_persona', [
+                            rut, dv, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, rut_tutor, realizado])
 
-        # Llamado al procedimiento almacenado para crear persona (no crea usuario)
-        cursor.callproc('pkg_crear_usuario.sp_crear_persona', [
-                        rut, dv, nombres, app_paterno, app_materno, telefono, email, direccion, comuna, centro_s, rut_tutor, realizado])
-        print(realizado.getvalue())
+            if int(realizado.getvalue()) == 1:
+                # mensaje exito
+                messages.success(request, 'Datos agregados al Sistema.')
+                # ----------------ACÁ SERIA CREAR PERSONA
+                usuario = Usuario.objects.create_user(rut)
+                mensaje_email = 'Tu usuario es ' + \
+                    rut + ' .Tu contraseña es ' + rut[0:4]
 
-        if int(realizado.getvalue()) == 1:
-            # mensaje exito
-            messages.success(request, 'Datos agregados al Sistema.')
-            # ----------------ACÁ SERIA CREAR PERSONA
-            usuario = Usuario.objects.create_user(rut)
-            mensaje_email = 'Tu usuario es ' + \
-                rut + ' .Tu contraseña es ' + rut[0:4]
-
-            # envío de mail con el usuario y la contraseña
-            send_mail(
-                'Bienvenido a Autofarma.',
-                mensaje_email,
-                'torpedo.page@gmail.com',
-                [email],
-                fail_silently=False
-            )
-
-        elif int(realizado.getvalue()) == 0:
-            # mesaje error
-            messages.error(
-                request, 'Se ha producido un problema y los datos no han sido almacenados. Por Favor intente nuevamente.')
+                # envío de mail con el usuario y la contraseña
+                send_mail(
+                    'Bienvenido a Autofarma.',
+                    mensaje_email,
+                    'torpedo.page@gmail.com',
+                    [email],
+                    fail_silently=False
+                )
+            elif int(realizado.getvalue()) == 0:
+                # mesaje error
+                messages.error(
+                    request, 'Se ha producido un problema y los datos no han sido almacenados. Por Favor intente nuevamente.')
     return render(request, 'autofarmapage/registrar-tutor.html', {'regiones': regiones, 'ciudades': ciudades, 'centro_salud': centro_salud, })
 
 #Vista Agregar Tutor (Se agregar el RUT del Tutor a una Persona)

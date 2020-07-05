@@ -90,12 +90,23 @@
                         {% if persona %}
                         {% for person in persona %}
                         <form method="POST">{% csrf_token %}
+                            <!--rut-->
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
+                                    <input  class="intputs" type="text"
+                                        name="rut" id="rut" maxlength="8"
+                                        value="{{person.rut}}-{{person.dv}}"
+                                        readonly required>
+                                </div>
+                            </div>
+
                             <!--Nombre-->
                             <div class="row">
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
                                     <input class="intputs" id="stname"
                                         type="text" name="nombres"
-                                        value="{{person.nombres}}">
+                                        value="{{person.nombres}}"
+                                        required>
                                 </div>
                             </div>
 
@@ -104,7 +115,8 @@
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
                                     <input class="intputs" type="text"
                                         name="apellido_paterno"
-                                        value="{{person.apellido_paterno}}">
+                                        value="{{person.apellido_paterno}}"
+                                        required>
                                 </div>
                             </div>
 
@@ -113,16 +125,8 @@
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
                                     <input class="intputs" type="text"
                                         name="apellido_materno"
-                                        value="{{person.apellido_materno}}">
-                                </div>
-                            </div>
-
-                            <!--rut-->
-                            <div class="row">
-                                <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                    <input class="intputs" type="text"
-                                        name="rut" maxlength="8"
-                                        value="{{person.rut}}">
+                                        value="{{person.apellido_materno}}"
+                                        required>
                                 </div>
                             </div>
 
@@ -131,7 +135,8 @@
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
                                     <input class="intputs" type="tel"
                                         pattern="[0-9]{9}" name="telefono"
-                                        value="{{person.telefono}}">
+                                        value="{{person.telefono}}"
+                                        required>
                                 </div>
                             </div>
 
@@ -140,7 +145,8 @@
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
                                     <input class="intputs" type="email"
                                         name="correo_electronico"
-                                        value="{{person.correo_electronico}}">
+                                        value="{{person.correo_electronico}}"
+                                        required>
                                 </div>
                             </div>
 
@@ -149,7 +155,8 @@
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
                                     <input class="intputs" type="text"
                                         name="direccion"
-                                        value="{{person.direccion}}">
+                                        value="{{person.direccion}}"
+                                        required>
                                 </div>
                             </div>
 
@@ -180,13 +187,17 @@
                             <!--centro de salud-->
                             <div class="row">
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                    <select required name="id_centro">
+                                    <!--<select required name="id_centro">
                                         <option
                                             value="{{person.id_centro.id_centro}}">{{person.id_centro.nombre_centro}}</option>
                                         {% for e in centro_salud%}
                                         <option value="{{e.id_centro}}">{{e.nombre_centro}}</option>
                                         {% endfor %}
-                                    </select>
+                                    </select>-->
+                                    <input class="intputs" type="text"
+                                        name="id_centro" required readonly
+                                        value="{{person.id_centro.nombre_centro}}"
+                                        required>
                                 </div>
                             </div>
 
@@ -211,11 +222,9 @@
 
                             <div class="row">
                                 <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                    <a id="edit" href="{% url 'deshabilitarpage' person.rut %}">DESHABILITAR</div></a>
+                                    <a id="edit" href="{% url 'deshabilitarpage' person.rut %}">DESHABILITAR USUARIO</div></a>
                                 </div>
                             </div>
-    
-    
     
                             <div class="row center-xs mensajes">
                                 {% if messages %}
