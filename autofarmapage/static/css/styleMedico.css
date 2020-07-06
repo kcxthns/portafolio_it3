@@ -1,4 +1,5 @@
 /* Índice */
+
 /*
 *  Generales
 *  Home médico
@@ -23,6 +24,7 @@
 .barra_h {
   height: 100%;
 }
+
 body {
   background-color: #f2f5fa;
 }
@@ -37,8 +39,8 @@ body {
   font-weight: lighter;
   padding: 55px;
   text-transform: uppercase;
-
 }
+
 ::placeholder {
   color: #000;
 }
@@ -56,6 +58,7 @@ body {
   align-items: center;
   text-align: center;
 }
+
 .btn {
   border: none;
   background: #1290cb;
@@ -118,7 +121,6 @@ body {
   color: #ffffff;
 }
 
-
 /*------------ 2 Home médico ------------ */
 
 .backgroundheader-home {
@@ -144,11 +146,14 @@ body {
   padding: 30px;
 }
 
+.med-lateral {
+  padding-top: 130px;
+}
+
 #encabezado1 {
   color: #1290cb;
   margin-top: 25px;
   font-weight: bold;
-
 }
 
 #parrafo1 {
@@ -158,6 +163,7 @@ body {
 .cerrar {
   width: 100%;
 }
+
 .img-perfil {
   position: fixed;
   bottom: 1%;
@@ -197,10 +203,13 @@ body {
   transition: 1s;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
-.opcion-mensaje { /* Alerta con mensaje y da opción en botón al respecto */
+
+.opcion-mensaje {
+  /* Alerta con mensaje y da opción en botón al respecto */
   align-items: baseline;
   justify-content: space-evenly;
 }
+
 .b-tutor, .b-agregarpaciente {
   background-color: #68c2dc;
   color: #fff;
@@ -232,10 +241,7 @@ body {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.b-crear-receta:hover,
-.b-agregar-paciente:hover,
-.b-asignar-tutor:hover,
-.b-ver-recetas:hover {
+.b-crear-receta:hover, .b-agregar-paciente:hover, .b-asignar-tutor:hover, .b-ver-recetas:hover {
   background: #b9dcf0;
 }
 
@@ -256,12 +262,10 @@ h4 {
     margin: 3% 10% 0 10%;
     background: #1290cb;
   }
-
   .b-agregar-paciente {
     margin: 3% 10% 0 10%;
     background: #1290cb;
   }
-
   .b-asignar-tutor {
     background: #1290cb;
     margin: 3% 10% 0 10%;
@@ -287,7 +291,6 @@ h4 {
 
 .linea {
   color: #1290cb;
-
 }
 
 .linea h3 {
@@ -309,9 +312,14 @@ h4 {
   background: #Fff;
 }
 
+.med-lateral i {
+  padding-top: 10px;
+}
+
 .linea:hover {
   color: #FFF;
 }
+
 /*------------ Header usuario ------------ */
 
 .backgroundheader {
@@ -353,6 +361,7 @@ h4 {
   position: relative;
   display: flex;
 }
+
 .h-nombre {
   vertical-align: text-bottom;
   align-items: center;
@@ -384,10 +393,7 @@ h4 {
   padding-top: 4px;
 }
 
-.b2-crear-receta,
-.b2-agregar-paciente,
-.b2-asignar-tutor,
-.b2-ver-recetas {
+.b2-crear-receta, .b2-agregar-paciente, .b2-asignar-tutor, .b2-ver-recetas {
   border: #ffffff 1.3px solid;
   align-items: center;
   margin: 4px 0 4px 8px;
@@ -396,10 +402,7 @@ h4 {
   transition: 1s;
 }
 
-.b2-crear-receta:hover,
-.b2-agregar-paciente:hover,
-.b2-asignar-tutor:hover,
-.b2-ver-recetas:hover {
+.b2-crear-receta:hover, .b2-agregar-paciente:hover, .b2-asignar-tutor:hover, .b2-ver-recetas:hover {
   background: #f2f5fa;
 }
 
@@ -435,7 +438,8 @@ h4 {
   margin-right: 20%;
 }
 
-.input-8 { /* Dígito verificador */
+.input-8 {
+  /* Dígito verificador */
   color: #666;
   border: none;
   width: 8%;
@@ -491,7 +495,9 @@ input:disabled {
   color: #666666;
   vertical-align: middle;
 }
+
 /* Campo + otros elementos */
+
 .campo-compuesto {
   display: flex;
   width: 100%;
@@ -537,6 +543,7 @@ input[type="submit"] {
 }
 
 /* Clear floats after the columns */
+
 .row:after {
   content: "";
   display: table;
@@ -544,10 +551,9 @@ input[type="submit"] {
 }
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+
 @media screen and (max-width: 600px) {
-  .col-25,
-  .col-75,
-  input[type="submit"] {
+  .col-25, .col-75, input[type="submit"] {
     width: 100%;
     margin-top: 0;
   }
@@ -583,8 +589,7 @@ table {
   font-size: 0.9rem;
 }
 
-th,
-td {
+th, td {
   padding: 6px 0;
   font-weight: lighter;
 }
@@ -630,15 +635,11 @@ tr:hover td {
 
 /*------------ Agregar paciente + formularios  ------------ */
 
-.formulario-paciente,
-.formulario-tutor,
-.formulario-receta,
-.formulario-receta2,
-.formulario-ver-receta,
-.formulario-buscar {
+.formulario-paciente, .formulario-tutor, .formulario-receta, .formulario-receta2, .formulario-ver-receta, .formulario-buscar {
   width: 80%;
   padding-left: 14%;
 }
+
 .formulario-buscar {
   flex-wrap: nowrap;
 }
@@ -662,11 +663,13 @@ tr:hover td {
   margin-bottom: 30px;
   border-bottom: 1px solid #666666;
 }
+
 .input-100-s {
   width: 100%;
   height: 35px;
   margin-bottom: 30px;
 }
+
 .input-90 {
   width: 90%;
   height: 35px;
@@ -682,6 +685,7 @@ tr:hover td {
   margin-bottom: 30px;
   border-bottom: 1px solid #666666;
 }
+
 .input-80-s {
   color: #666;
   border: none;
@@ -785,14 +789,14 @@ input:disabled {
   text-align: left;
 }
 
-btn-x a, a:link, a:visited, a:active { 
+btn-x a, a:link, a:visited, a:active {
   color: #fff;
   text-decoration: none;
 }
 
 /*------ CREAR RECETA 1 y 2 ---------*/
 
-subtitulo-receta {
+.subtitulo-receta {
   padding: 4px;
   margin-bottom: 30px;
   background: #000;
@@ -840,7 +844,6 @@ subtitulo-receta {
   width: 1000px;
   margin: auto;
 }
-
 
 .area-receta2 {
   width: 86%;
@@ -991,6 +994,10 @@ subtitulo-receta {
   padding: 80px 0;
 }
 
+.contenidoMedico {
+  padding: 0;
+}
+
 .contenidoFarma {
   padding: 60px 0;
 }
@@ -1027,26 +1034,26 @@ subtitulo-receta {
 
 /*------ENTREGA MEDICAMENTOS---------*/
 
-.labelListar{
+.labelListar {
   color: slategrey;
   margin-top: 2px;
   font-weight: lighter;
 }
 
-.cardListar{
+.cardListar {
   margin: 2%;
   background: white;
 }
 
-.separacionInterior{
+.separacionInterior {
   margin-top: 1%;
 }
 
-.backgroundStock{
-  background:#f2f5fa ;
+.backgroundStock {
+  background: #f2f5fa;
 }
 
-.tratamientoPermanente{
+.tratamientoPermanente {
   color: darkred;
   font-weight: bold;
   padding: 1%;
@@ -1054,7 +1061,6 @@ subtitulo-receta {
 }
 
 /*------ VER RECETAS ---------*/
-
 
 #formulario-ver-receta {
   width: 900px;
@@ -1077,7 +1083,6 @@ subtitulo-receta {
   border-bottom: 1px solid #666666;
   justify-content: space-between;
 }
-
 
 /*------ VER RECETAS 2 - RECETA SELECCIONADA ---------*/
 
@@ -1122,7 +1127,6 @@ subtitulo-receta {
   padding-top: 10px;
   padding-bottom: 15px;
   margin: auto;
-
 }
 
 .n-paciente {
@@ -1179,6 +1183,7 @@ subtitulo-receta {
 }
 
 /*------ VER RECETA recién prescrita para imprimir ---------*/
+
 /*
 .receta-prescrita {
   width: 720px;

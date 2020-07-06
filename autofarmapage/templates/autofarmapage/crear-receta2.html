@@ -29,13 +29,14 @@
                 <div class="header">
                     <div class="logo2 col-xs-12 end-xs">
                         <a href="{% url 'home_medico' %}">
-                            <img src="{% static 'imagenes/LOGO_blanco.png' %}"
-                                alt="Logopaginablanco" height="40" width="200" />
+                            <img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="40"
+                                width="200" />
                         </a>
                     </div>
                     <div class="col-xs-12 start-xs">
                         <p>{{ user.rut.id_centro.nombre_centro }}</p>
-                        <h4>Nombre del Médico: {{user.rut.nombres}} {{user.rut.apellido_paterno}}</h4>
+                        <h4>Nombre del Médico: {{user.rut.nombres}} {{user.rut.apellido_paterno}}
+                            {{user.rut.apellido_materno}}</h4>
                     </div>
                 </div>
             </div>
@@ -74,8 +75,8 @@
                         <div class="col-xs-12 col-lg-12 center-lg">
                             <div class="b2-ver-recetas">
                                 <a href="{% url 'ver-recetas' %}">
-                                    <img src="{% static 'imagenes/ver-recetas2.png' %}"
-                                        alt="ver recetas" height="60" width="60" /></a>
+                                    <img src="{% static 'imagenes/ver-recetas2.png' %}" alt="ver recetas" height="60"
+                                        width="60" /></a>
                                 <h4>Ver recetas</h4>
                             </div>
                         </div>
@@ -86,7 +87,7 @@
 
             <!--FORMULARIO CREAR RECETA -->
             <div class="col-xs-12 col-md-12 col-lg-10 center-xs backgroundrightside">
-                <div class="contenido">
+                <div class="contenidoMedico">
                     <div class="row">
                         <div class="col-xs-12 col-md-12 col-lg-12 center xs">
                             <h4 id="encabezadoform" name="idreceta" value="{{recetapk.id_receta}}">Información de la
@@ -216,7 +217,7 @@
                                 <p><b class="MayusName">{{j.codigo.nombre_medicamento}}</b>
                                     en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
                                     unidades/dosis por {{j.duracion_tratamiento}} días - {{j.posologia}}
-                                    <p>
+                                <p>
                             </li>
                         </tr>
                         {%endfor%}
@@ -262,5 +263,3 @@
 </body>
 
 </html>
-
-

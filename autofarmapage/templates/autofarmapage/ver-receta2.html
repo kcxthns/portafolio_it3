@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="contenido">
+<div class="contenidoMedico">
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
             <h4 id="encabezadoform">Información receta</h4>
@@ -45,7 +45,7 @@
                         <p><b class="MayusName">{{j.codigo.nombre_medicamento}}</b>
                             en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
                             unidades/dosis por {{j.duracion_tratamiento}} días
-                            <p>
+                        <p>
                         <p>{{j.posologia}}</p>
                     </li>
                     {%endfor%}

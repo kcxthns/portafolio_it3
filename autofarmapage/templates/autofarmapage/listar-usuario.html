@@ -1,196 +1,197 @@
 {% load static%}
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!--Enlace css-->
-        <link rel="stylesheet" href="{% static 'css/estiloListarUsuario.css' %}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <!--Enlace flexbox-->
-        <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
 
-        <!--  Enlace a fuentes-->
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Enlace css-->
+    <link rel="stylesheet" href="{% static 'css/estiloListarUsuario.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!--Enlace flexbox-->
+    <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
 
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
+    <!--  Enlace a fuentes-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
 
-        <script src="{% static 'js/validarRut.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-        <title>Listar Usuarios</title>
+    <script src="{% static 'js/validarRut.js' %}"></script>
 
-    </head>
-    
-    <body>
-        <div class="container">
-            <header class="row backgroundheader">
-                <div class="col-xs-12 col-lg-12" >
-                   <div class="header"> 
-                       <div class="col-xs-12 end-xs">
-                            <a href="{% url 'homeadmi' %}">
-                                <img src="{% static 'imagenes/LOGO_blanco.png' %}" 
-                                    alt="Logopaginablanco" height="40" width="200"> </a>
-                            <p>{{ user.rut.id_centro.nombre_centro }}</p>
-                            <div class="col-xs-12 start-xs">
-                                <h4>{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>
-                            </div>
-                       </div>
-                   </div>
+    <title>Listar Usuarios</title>
+
+</head>
+
+<body>
+    <div class="container">
+        <header class="row backgroundheader">
+            <div class="col-xs-12 col-lg-12">
+                <div class="header">
+                    <div class="col-xs-12 end-xs">
+                        <a href="{% url 'homeadmi' %}">
+                            <img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="40"
+                                width="200"> </a>
+                        <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                        <div class="col-xs-12 start-xs">
+                            <h4>{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>
+                        </div>
+                    </div>
                 </div>
-            </header>
+            </div>
+        </header>
 
-            <section class="row section">
-                <div class="col-xs-12 col-md-2 col-lg-2 start-large backgroundleftside">
-                    <div class="sideleft">
-                        <div class="row">
-                            <div class="col-xs-12 col-lg-12 center-lg">
-                                <div class="button_usuario">
-                                    <a href="{% url 'agregar-usuario' %}"><img
-                                            src="{% static 'imagenes/agregarUsuario.png' %}"
-                                            alt="agregar_Usuario" height="60"
-                                            width="60"></a>
-                                    <h4>Crear Usuario</h4>
-                                </div>
+        <section class="row section">
+            <div class="col-xs-12 col-md-2 col-lg-2 start-large backgroundleftside">
+                <div class="sideleft">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="button_usuario">
+                                <a href="{% url 'agregar-usuario' %}"><img
+                                        src="{% static 'imagenes/agregarUsuario.png' %}" alt="agregar_Usuario"
+                                        height="60" width="60"></a>
+                                <h4>Crear Usuario</h4>
                             </div>
-                            <div class="col-xs-12 col-lg-12 center-lg">
-                                <div class="button_listarusuarios">
-                                    <a href="{% url 'listar-usuario' %}"><img
-                                            src="{% static 'imagenes/listarusuarios.png' %}"
-                                            alt="lstar_usuario" height="60"
-                                            width="60"></a>
-                                    <h4>Listar Usuarios</h4>
-                                </div>
+                        </div>
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="button_listarusuarios">
+                                <a href="{% url 'listar-usuario' %}"><img
+                                        src="{% static 'imagenes/listarusuarios.png' %}" alt="lstar_usuario" height="60"
+                                        width="60"></a>
+                                <h4>Listar Usuarios</h4>
                             </div>
-                            <div class="col-xs-12 center-lg">
-                                <div class="button_listarusuarios">
-                                    <a href="{% url 'cambio-centro-salud' %}">
-                                        <img src="{% static 'imagenes/hospital.png' %}" 
-                                            alt="Cambiar_centro_salud"
-                                            height="60"
-                                            width="60">
-                                    </a>
-                                    <h4>Cambiar Centro de Salud</h4>
-                                </div>
+                        </div>
+                        <div class="col-xs-12 center-lg">
+                            <div class="button_listarusuarios">
+                                <a href="{% url 'cambio-centro-salud' %}">
+                                    <img src="{% static 'imagenes/hospital.png' %}" alt="Cambiar_centro_salud"
+                                        height="60" width="60">
+                                </a>
+                                <h4>Cambiar Centro de Salud</h4>
                             </div>
-                            <div class="col-xs-12 col-lg-12 center-lg">
-                                <div class="button_listarinformes">
-                                    <a href="{% url 'listar-informe' %}"><img
-                                            src="{% static 'imagenes/listarInformes.png' %}"
-                                            alt="listar_informes" height="60"
-                                            width="60"></a>
-                                    <h4>Informes</h4>
-                                </div>
+                        </div>
+                        <div class="col-xs-12 col-lg-12 center-lg">
+                            <div class="button_listarinformes">
+                                <a href="{% url 'listar-informe' %}"><img
+                                        src="{% static 'imagenes/listarInformes.png' %}" alt="listar_informes"
+                                        height="60" width="60"></a>
+                                <h4>Informes</h4>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- seccion lista-->
+            <!-- seccion lista-->
 
-                <div class="col-xs-12 col-md-10 col-lg-10 center-xs backgroundrightside">
-                    <div class="sideright">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                <h4 id="encabezadoform">LISTADO DE USUARIOS</h4>
-                            </div>
+            <div class="col-xs-12 col-md-10 col-lg-10 center-xs backgroundrightside">
+                <div class="sideright">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
+                            <h4 id="encabezadoform">LISTADO DE USUARIOS</h4>
                         </div>
+                    </div>
 
-                        <!--CAMPO BUSCAR-->
+                    <!--CAMPO BUSCAR-->
 
-                        <form id="formulario-buscar" method="GET" action="#" class="formulariobuscar">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-xs-6 col-md-6 col-lg-6 end-xs">
-                                    <input class="intputs" type="search" value=" {{ request.GET.q }}"
-                                        name="q" required placeholder="Buscar por rut" maxlength="8">
-                                </div>
-                                <button class="buttonBuscar" name="submit" type="submit" value="Search">
-                                    <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
-                                </button>
-                            </div>
-                        </form>
-
+                    <form id="formulario-buscar" method="GET" action="#" class="formulariobuscar">
+                        {% csrf_token %}
                         <div class="row">
-                            <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                                {% if messages %}
-                                <ul class="messages">
-                                       {% for message in messages %}
-                                       <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                       {% endfor %}
-                                </ul>
-                                {% endif %}
-                                <br>
-                               <table>
-                                   <thead>
-                                       <tr>
-                                           <th>Nombre usuario</th>
-                                           <th>Rut usuario</th>
-                                           <th>Situación</th>
-                                           <th>Tipo Usuario</th>
-                                           <th>Editar</th>
-                                           <th>Campo tutor</th>
-                                           <th>Agregar tutor</th>
-                                       </tr>
-                                   </thead>
-                                   {% if personas %}
-                                   {% for i in personas %}
-                                   <tr>
-                                       <td>{{ i.NOMBRES }} {{ i.APELLIDO_PATERNO }}</td>
-                                       <form action="#" method="POST">
-                                           {% csrf_token %}
-                                           <td>{{ i.RUT }}-{{ i.DV }}</td>
-                                           <input type="hidden" name="rutPaciente" value="{{ i.RUT }}-{{i.DV }}" id="inputlistusuario">
-                                           {% if i.HABILITADO == 1 %}
-                                           <td>Habilitado</td>
-                                           {% elif i.HABILITADO == 0 %}
-                                           <td>Deshabilitado</td>
-                                           {% endif %}
-                                           <td>{{ i.TIPO_EMPLEADO }}</td>
-                                           <td><button class="btn-x" type="button">
+                            <div class="col-xs-6 col-md-6 col-lg-6 end-xs">
+                                <input class="intputs" type="search" value="{{ request.GET.q }}" name="q" required
+                                    placeholder="Buscar por rut" maxlength="8">
+                            </div>
+                            <button class="buttonBuscar" name="submit" type="submit" value="Search">
+                                <i class="fa fa-search fa-lg" style="font-size: 20px; color: #fff;"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <br>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nombre usuario</th>
+                                        <th>Rut usuario</th>
+                                        <th>Situación</th>
+                                        <th>Tipo Usuario</th>
+                                        <th>Editar</th>
+                                        <th>Campo tutor</th>
+                                        <th>Agregar tutor</th>
+                                    </tr>
+                                </thead>
+                                {% if personas %}
+                                {% for i in personas %}
+                                <tr>
+                                    <td>{{ i.NOMBRES }} {{ i.APELLIDO_PATERNO }}</td>
+                                    <form action="#" method="POST">
+                                        {% csrf_token %}
+                                        <td>{{ i.RUT }}-{{ i.DV }}</td>
+                                        <input type="hidden" name="rutPaciente" value="{{ i.RUT }}-{{i.DV }}"
+                                            id="inputlistusuario">
+                                        {% if i.HABILITADO == 1 %}
+                                        <td>Habilitado</td>
+                                        {% elif i.HABILITADO == 0 %}
+                                        <td>Deshabilitado</td>
+                                        {% endif %}
+                                        <td>{{ i.TIPO_EMPLEADO }}</td>
+                                        <td><button class="btn-x" type="button">
                                                 <a href="{% url 'editarPersona' i.RUT %}">
-                                                    <i class="fa fa-edit fa-lg" style="font-size: 20px; color: #fff;"></i>
+                                                    <i class="fa fa-edit fa-lg"
+                                                        style="font-size: 20px; color: #fff;"></i>
                                                 </a>
-                                           </button></td>
-                                           <td><input name="rutTutor" type="text" required placeholder="{{ i.RUT_TUTOR }}" id="inputlistusuario"
-                                                maxlength="12", oninput="checkRut(this)" onkeypress="return isNumber(event)">
-                                            </td>
-                                           <td>
-                                               <button class="btn-x" type="submit">
-                                                   <i class="fa fa-user-plus fa-lg" style="font-size: 20px; color: #fff;"></i>
-                                               </button>
-                                           </td>
-                                       </form>
-                                   </tr>
-                                   {% endfor %}
-                                   {% endif %}
-                               </table>
-                            </div>
+                                            </button></td>
+                                        <td><input name="rutTutor" type="text" required placeholder="{{ i.RUT_TUTOR }}"
+                                                id="inputlistusuario" maxlength="12" , oninput="checkRut(this)"
+                                                onkeypress="return isNumber(event)">
+                                        </td>
+                                        <td>
+                                            <button class="btn-x" type="submit">
+                                                <i class="fa fa-user-plus fa-lg"
+                                                    style="font-size: 20px; color: #fff;"></i>
+                                            </button>
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </table>
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+    </div>
 
-        <script>
-            $(document).ready(function() {
-                var Card =$(".buttomCard"); 
-            
-                //$('#flechaimg').attr('src',"{% static 'imagenes/agregarUsuario.png' %}");
-             
-                $(".rowe").click(function(){
-              
-                $(Card).fadeOut('slow', function() { $(this).remove(); });
-                
+    <script>
+        $(document).ready(function () {
+            var Card = $(".buttomCard");
+
+            //$('#flechaimg').attr('src',"{% static 'imagenes/agregarUsuario.png' %}");
+
+            $(".rowe").click(function () {
+
+                $(Card).fadeOut('slow', function () { $(this).remove(); });
+
                 $("#onInput").val('');
                 var id_row = $(this).attr('id');
                 $(Card).hide().insertBefore(this).fadeIn("slow");
-               
-                $("#onInput").val(id_row);                   
-                });
+
+                $("#onInput").val(id_row);
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
+
 </html>
