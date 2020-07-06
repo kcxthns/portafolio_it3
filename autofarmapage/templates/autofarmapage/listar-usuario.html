@@ -95,7 +95,7 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-xs-6 col-md-6 col-lg-6 end-xs">
-                                    <input class="intputs" type="search" value=" {{ request.GET.q }}"
+                                    <input class="intputs" type="search" value="{{ request.GET.q }}"
                                         name="q" required placeholder="Buscar por rut">
                                 </div>
                                 <button class="buttonBuscar" name="submit" type="submit" value="Search">

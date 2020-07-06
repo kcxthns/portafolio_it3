@@ -100,8 +100,8 @@
                             </div>
                         </div>
 
-                        <!--CAMPO BUSCAR-->
-                        <form id="formulario-buscar-informe" method="POST"
+                        <!--CAMPO BUSCAR
+                        <form id="formulario-buscar-informe" method="GET"
                             action="#" class="formulariobuscarinforme">
                             <div class="row">
                                 <div class="col-xs-6 col-md-6 col-lg-6 end-xs">
@@ -119,44 +119,76 @@
                                             width="30"></button>
                                 </div>
                             </div>
-                        </form>
+                        </form>-->
+
+                        <div class="col-xs-12 center">
+                            <form method="POST">{% csrf_token %}
+                                <select required name="medic"
+                                        id="regiones">
+                                        <option></option>
+                                        {%if medicamentos%}
+                                        {%for n in medicamentos%}
+                                        <option value="{{n.nombre_medicamento}}">{{n.nombre_medicamento}}</option>
+                                        {%endfor%}
+                                        {%endif%}
+                                       </select>
+
+                                <button class="btn-x" >CREAR INFORME<img src="{% static 'imagenes/add-02.png' %}" alt="search-listar" height="25" width="25"></button>
+                            </form>
+                            <div class="row center-xs mensajes">
+                                {% if messages %}
+                                <ul>
+                                    {% for message in messages %} 
+                                    <li class="{{ message.tags }}">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                            <br>
+                        </div>
 
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
-                               
+                                       
+                                <h3>REGISTRO INFORMES:</h3>
                                 
                     
                                     <table>
                                         <thead>
                                             <tr>
-                                                <th>Nombre medicamento</th>
-                                                <th>Total disponibles</th>
-                                                <th>Centro de salud</th>
-                                                <th>Ver pdf</th>
-                                                <th>Descargar</th>
+                                                <th>ID_INFORME</th>
+                                                <th>FECHA_INFORME</th>
+                                                <th>ID_CENTRO</th>
+                                                <th>ID_TIPO_INFORME</th>
+                                                <th>Abrir</th>
+                                                <td>Descargar</td>
+                                                
                                             </tr>
                                         </thead>
-                                        {% if informe_stock %}
-                                        {% for i in informe_stock %}
+                                        {% if bd_informes %}
+                                        {% for i in bd_informes %}
                                         <tr>
-                                            <td>{{ i.NOMBRE_MEDICAMENTO }}</td>
-                                            <td>{{ i.TOTAL_DISPONIBLE }} </td>
-                                            <td>{{ i.COMUNA }}</td>
+                                            <td>{{ i.id_informe }}</td>
+                                            <td>{{ i.fecha }} </td>
+                                            <td>{{ i.id_centro.nombre_centro}}</td>
+                                            <td>{{ i.id_tipo_inf.nombre_tipo_inf}}</td>
                                             <td>
                                                 <button class="btn-x" type="button">
-                                                   <a href="{% url 'pdf_stock' i.NOMBRE_MEDICAMENTO %}" target="_blank">ABRIR</a>
+                                                   <a href="{% url 'pdf_stock' i.id_informe %}" target="_blank"><img src="{% static 'imagenes/New-Open.png' %}" alt="search-listar" height="30" width="30"></a>
                                                 </button>
                                             </td>
 
                                             <td>
                                                 <button class="btn-x" type="button">
-                                                   <a href="{% url 'pdf_download' i.NOMBRE_MEDICAMENTO %}" target="_blank">DESCARGAR</a>
+                                                   <a href="{% url 'pdf_download' i.id_informe %}" target="_blank"><img src="{% static 'imagenes/Download.png' %}" alt="search-listar" height="30" width="30"></a>
                                                 </button>
                                             </td>
                                         </tr>
                                         {% endfor %}
                                         {% endif %}
                                     </table>
+
+                                   
                               
                             
         

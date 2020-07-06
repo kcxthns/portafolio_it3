@@ -4,6 +4,13 @@
 
 }
 
+button{
+    border: none;
+    background: #1290cb;
+    color: rgb(253, 253, 253);
+    font-weight: bold;
+    
+}
 
 
 .backgroundheader{
