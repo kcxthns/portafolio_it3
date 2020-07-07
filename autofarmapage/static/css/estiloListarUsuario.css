@@ -1,25 +1,25 @@
-*{
+* {
     margin: 0px;
     font-family: 'Roboto', sans-serif;
 }
 
-.backgroundheader{
+.backgroundheader {
     background: #68c2dc;
     padding: 10px;
     color: #ffffff;
-    box-shadow: 0px 3px 0px rgba(0,0,0,.1);
+    box-shadow: 0px 3px 0px rgba(0, 0, 0, .1);
     position: fixed;
     left: 0;
     right: 0;
     top: 0;
 }
 
-.section{
+.section {
     padding-top: 5.2rem;
-    min-height: 101vh; 
+    min-height: 101vh;
 }
 
-.backgroundleftside{
+.backgroundleftside {
     background: #b9dcf0;
     display: flex;
     flex-direction: column;
@@ -27,7 +27,7 @@
     min-height: 10vh;
 }
 
-.button_usuario{  
+.button_usuario {
     background: #b9dcf0;
     border: #ffffff 1.3px solid;
     margin-top: 8px;
@@ -35,51 +35,52 @@
     margin-bottom: 8px;
     padding-top: 26px;
     padding-bottom: 26px;
-    color: #1290cb ;
+    color: #1290cb;
     transition: 1s;
 }
 
-.button_usuario:hover{
+.button_usuario:hover {
     background: #f2f5fa;
 }
 
-.button_listarusuarios{ 
+.button_listarusuarios {
     background: #b9dcf0;
     border: #ffffff 1.3px solid;
     margin-left: 8px;
     margin-bottom: 8px;
     padding-top: 26px;
     padding-bottom: 26px;
-    color: #1290cb ;
+    color: #1290cb;
     transition: 1s;
 }
 
-.button_listarusuarios:hover{
+.button_listarusuarios:hover {
     background: #f2f5fa;
 }
 
-.button_listarinformes{
+.button_listarinformes {
     background: #b9dcf0;
     border: #ffffff 1.3px solid;
     margin-left: 8px;
-    margin-bottom:8px;
+    margin-bottom: 8px;
     padding-top: 26px;
     padding-bottom: 26px;
-    color: #1290cb ;
+    color: #1290cb;
     transition: 1s;
 }
 
-.button_listarinformes:hover{
+.button_listarinformes:hover {
     background: #f2f5fa;
 }
 
-#encabezadoform{
+#encabezadoform {
     font-weight: lighter;
-    padding: 55px;    
+    padding: 55px;
 }
 
 /*ESTILO CAMPOS*/
-input{
+
+input {
     border: none;
     background: #FFFFFF;
     width: 200x;
@@ -89,18 +90,18 @@ input{
     border-bottom: 1px solid #666666;
 }
 
-#inputlistusuario{
+#inputlistusuario {
     border: none;
     background: #FFFFFF;
     margin-bottom: 0px;
 }
 
-button{
+button {
     border: none;
     background: #1290cb;
 }
 
-.buttonBuscar{
+.buttonBuscar {
     border: none;
     background: #1290cb;
     height: 35px;
@@ -111,7 +112,7 @@ button{
     margin-bottom: 30px;
 }
 
-.inputCard{
+.inputCard {
     border: none;
     background: #f2f5fa;
     width: 400x;
@@ -121,7 +122,7 @@ button{
     border-bottom: 1px solid #666666;
 }
 
-.buttonEditar{
+.buttonEditar {
     border: none;
     background: #1290cb;
     height: 35px;
@@ -132,32 +133,32 @@ button{
     margin-bottom: 30px;
 }
 
-.backgroundCard a{
+.backgroundCard a {
     text-decoration: none;
     background: #1290cb;
     color: #ffffff;
     padding: 5px;
 }
 
-.backgroundCard #arrowe{
-   text-decoration: none;
-   background: none;
+.backgroundCard #arrowe {
+    text-decoration: none;
+    background: none;
 }
 
-#buttomIcon{
-    border:1px solid lightgray;
+#buttomIcon {
+    border: 1px solid lightgray;
     left: 0px;
     right: 0px;
     margin-top: 8px;
-    border-radius: 10px 10px 10px 10px;   
+    border-radius: 10px 10px 10px 10px;
 }
 
-.buttomCard{
+.buttomCard {
     display: none;
     margin-top: 25px;
 }
 
-.btnCardMed{
+.btnCardMed {
     border: none;
     background: #1290cb;
     height: 35px;
@@ -166,11 +167,11 @@ button{
     font-size: small;
 }
 
-.arrowe{
+.arrowe {
     transition: 60s;
 }
 
-.buttonAddTutor{
+.buttonAddTutor {
     border: none;
     background: #1290cb;
     height: 35px;
@@ -181,7 +182,7 @@ button{
     margin-bottom: 5px;
 }
 
-.buttonDeshabilitar{
+.buttonDeshabilitar {
     border: none;
     background: #1290cb;
     height: 35px;
@@ -192,39 +193,37 @@ button{
 }
 
 /*FIN ESTILO CAMPOS*/
-.backgroundCard{
+
+.backgroundCard {
     background: #ffffff;
-    box-shadow: 0px 0px 3px rgba(0,0,0,.1);
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, .1);
     padding: 15px;
     margin: 15px;
     margin-left: 10rem;
     margin-right: 20rem;
 }
 
-.backgroundrightside{
+.backgroundrightside {
     background: #f2f5fa;
     min-height: 700px;
 }
 
-@media(max-width:1080px){
-    .backgroundCard{
+@media(max-width:1080px) {
+    .backgroundCard {
         margin: 15px;
     }
-
-    .button_usuario{      
-        padding-left: 5px; 
-    }
-
-    .button_listarusuarios{
+    .button_usuario {
         padding-left: 5px;
     }
-
-    .button_listarinformes{
+    .button_listarusuarios {
+        padding-left: 5px;
+    }
+    .button_listarinformes {
         padding-left: 5px;
     }
 }
 
-.labelListaMed{
+.labelListaMed {
     color: slategrey;
     margin-top: 2px;
     font-weight: lighter;
@@ -234,7 +233,7 @@ button{
     margin-left: 2%;
 }
 
-.btn{
+.btn {
     border: #1290cb 1px solid;
     background: #1290cb;
     color: #FFFFFF;
@@ -242,19 +241,24 @@ button{
     padding: 2%;
 }
 
-.btn:hover{
+.btn:hover {
     border: #1290cb 1px solid;
     background: #F2F5FA;
     color: #1290cb;
 }
 
-.parrafo{
+.btn-x {
+    width: 36px;
+    height: 26px;
+}
+
+.parrafo {
     font-family: 'Roboto', sans-serif;
     color: #666666;
     font-size: small;
 }
 
-.buttonBuscar2{
+.buttonBuscar2 {
     border: none;
     background: #1290cb;
     /*height: 35px;
