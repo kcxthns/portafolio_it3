@@ -1293,7 +1293,7 @@ def listarinforme(request):
         medicamento = request.POST['medic']
         print(medicamento)
         paracetamol = 'paracetamol'
-        cursor.callproc('sp_insertar_informes', [now, centroSalud, 1, realizado])
+        cursor.callproc('spa_insertar_informes', [now, centroSalud, 1, realizado])
         
         if realizado.getvalue() == 1:
             print("correcto")
