@@ -19,18 +19,18 @@
                     <p>{{ user.rut.id_centro.nombre_centro }}</p>
                     <h4 class="nombre-medico">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
                         {{user.rut.apellido_materno}}</h4>
-                    <h4>RUT: {{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}}</h4>
+                    <h4 id="formateoRut"> {{receta.rut_medico.rut.rut}}{{receta.rut_medico.rut.dv}}</h4>
                 </div>
             </div>
             <div class="receta-paciente">
                 <div class="n-paciente">
-                    <h4><b>Nombre paciente: </b> {{receta.rut_paciente.nombres}}
+                    <h4>NOMBRE PACIENTE: {{receta.rut_paciente.nombres}}
                         {{receta.rut_paciente.apellido_paterno}}
                         {{receta.rut_paciente.apellido_materno}}
                     </h4>
                 </div>
-                <div class="r-paciente">
-                    <h4> <b> RUT paciente: </b> {{receta.rut_paciente.rut}} - {{receta.rut_paciente.dv}} </h4>
+                <div class="r-paciente" id="formateoRutP">
+                    <h4> a {{receta.rut_paciente.rut}}{{receta.rut_paciente.dv}} </h4>
                 </div>
                 <br>
             </div>
@@ -63,4 +63,21 @@
         </div>
     </div>
 </div>
+
+<!-- Formatear RUT -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" rel="stylesheet" />
+
+<script>
+    $("#formateoRut").inputmask({
+        mask: " RUT: 9[9.999.999]-[9|K|k]",
+    });
+
+    $("#formateoRutP").inputmask({
+        mask: " RUT PACIENTE: 9[9.999.999]-[9|K|k]",
+    });
+</script>
+
 {% endblock %}
