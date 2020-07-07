@@ -962,7 +962,6 @@ btn-x a, a:link, a:visited, a:active {
 }
 
 .listar-agregados:nth-child(even) {
-    background-color: rgb(247, 247, 247);
     color: #000;
 }
 
