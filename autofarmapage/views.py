@@ -1253,10 +1253,11 @@ def stock_informe1(id_informe, conexion):
 class MostrarPDFSTOCK(View):
     def get(self, request, id_informe):
         conexion = ConexionBD()
-        centroSalud = request.user.rut.id_centro.id_centro
+        fecha = RegistroInformes.objects.get(id_informe=id_informe)
         data1 = stock_informe1(id_informe, conexion)
         data = { 
-                 'data1':data1}
+                 'data1':data1,
+                 'fecha':fecha}
         pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
 
@@ -1264,8 +1265,9 @@ class DescargarPDF(View):
     def get(self, request, id_informe):
         conexion = ConexionBD()
         centroSalud = request.user.rut.id_centro.id_centro
+        fecha = RegistroInformes.objects.get(id_informe=id_informe)
         data1 = stock_informe1(id_informe, conexion)
-        data = {
+        data = { 'fecha':fecha,
                  'data1':data1}
         pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
@@ -1290,8 +1292,7 @@ def listarinforme(request):
         con = bd.conectar()
         cursor = con.cursor()
         realizado = cursor.var(int)
-        medicamento = request.POST['medic']
-        print(medicamento)
+        
         paracetamol = 'paracetamol'
         cursor.callproc('spa_insertar_informes', [now, centroSalud, 1, realizado])
         
@@ -1301,14 +1302,7 @@ def listarinforme(request):
         elif realizado.getvalue() == 0:
             print("incorrecto")
             messages.success(request,  'ATENCIÓN: ¡OCURRIÓ UN ERROR!')
-    #prueba        
-    bd = ConexionBD()
-    con = bd.conectar()
-    cursor= con.cursor()
-    cursor.execute("""SELECT e.nombre, e.laboratorio, e.presentacion, e.stock, e.caducados, e.total, e.centro , e.comuna 
-                          FROM registro_informes w, TABLE(w.informe) e
-                          WHERE id_informe = 140""")
-    res = rows_to_dict_list(cursor)
+        
     #datos para la vista
     datos= {
         'medicamentos':medicamentos,

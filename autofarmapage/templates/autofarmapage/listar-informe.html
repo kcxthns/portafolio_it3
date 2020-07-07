@@ -123,15 +123,7 @@
 
                         <div class="col-xs-12 center">
                             <form method="POST">{% csrf_token %}
-                                <select required name="medic"
-                                        id="regiones">
-                                        <option></option>
-                                        {%if medicamentos%}
-                                        {%for n in medicamentos%}
-                                        <option value="{{n.nombre_medicamento}}">{{n.nombre_medicamento}}</option>
-                                        {%endfor%}
-                                        {%endif%}
-                                       </select>
+                                
 
                                 <button class="btn-x" >CREAR INFORME<img src="{% static 'imagenes/add-02.png' %}" alt="search-listar" height="25" width="25"></button>
                             </form>
