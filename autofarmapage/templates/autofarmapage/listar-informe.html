@@ -124,12 +124,10 @@
                             <form method="POST">{% csrf_token %}
                                 
 
-                                <button class="btn-x" name="btn_stock">CREAR INFORME<img src="{% static 'imagenes/add-02.png' %}" alt="search-listar" height="25" width="25"></button>
+                                <button class="btn-x" name="btn_stock">CREAR INFORME STOCK<img src="{% static 'imagenes/add-02.png' %}" alt="search-listar" height="25" width="25"></button>
                             </form>
 
-                            <form method="GET">{% csrf_token %}
-                                    <button name="btn_reserva"class="btn-x">CREAR INFORME RESERVA</button>
-                            </form>
+                            
                             <div class="row center-xs mensajes">
                                 {% if messages %}
                                 <ul>
@@ -141,6 +139,15 @@
                             </div>
                             <br>
                         </div>
+
+                        <div class="col-xs-12">
+                            <form method="GET">{% csrf_token %}
+                                <button name="btn_reserva"class="btn-x">CREAR INFORME RESERVA<img src="{% static 'imagenes/add-02.png' %}" alt="search-listar" height="25" width="25"></button>
+                            </form>
+                        </div>
+
+                        <br>
+                        <br>
 
                         <div class="row">
                             <div class="col-xs-12 col-md-12 col-lg-12 center-xs">

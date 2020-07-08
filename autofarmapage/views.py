@@ -1729,8 +1729,38 @@ def listarinforme(request):
         #    messages.success(request,  'ATENCIÓN: ¡OCURRIÓ UN ERROR!')
 
     # datos para la vista
+# LISTAR INFORMES DEL FARMACIA
+def listarInforFarmacia(request):
+    ow = datetime.now()
+    centroSalud = request.user.rut.id_centro.id_centro
+    medicamentos = Medicamento.objects.all()
+    bd_informes = RegistroInformes.objects.filter(
+        id_centro=request.user.rut.id_centro).order_by('-id_informe')
+    informes = RegistroInformes.objects.filter(
+        id_centro=request.user.rut.id_centro).order_by('-id_informe')
+    datos3 = {
 
+        'informes': informes
+    }
 
+    
+    if 'btn_reserva' in request.GET:
+        bd = ConexionBD()
+        con = bd.conectar()
+        cursor = con.cursor()
+        cursor.callproc('sp_guardar_informe_reservas', [centroSalud]) 
+
+         
+    if request.method == "POST":
+        bd = ConexionBD()
+        con = bd.conectar()
+        cursor = con.cursor()
+        realizado = cursor.var(int)
+
+        paracetamol = 'paracetamol'
+        cursor.callproc('sp_guardar_informe_medicamento', [centroSalud])
+
+    return render(request, 'autofarmapage/farmacia/listar-inforfarmacia.html',datos3)
 # funcion para convertir datos del query oracle en diccionario
 
 

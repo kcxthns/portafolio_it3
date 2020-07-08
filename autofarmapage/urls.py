@@ -98,5 +98,8 @@ urlpatterns = [
     #url informe stock
     path('informeStock', views.render_informestock_html, name='informeStock'),
     path('informeReserva', views.render_informereserva_html, name='informeReserva'),
+
+    #url listar informes de farmacia
+    path('listar-informe-farmacia', views.listarInforFarmacia, name='listar-informe-farmacia'),
     
 ]
