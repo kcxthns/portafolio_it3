@@ -92,6 +92,11 @@ urlpatterns = [
     path('pdf_stock/<int:id_informe>', views.MostrarPDFSTOCK.as_view(), name='pdf_stock'),
     path('pdf_download/<int:id_informe>', views.DescargarPDF.as_view(), name='pdf_download'),
 
+    #generador pdf reserva
+    path('pdf_reserva/<int:id_informe>', views.MostrarPDFRESERVA.as_view(), name='pdf_reserva'),
+    path('pdf_descargar/<int:id_informe>', views.DescargarPDFRESERVA.as_view(), name='pdf_descargar'),
     #url informe stock
-    path('informeStock', views.render_informestock_html, name='informeStock')
+    path('informeStock', views.render_informestock_html, name='informeStock'),
+    path('informeReserva', views.render_informereserva_html, name='informeReserva')
+    
 ]

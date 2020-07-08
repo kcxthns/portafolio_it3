@@ -124,7 +124,11 @@
                             <form method="POST">{% csrf_token %}
                                 
 
-                                <button class="btn-x" >CREAR INFORME<img src="{% static 'imagenes/add-02.png' %}" alt="search-listar" height="25" width="25"></button>
+                                <button class="btn-x" name="btn_stock">CREAR INFORME<img src="{% static 'imagenes/add-02.png' %}" alt="search-listar" height="25" width="25"></button>
+                            </form>
+
+                            <form method="GET">{% csrf_token %}
+                                    <button name="btn_reserva"class="btn-x">CREAR INFORME RESERVA</button>
                             </form>
                             <div class="row center-xs mensajes">
                                 {% if messages %}
@@ -163,6 +167,23 @@
                                             <td>{{ i.fecha }} </td>
                                             <td>{{ i.id_centro.nombre_centro}}</td>
                                             <td>{{ i.id_tipo_inf.nombre_tipo_inf}}</td>
+
+                                            {% if i.id_tipo_inf.id_tipo_inf == 2 %}
+
+                                            <td>
+                                                <button class="btn-x" type="button">
+                                                   <a href="{% url 'pdf_reserva' i.id_informe %}" target="_blank"><img src="{% static 'imagenes/New-Open.png' %}" alt="search-listar" height="30" width="30"></a>
+                                                </button>
+                                            </td>
+
+                                            <td>
+                                                <button class="btn-x" type="button">
+                                                   <a href="{% url 'pdf_descargar' i.id_informe %}" target="_blank"><img src="{% static 'imagenes/Download.png' %}" alt="search-listar" height="30" width="30"></a>
+                                                </button>
+                                            </td>
+
+                                            {%elif i.id_tipo_inf.id_tipo_inf == 1%}
+
                                             <td>
                                                 <button class="btn-x" type="button">
                                                    <a href="{% url 'pdf_stock' i.id_informe %}" target="_blank"><img src="{% static 'imagenes/New-Open.png' %}" alt="search-listar" height="30" width="30"></a>
@@ -174,6 +195,9 @@
                                                    <a href="{% url 'pdf_download' i.id_informe %}" target="_blank"><img src="{% static 'imagenes/Download.png' %}" alt="search-listar" height="30" width="30"></a>
                                                 </button>
                                             </td>
+
+                                            {%endif%}
+                                            
                                         </tr>
                                         {% endfor %}
                                         {% endif%}

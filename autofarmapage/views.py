@@ -1581,6 +1581,10 @@ def render_informestock_html(request):
 
     return render(request, 'autofarmapage/formatoInforme.html', dataInforme)
 
+#vista informe reserva    
+def render_informereserva_html(request):
+    CentroSalud = request.user.rut.id_centro.id_centro
+    return render(request, 'autofarmapage/formatoInformeRerserva.html', {})
 # VISTA PDF INFORME STOCK
 
 
@@ -1638,8 +1642,50 @@ class DescargarPDF(View):
 
         return response
 
- # BORRAR ESTA PARTE
+ # apartado pdf reserva
+def reserva_informe1(id_informe, conexion):
+    con = conexion.conectar()
+    cursor= con.cursor()
+    cursor.prepare("""SELECT e.id_reserva, e.codigo, e.nombre_medicamento, e.id_receta, e.cantidad, e.fecha_reserva
+                          FROM registro_informes w, 
+                          TABLE(w.array_informe_reserva) e
+                          WHERE id_informe = :id_informe""")
+    cursor.execute(None, id_informe=id_informe)
+    reserva_informe = rows_to_dict_list(cursor)
+    datos = {
+        'reserva_informe': reserva_informe
+    }
+    return datos
 
+#generar pdf
+
+class MostrarPDFRESERVA(View):
+    def get(self, request, id_informe):
+        conexion = ConexionBD()
+        fecha = RegistroInformes.objects.get(id_informe=id_informe)
+        data1 = reserva_informe1(id_informe, conexion)
+        data = {
+            'data1': data1,
+            'fecha': fecha}
+        pdf = renderizar_pdf('autofarmapage/formatoInformeRerserva.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
+class DescargarPDFRESERVA(View):
+    def get(self, request, id_informe):
+        conexion = ConexionBD()
+        centroSalud = request.user.rut.id_centro.id_centro
+        fecha = RegistroInformes.objects.get(id_informe=id_informe)
+        data1 = reserva_informe1(id_informe, conexion)
+        data = {'fecha': fecha,
+                'data1': data1}
+        pdf = renderizar_pdf('autofarmapage/formatoInformeReserva.html', data)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Informe_stock_%s.pdf" % ("centro_N-" + str(centroSalud))
+        content = "attachment; filename=%s" % (filename)
+        response['Content-Disposition'] = content
+
+        return response
 
 # Vista de la Lista de Informes
 
@@ -1655,10 +1701,14 @@ def listarinforme(request):
         'informes':informes
     }
 
-    for i in informes:
-        print(i.id_informe)
-        print(i.fecha)
+    
+    if 'btn_reserva' in request.GET:
+        bd = ConexionBD()
+        con = bd.conectar()
+        cursor = con.cursor()
+        cursor.callproc('sp_guardar_informe_reservas', [centroSalud]) 
 
+         
     if request.method == "POST":
         bd = ConexionBD()
         con = bd.conectar()
@@ -1667,6 +1717,8 @@ def listarinforme(request):
 
         paracetamol = 'paracetamol'
         cursor.callproc('sp_guardar_informe_medicamento', [centroSalud])
+   
+           
     return render(request, 'autofarmapage/listar-informe.html', datos3 )
         #if realizado.getvalue() == 1:
         #    print("correcto")
