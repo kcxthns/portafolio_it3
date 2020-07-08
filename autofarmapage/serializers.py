@@ -22,3 +22,6 @@ class ReservaSerializer(serializers.Serializer):
     DISPONIBLE_ENTREGA = serializers.IntegerField()
     ID_RECETA = serializers.IntegerField()
     FECHA_RESERVA = serializers.DateTimeField()
+
+class UsuarioSerializer(serializers.Serializer):
+    NOMBRE_USUARIO = serializers.CharField()

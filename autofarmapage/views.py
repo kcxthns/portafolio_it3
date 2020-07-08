@@ -22,7 +22,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
-from autofarmapage.serializers import ReservaSerializer
+from autofarmapage.serializers import ReservaSerializer, UsuarioSerializer
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
 try:
@@ -492,7 +492,7 @@ def listarMedicamento(request):
                 nombre_medicamento__icontains=criterio_busqueda)
             stock = StockMedicamento.objects.filter(codigo__nombre_medicamento__icontains=criterio_busqueda).filter(
                 id_centro=request.user.rut.id_centro.id_centro).order_by('codigo')
-            paginador = Paginator(stock, 10)
+            paginador = Paginator(stock, 5)
             pagina = request.GET.get('page')
             stock = paginador.get_page(pagina)
             datos = {
@@ -553,7 +553,7 @@ def listarMedicamento(request):
             #medicamentos = Medicamento.objects.all()
         stock = StockMedicamento.objects.filter(
             id_centro=request.user.rut.id_centro.id_centro).order_by('codigo')
-        paginador = Paginator(stock, 10)
+        paginador = Paginator(stock, 5)
         pagina = request.GET.get('page')
         stock = paginador.get_page(pagina)
         datos = {
@@ -562,12 +562,12 @@ def listarMedicamento(request):
         }
         return render(request, 'autofarmapage/listar-medicamento.html', datos)
 
-    paginador = Paginator(stock, 10)
+    paginador = Paginator(stock, 5)
     pagina = request.GET.get('page')
     stock = paginador.get_page(pagina)
 
     datos = {
-        'medicamentos': medicamentos,
+        #'medicamentos': medicamentos,
         'stock': stock
     }
     parametros = request.GET.copy()
@@ -1077,7 +1077,7 @@ def agregarpaciente(request):
         existe_persona = cursor.var(bool)
         cursor.callfunc('pkg_crear_usuario.fn_existe_persona', existe_persona, [rut])
         #Comprueba si el rut ya está registrado en la bd
-        if existe_persona:
+        if existe_persona.getvalue():
             messages.error(request, 'El rut ' + rut + '-' + dv + ' ya está registrado en el sistema.')
         else:
             # Llamado al procedimiento almacenado para crear persona (no crea usuario)
@@ -1233,7 +1233,7 @@ def registrartutor(request):
         cursor = conn.cursor()
         realizado = cursor.var(int)
         existe_persona = cursor.var(bool)
-        if existe_persona:
+        if existe_persona.getvalue():
             messages.error(request, 'El rut ' + rut + '-' + dv + ' ya está registrado en el sistema.')
         else:
             # Llamado al procedimiento almacenado para crear persona (no crea usuario)
@@ -1437,9 +1437,11 @@ def resetPasswordRutSuccess(request):
 #VISTA INFORME STOCK#
 #####################
 
+#vista informe stock
 def render_informestock_html(request):
     centroSalud = request.user.rut.id_centro.id_centro
     dataInforme = listar_informe_stock(centroSalud)
+
     return render(request, 'autofarmapage/formatoInforme.html', dataInforme)     
 
 # VISTA PDF INFORME STOCK
@@ -1451,75 +1453,82 @@ def renderizar_pdf(template_src, datos_informe={}):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='aplication/pdf')
     return None
+#obtener datos para el pdf
+def stock_informe1(id_informe, conexion):
+    con = conexion.conectar()
+    cursor= con.cursor()
+    cursor.prepare("""SELECT e.nombre, e.laboratorio, e.presentacion, e.stock, e.caducados, e.total, e.centro , e.comuna 
+                          FROM registro_informes w, 
+                          TABLE(w.informe) e
+                          WHERE id_informe = :id_informe""")
+    cursor.execute(None, id_informe=id_informe)                      
+    registro_informe = rows_to_dict_list(cursor)
+    datos = {
+        'registro_informe':registro_informe
+    }
+    return datos
 
 class MostrarPDFSTOCK(View):
-    def get(self, request, nombre_medicamento):
+    def get(self, request, id_informe):
         conexion = ConexionBD()
-        centroSalud = request.user.rut.id_centro.id_centro
-        data1 = stock_informe(centroSalud, nombre_medicamento, conexion)
-        now = datetime.now()
-        data = { 'now': now,
-                 'data1':data1, }
+        fecha = RegistroInformes.objects.get(id_informe=id_informe)
+        data1 = stock_informe1(id_informe, conexion)
+        data = { 
+                 'data1':data1,
+                 'fecha':fecha}
         pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
 
 class DescargarPDF(View):
-    def get(self, request, nombre_medicamento):
+    def get(self, request, id_informe):
         conexion = ConexionBD()
         centroSalud = request.user.rut.id_centro.id_centro
-        data1 = stock_informe(centroSalud, nombre_medicamento, conexion)
-        now = datetime.now()
-        data = { 'now': now,
-                 'data1':data1, }
+        fecha = RegistroInformes.objects.get(id_informe=id_informe)
+        data1 = stock_informe1(id_informe, conexion)
+        data = { 'fecha':fecha,
+                 'data1':data1}
         pdf = renderizar_pdf('autofarmapage/formatoInforme.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Informe_stock_%s.pdf" %("centro_N-" + str(centroSalud))
-        content = "attachment; filename='%s'" %(filename)
+        content = "attachment; filename=%s" %(filename)
         response['Content-Disposition'] = content
+
         return response
 
-def listar_informe_stock(id_centro):
-    bd = ConexionBD()
-    con = bd.conectar()
-    cursor = con.cursor()
-    cursor.prepare("""SELECT me.nombre_medicamento,  
-                      me.fabricante, tm.nombre_tipo_med, 
-                      st.stock, ca.cantidad AS CANT_CADUCADOS, 
-                      st.stock - ca.cantidad AS TOTAL_DISPONIBLE, 
-                      (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, 
-                      (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA 
-                      FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo 
-                      JOIN caducado ca ON ca.codigo = me.codigo 
-                      JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med 
-                      WHERE st.id_centro = :id_centro""")
-    cursor.execute(None, id_centro = id_centro)   
-    #cursor.execute(query, id_centro=301)
-    cursor.rowfactory = fabricaDiccionario(cursor)
-    informe_stock = cursor.fetchall()
-    datos ={
-            'informe_stock': informe_stock,
-        }             
-    return datos
+ # BORRAR ESTA PARTE   
 
-def stock_informe(id_centro, nombre_medicamento, conexion):
-    con = conexion.conectar()
-    cursor = con.cursor()
-    cursor.prepare("SELECT me.nombre_medicamento,  me.fabricante, tm.nombre_tipo_med, st.stock, ca.cantidad AS CANT_CADUCADOS, st.stock - ca.cantidad AS TOTAL_DISPONIBLE, (SELECT nombre_centro FROM centro_salud WHERE id_centro=st.id_centro) AS CENTRO_SALUD, (SELECT co.nombre_comuna FROM comuna co JOIN centro_salud cs ON cs.id_comuna=co.id_comuna WHERE id_centro = st.id_centro) AS COMUNA FROM stock_medicamento st JOIN medicamento me ON st.codigo = me.codigo JOIN caducado ca ON ca.codigo = me.codigo JOIN tipo_medicamento tm ON tm.id_tipo_med = me.id_tipo_med WHERE st.id_centro = :id_centro AND me.nombre_medicamento = :nombre_medicamento")
-    cursor.execute(None, id_centro = id_centro, nombre_medicamento = nombre_medicamento)
-    cursor.rowfactory = fabricaDiccionario(cursor)
-    informe_stock = cursor.fetchall()
-    datos ={
-            'informe_stock': informe_stock,
-        }
-    return datos
 
 #Vista de la Lista de Informes
 def listarinforme(request):
-    #Obtiene todos los informes
-    """informe = RegistroInformes.objects.all()
-    datainfo = {
-        'informe': informe
-    }"""
+    now = datetime.now()
     centroSalud = request.user.rut.id_centro.id_centro
-    dataInforme = listar_informe_stock(centroSalud)
-    return render(request, 'autofarmapage/listar-informe.html', dataInforme)    
+    medicamentos = Medicamento.objects.all()
+    bd_informes = RegistroInformes.objects.filter(id_centro=request.user.rut.id_centro).order_by('-id_informe')
+
+    if request.method == "POST":
+        bd = ConexionBD()
+        con = bd.conectar()
+        cursor = con.cursor()
+        realizado = cursor.var(int)
+
+        paracetamol = 'paracetamol'
+        cursor.callproc('spa_insertar_informes', [now, centroSalud, 1, realizado])
+
+        if realizado.getvalue() == 1:
+            print("correcto")
+            messages.success(request,  'CORRECTO: INFORME ALMACENADO:')
+        elif realizado.getvalue() == 0:
+            print("incorrecto")
+            messages.success(request,  'ATENCIÓN: ¡OCURRIÓ UN ERROR!')
+
+    #datos para la vista
+    datos= {
+        'medicamentos':medicamentos,
+        'bd_informes':bd_informes
+    }
+    return render(request, 'autofarmapage/listar-informe.html',datos)    
+#funcion para convertir datos del query oracle en diccionario
+def rows_to_dict_list(cursor):
+    columns = [i[0] for i in cursor.description]
+
+    return [dict(zip(columns, row)) for row in cursor]  

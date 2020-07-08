@@ -163,6 +163,31 @@
                             </div>
                             {% endfor %}
                             {% endif %}
+                            
+                            {% if stock %}
+                            <div class="row">
+                                <div class="col-xs-12 center-xs">
+                                    <div class="backgroundCard">
+                                        <div class="col-xs-4 start-xs">
+                                            {% if stock.has_previous %}
+                                            <a href="?page={{ stock.previous_page_number }}">Anterior</a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-xs-4 center-xs">
+                                            <span>Página {{ stock.number }} de {{stock.paginator.num_pages }}</span>
+                                        </div>
+                                        <div class="col-xs-4 end-xs">
+                                            {% if stock.has_next %}
+                                            <a href="?page={{ stock.next_page_number }}">Siguiente</a>
+                                            {% endif %} 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+
+
                             <div class="buttomCard">
                                 <form class="formularioCard" id="formulario-card" action="#" method="POST">
                                     {% csrf_token %}
@@ -196,20 +221,6 @@
                                     </div>
                                 </form>
                             </div>
-                            {% if stock %}
-                            <div class="row">
-                                <div class="col-xs-12 center-xs">
-                                    <div class="col-xs-12 col-md-12 center-xs">
-                                        {% if stock.has_previous %}
-                                        <a href="?page={{ medicamentos.previous_page_number }}">Anterior</a>
-                                        {% endif %}
-                                        {% if stock.has_next %}
-                                        <a href="?page={{ medicamentos.next_page_number }}">Siguiente</a>
-                                        {% endif %} 
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -10,33 +10,48 @@
     <header>
         <hr>
         <h2 align="center">INFORME STOCK MEDICAMENTOS</h2>
-        {%if data1.informe_stock %}
-        {% for datos in data1.informe_stock %}
-        <br>
-        <h3>Centro de salud: {{ datos.CENTRO_SALUD}}</h3>
+        {%if data1.registro_informe %}
 
-        <h3>{{ datos.COMUNA}}</h3>
-        <h3>Fecha Emisión: {{ now }}</h3>
+        <h3>FECHA EMISIÓN: {{fecha.fecha}}</h3>
         <hr>
         <br>
     </header>
 
     <div>
-        <h4>Nombre médicamento: {{ datos.NOMBRE_MEDICAMENTO}}</h4> 
-        <br>
-        <h4>Fabricante: {{ datos.FABRICANTE}}</h4>
-        <br>
-        <h4>Presentación: {{ datos.NOMBRE_TIPO_MED}}</h4> 
-        <br>
-        <h4>Stock: {{datos.STOCK}} </h4> 
-        <br>
-        <h4>Médicamentos caducados: {{ datos.CANT_CADUCADOS}}</h4>
-        <br>
-        <h4>Total disponibles: {{ datos.TOTAL_DISPONIBLE}}</h4>
-        <br>
+
+        <table  border="2px" style="padding: 3px;" >
+            <thead style="margin:5px"> 
+                <tr style="margin:5px">
+                    <th>NOMBRE MEDICAMENTO</th>
+                    <th>FABRICANTE</th>
+                    <th>PRESENTACION</th>
+                    <TH>CENTRO</TH>
+                    <TH>COMUNA</TH>
+                    <th>STOCK</th>
+                    <th>MEDICAMENTOS CADUCADOS</th>
+                    <th>TOTAL DISPONIBLE</th>
+
+                </tr>
+            </thead>
+            {% for datos in data1.registro_informe %}
+            <tr style="margin:5px">
+
+                <td>{{ datos.NOMBRE }}</td>
+                <td>{{ datos.LABORATORIO}} </td>
+                <td>{{ datos.PRESENTACION}}</td>
+                <td>{{datos.CENTRO}}</td>
+                <td>{{datos.COMUNA}}</td>
+                <td>{{ datos.STOCK}}</td>
+                <td>{{ datos.CADUCADOS}}</td>
+                <td>{{ datos.TOTAL}}</td>
+
+
+            </tr>
+            {%endfor%}
+        </table>
         <hr>
     </div>
-    {%endfor%}
+
     {% endif%}
 </body>
-</html>
+</html> 
