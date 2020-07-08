@@ -242,7 +242,8 @@ class Region(models.Model):
 class RegistroInformes(models.Model):
     id_informe = models.FloatField(primary_key=True)
     fecha = models.DateField()
-    informe = models.BinaryField()
+    array_informe_reserva = models.BinaryField()
+    array_informe_medicamento = models.BinaryField()
     id_centro = models.ForeignKey(CentroSalud, models.DO_NOTHING, db_column='id_centro')
     id_tipo_inf = models.ForeignKey('TipoInforme', models.DO_NOTHING, db_column='id_tipo_inf')
 

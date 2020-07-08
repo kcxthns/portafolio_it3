@@ -50,7 +50,7 @@ urlpatterns = [
 
     ###urls del k-prueba
     path('ver-receta/<int:id_receta>', views.verReceta, name='ver-receta'),
-
+    path('ver-receta-movil/<int:id_receta>', views.verRecetaMovil, name='ver-receta-movil'),
     #urls modificaciones contraseña
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='registration/password_change_d.html'),

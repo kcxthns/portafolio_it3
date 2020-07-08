@@ -1305,6 +1305,17 @@ def verReceta(request, id_receta):
     }
     return render(request, 'autofarmapage/ver-receta.html', data)
 
+
+def verRecetaMovil(request, id_receta):
+    receta = Receta.objects.get(id_receta=id_receta)
+    detallereceta = DetalleReceta.objects.filter(id_receta=id_receta)
+    data = {
+        'receta': receta,
+        'detallereceta': detallereceta
+       }
+    return render(request, 'autofarmapage/receta-movil.html', data)
+       
+
 # Vista Registrar Tutor (Se Registra una nueva Persona y Usuario) (Médico)
 
 
@@ -1643,6 +1654,10 @@ def listarinforme(request):
         
         'informes':informes
     }
+
+    for i in informes:
+        print(i.id_informe)
+        print(i.fecha)
 
     if request.method == "POST":
         bd = ConexionBD()

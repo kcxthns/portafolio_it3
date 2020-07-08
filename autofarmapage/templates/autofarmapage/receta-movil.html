@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--Enlace css-->
+    <link rel="stylesheet" href="{% static 'css/styleMedico.css' %}" />
+    <!--Enlace flexbox-->
+    <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}" />
+    <!--Enlace iconos-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <!--  Enlace a fuentes-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <title>Receta médica</title>
+</head>
+
+<body>
+
+   
+
+        <div class="print">
+            <div class="receta-prescrita">
+                <div class="receta-contenido">
+                    <div class="receta-cabecera">
+                        <div class="receta-logo1">
+                            <img src="{% static 'imagenes/LOGO_azul.png' %}" alt="Logopaginablanco" height="40"
+                                width="200" />
+                        </div>
+                        <div class="receta-medico1">
+                            <h4>N° de receta: {{receta.id_receta}}</h4>
+                            <p>{{ user.rut.id_centro.nombre_centro }}</p>
+                            <h4 class="nombre-medico1">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
+                                {{user.rut.apellido_materno}}</h4>
+                            <h4 id="formateoRut"> {{receta.rut_medico.rut.rut}}{{receta.rut_medico.rut.dv}} </h4>
+
+                        </div>
+                    </div>
+                    <div class="receta-paciente1">
+                        <div class="n-paciente1">
+                            <h4>NOMBRE PACIENTE:
+                                {{receta.rut_paciente.nombres}}
+                                {{receta.rut_paciente.apellido_paterno}}
+                                {{receta.rut_paciente.apellido_materno}}
+                            </h4>
+                        </div>
+                        <div class="r-paciente1">
+                            <h4 class="rutPaciente" id="formateoRutP">
+                                a {{receta.rut_paciente.rut}}{{receta.rut_paciente.dv}} </h4>
+                        </div>
+
+                        <br>
+
+                    </div>
+                    <div class="receta-detalle1">
+                        <hr class="hr-receta">
+                        <h4> <b>RECETA MÉDICA</b></h4>
+                        <hr class="hr-receta">
+                        <div class="receta ancho-100">
+                            {%if detallereceta%}
+                            {%for j in detallereceta%}
+                            <li class="receta-remedios">
+                                <p><b class="MayusName">{{j.codigo.nombre_medicamento}}</b>
+                                    en {{j.codigo.id_tipo_med.nombre_tipo_med}}: {{j.dosis_diaria}}
+                                    unidades/dosis por {{j.duracion_tratamiento}} días
+                                <p>
+                                <p>{{j.posologia}}</p>
+                            </li>
+                            {%endfor%}
+                            {%endif%}
+                        </div>
+                    </div>
+                    <div class="receta-pie">
+                        <div class="receta-fecha1">
+                            <h4>Fecha: {{receta.fecha_receta}} </h4>
+                        </div>
+                        <div class="receta-firma1">
+                            <h4> Firma médico</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+</body>
+
+
+<!-- Formatear RUT -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" rel="stylesheet" />
+
+<script>
+    $("#formateoRut").inputmask({
+        mask: " RUT: 9[9.999.999]-[9|K|k]",
+    });
+
+    $("#formateoRutP").inputmask({
+        mask: " RUT PACIENTE: 9[9.999.999]-[9|K|k]",
+    });
+</script>
+
+
+<!--Librerias externas de Jquery y JSPDF -->
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
+
+<!-- Generador de PDF-->
+
+
+
+<!--<script>
+    var downPdf = document.getElementById("generarPDF");
+    var rutPac = document.getElementById("formateoRutP").innerHTML;
+    downPdf.onclick = function () {
+        html2canvas(document.getElementById("recetaMedica"), {
+            dpi: 144,
+            quality: 2,
+            zoom: 0.5,
+            html2canvas: { scale: 1 },
+            onrendered: function (canvas) {
+                var context = canvas.getContext('2d');
+                context.scale(2, 2);
+                var pageData = canvas.toDataURL("image/png", 1.0);
+                var pdf = new jsPDF('', 'pt', 'letter');
+                pdf.addImage(pageData, 'PNG', 30, 50);
+                pdf.save(rutPac + '.pdf');
+
+                //'a4': [595.28, 841.89],
+                //'letter': [612, 792],
+            }
+        });
+
+    };
+
+</script>-->
+<!--
+    <script>
+    pdf.addHTML($('#recetaMedica'), y, x, options, function () {
+        var blob = pdf.output("blob");
+        window.open(URL.createObjectURL(blob));
+    });
+</script>
+-->
+
+<!-- CSS receta -->
+<style>
+    @media print {
+        .print {
+            display: block
+        }
+
+        .btn-print {
+            display: none;
+        }
+    }
+
+    .icon-print {
+        vertical-align: middle;
+        font-size: 40px;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+    .btn-receta {
+        cursor: pointer;
+        cursor: hand;
+    }
+
+    #botones {
+        width: 820px;
+        z-index: 10;
+        position: fixed;
+        margin-top: 600px;
+        padding-left: 130px;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    #recetaMedica {
+        z-index: 1;
+    }
+
+    .receta-prescrita {
+        /* display:none;       ----> Con esto no se ve el div en la pag crear-receta2 */
+        width: 800x;
+        min-height: 500px;
+        height: 900px;
+        justify-content: left;
+        text-align: left;
+    }
+
+    .receta-contenido {
+        max-width: 720px;
+        min-width: 600px;
+        margin: auto;
+        height: 100%;
+        background-color: #fff;
+        border: none;
+    }
+
+    .receta-cabecera {
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: -o-flex;
+        display: flex;
+        width: 100%;
+        padding: 5% 0;
+        align-items: center;
+    }
+
+    .receta-logo1 {
+        width: 45%;
+        padding-left: 5%;
+        margin: 10px;
+    }
+
+    .receta-medico1 {
+        width: 55%;
+        padding-left: 10%;
+        margin: 10px;
+    }
+
+    .nombre-medico1 {
+        color: #1290cb;
+        font-weight: normal;
+        font-size: 16px;
+    }
+
+    .receta-paciente1 {
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: -o-flex;
+        display: flex;
+        width: 90%;
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 15px;
+        margin: auto;
+    }
+
+    .n-paciente1 {
+        width: 65%;
+        margin-left: 3%;
+        text-align: left;
+    }
+
+    .r-paciente1 {
+        width: 35%;
+        margin-left: 2%;
+        text-align: left;
+    }
+
+    .receta-detalle1 {
+        width: 86%;
+        color: #666;
+        padding-top: 20px;
+        padding-bottom: 30px;
+        margin: auto;
+        height: 69%;
+    }
+
+    .receta-detalle1 h4 {
+        text-align: center;
+    }
+
+    .receta {
+        padding-top: 20px;
+    }
+
+    .receta-remedios {
+        padding: 3px 0;
+        width: 88%;
+        margin: auto;
+        text-align: left;
+        margin-bottom: 6px;
+        font-size: 15px;
+        font-weight: lighter;
+        color: #000;
+        list-style: none;
+    }
+
+    .hr-receta {
+        border-top: 2px solid #666;
+    }
+
+    .receta-pie {
+        width: 86%;
+        margin: auto;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flex;
+        display: -o-flex;
+        display: flex;
+    }
+
+    .receta-fecha1 {
+        width: 45%;
+        text-align: center;
+    }
+
+    .receta-firma1 {
+        width: 55%;
+        text-align: center;
+    }
+
+    .receta-firma1 h4 {
+        width: 70%;
+        border-top: 2px solid #000;
+        margin: auto;
+    }
+
+    .btn-receta {
+        border: none;
+        background: #1290cb;
+        height: 70px;
+        width: 160px;
+        color: #ffffff;
+        font-family: "Roboto", sans-serif;
+        font-size: medium;
+        transition: 1s;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    .btn-receta:hover {
+        border: #1290cb 5px solid;
+        background: #f2f5fa;
+        color: #1290cb;
+    }
+
+    .btn-print {
+        align-content: center;
+    }
+
+    .btn-receta {
+        margin: 0 40px;
+    }
+</style>
+
+</html>
