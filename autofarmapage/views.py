@@ -392,7 +392,7 @@ def deshabilitarUsuario(request, rut):
     # Form para habilitar/deshabilitar a la persona
     if request.method == 'POST':
         rut_usuario = request.POST['rutUsuario']
-        rut_usuario = rut_usuario.replace('-','')
+        rut_usuario = rut_usuario.replace('-', '')
         rut_usuario = rut_usuario[0: len(rut_usuario) - 1]
         print(rut_usuario)
         opcion = int(request.POST['opcion'])
@@ -1157,8 +1157,6 @@ def agregarpaciente(request):
         realizado = cursor.var(int)
         existe_persona = cursor.var(bool)
 
-
-
         cursor.callfunc('pkg_crear_usuario.fn_existe_persona',
                         existe_persona, [rut])
         # Comprueba si el rut ya está registrado en la bd
@@ -1312,9 +1310,10 @@ def verRecetaMovil(request, id_receta):
     data = {
         'receta': receta,
         'detallereceta': detallereceta
-       }
+
+    }
     return render(request, 'autofarmapage/receta-movil.html', data)
-       
+
 
 # Vista Registrar Tutor (Se Registra una nueva Persona y Usuario) (Médico)
 
@@ -1601,7 +1600,7 @@ def renderizar_pdf(template_src, datos_informe={}):
 
 def stock_informe1(id_informe, conexion):
     con = conexion.conectar()
-    cursor= con.cursor()
+    cursor = con.cursor()
     cursor.prepare("""SELECT e.nombre_medicamento, e.fabricante, e.presentacion, e.centro_salud, e.comuna, e.stock, e.caducado , e.total_stock 
                           FROM registro_informes w, 
                           TABLE(w.array_informe_medicamento) e
@@ -1694,11 +1693,13 @@ def listarinforme(request):
     now = datetime.now()
     centroSalud = request.user.rut.id_centro.id_centro
     medicamentos = Medicamento.objects.all()
-    bd_informes = RegistroInformes.objects.filter(id_centro=request.user.rut.id_centro).order_by('-id_informe')
-    informes = RegistroInformes.objects.filter(id_centro=request.user.rut.id_centro).order_by('-id_informe')
-    datos3={
-        
-        'informes':informes
+    bd_informes = RegistroInformes.objects.filter(
+        id_centro=request.user.rut.id_centro).order_by('-id_informe')
+    informes = RegistroInformes.objects.filter(
+        id_centro=request.user.rut.id_centro).order_by('-id_informe')
+    datos3 = {
+
+        'informes': informes
     }
 
     
@@ -1728,7 +1729,7 @@ def listarinforme(request):
         #    messages.success(request,  'ATENCIÓN: ¡OCURRIÓ UN ERROR!')
 
     # datos para la vista
-      
+
 
 # funcion para convertir datos del query oracle en diccionario
 

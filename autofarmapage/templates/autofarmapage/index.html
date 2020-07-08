@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,7 +57,8 @@
                     <input class="intputs" type="password" id="password" name="password" minlength="4" maxlength="20"
                         placeholder="Contraseña" required>
                     <div class="logeo-opcion">
-                        <span class="olvidaste"><a class="enlace" href="{% url 'reset_pass' %}" target="_blank"> ¿Olvidaste tu contraseña?
+                        <span class="olvidaste"><a class="enlace" href="{% url 'reset_pass' %}" target="_blank">
+                                ¿Olvidaste tu contraseña?
                             </a>
                         </span>
                         <button class="btn">
@@ -116,7 +118,7 @@
                 <p>Ver los medicamentos que tiene en reserva para ser retirarados</p>
             </li>
             <li>
-                <img src="{% static 'imagenes/celular.png' %}" alt="imagen app celular" height=" auto" width="250">
+                <img src="{% static 'imagenes/celular.png' %}" alt="imagen app celular" height=" auto" width="280">
             </li>
             <li class="movil-caracteristicas">
                 <i class="fas fa-bullhorn"></i>
