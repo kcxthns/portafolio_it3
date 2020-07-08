@@ -48,23 +48,25 @@
                             <p>{{ user.rut.id_centro.nombre_centro }}</p>
                             <h4 class="nombre-medico1">Dr/Dra. {{user.rut.nombres}} {{user.rut.apellido_paterno}}
                                 {{user.rut.apellido_materno}}</h4>
-                            <h4>RUT:{{receta.rut_medico.rut.rut}} - {{receta.rut_medico.rut.dv}} </h4>
+                            <h4 id="formateoRut"> {{receta.rut_medico.rut.rut}}{{receta.rut_medico.rut.dv}} </h4>
+
                         </div>
                     </div>
                     <div class="receta-paciente1">
                         <div class="n-paciente1">
-                            <h4><b>Nombre paciente: </b>
+                            <h4>NOMBRE PACIENTE:
                                 {{receta.rut_paciente.nombres}}
                                 {{receta.rut_paciente.apellido_paterno}}
                                 {{receta.rut_paciente.apellido_materno}}
                             </h4>
                         </div>
                         <div class="r-paciente1">
-                            <h4 class="rutPaciente"> <b> RUT paciente: </b>
-                                {{receta.rut_paciente.rut}} - {{receta.rut_paciente.dv}}
-                            </h4>
+                            <h4 class="rutPaciente" id="formateoRutP">
+                                a {{receta.rut_paciente.rut}}{{receta.rut_paciente.dv}} </h4>
                         </div>
+
                         <br>
+
                     </div>
                     <div class="receta-detalle1">
                         <hr class="hr-receta">
@@ -99,6 +101,24 @@
     </div>
 </body>
 
+
+<!-- Formatear RUT -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" rel="stylesheet" />
+
+<script>
+    $("#formateoRut").inputmask({
+        mask: " RUT: 9[9.999.999]-[9|K|k]",
+    });
+
+    $("#formateoRutP").inputmask({
+        mask: " RUT PACIENTE: 9[9.999.999]-[9|K|k]",
+    });
+</script>
+
+
 <!--Librerias externas de Jquery y JSPDF -->
 
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"
@@ -106,26 +126,34 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
 
 
+<!-- Generador de PDF-->
+
+
+
 <script>
     var downPdf = document.getElementById("generarPDF");
+    var rutPac = document.getElementById("formateoRutP").innerHTML;
     downPdf.onclick = function () {
         html2canvas(document.getElementById("recetaMedica"), {
             dpi: 144,
             quality: 2,
-            html2canvas: { scale: 2 },
+            zoom: 0.5,
+            html2canvas: { scale: 1 },
             onrendered: function (canvas) {
                 var context = canvas.getContext('2d');
                 context.scale(2, 2);
                 var pageData = canvas.toDataURL("image/png", 1.0);
                 var pdf = new jsPDF('', 'pt', 'letter');
                 pdf.addImage(pageData, 'PNG', 30, 50);
-                pdf.save('receta-medica.pdf');
+                pdf.save(rutPac + '.pdf');
 
                 //'a4': [595.28, 841.89],
                 //'letter': [612, 792],
             }
         });
+
     };
+
 </script>
 <!--
     <script>
@@ -136,7 +164,7 @@
 </script>
 -->
 
-<!--Para enviar a imprimir -->
+<!-- CSS receta -->
 <style>
     @media print {
         .print {
@@ -274,6 +302,10 @@
         list-style: none;
     }
 
+    .hr-receta {
+        border-top: 2px solid #666;
+    }
+
     .receta-pie {
         width: 86%;
         margin: auto;
@@ -296,7 +328,7 @@
 
     .receta-firma1 h4 {
         width: 70%;
-        border-top: 1px solid #000;
+        border-top: 2px solid #000;
         margin: auto;
     }
 

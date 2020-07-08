@@ -3,7 +3,7 @@
 
 {% block content %}
 <!-- CONTENIDO DE LA HTML-->
-<div class="contenido">
+<div class="contenidoMedico">
     <div class="row">
         <div class="col-xs-12 col-md-12 col-lg-12 center-xs">
             <h4 id="encabezadoform">Listado de recetas</h4>
@@ -42,7 +42,8 @@
             {% for i in receta %}
             <tr>
                 <td>{{ i.rut_paciente.rut }} - {{ i.rut_paciente.dv }}</td>
-                <td>{{ i.rut_paciente.nombres }} {{ i.rut_paciente.apellido_paterno }} {{ i.rut_paciente.apellido_materno }}</td>
+                <td>{{ i.rut_paciente.nombres }} {{ i.rut_paciente.apellido_paterno }}
+                    {{ i.rut_paciente.apellido_materno }}</td>
                 <td>{{ i.fecha_receta }}</td>
                 <td>
                     <button class="btn-x" type="button">

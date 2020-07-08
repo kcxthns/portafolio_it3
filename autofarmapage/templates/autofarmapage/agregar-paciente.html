@@ -6,7 +6,7 @@
 <!-- CONTENIDO DE LA HTML-->
 
 
-<div class="contenido">
+<div class="contenidoMedico">
   <div class="row">
     <div class="col-xs-12 col-md-12 col-lg-12 center xs">
       <h4 id="encabezadoform">Información del paciente</h4>
@@ -18,7 +18,8 @@
     {% csrf_token %}
     <div class="contenedor-inputs">
       <!-- Nombres  -->
-      <input class="input-100" id="nombres" type="text" name="nombres" maxlength="50" required placeholder="Nombres" value=""/>
+      <input class="input-100" id="nombres" type="text" name="nombres" maxlength="50" required placeholder="Nombres"
+        value="" />
       <!-- Apellido paterno -->
       <input class="input-48" id="apellido_paterno" type="text" name="apellido_paterno" maxlength="50" required
         placeholder="Apellido Paterno" />
@@ -26,16 +27,9 @@
       <input class="input-48" id="apellido_materno" type="text" name="apellido_materno" maxlength="50" required
         placeholder="Apellido Materno" />
       <!-- RUT -->
-      <input class="input-48" 
-        id="rut" 
-        type="text" 
-        name="rut" 
-        required 
-        placeholder="RUT" 
-        maxlength="12" 
-        oninput="checkRut(this)"
-        onkeypress="return isNumber(event)"/>
-        <!--<input class=" input-8" id="dv" type="text" name="dv" required maxlength="1" placeholder="K">-->
+      <input class="input-48" id="rut" type="text" name="rut" required placeholder="RUT" maxlength="12"
+        oninput="checkRut(this)" onkeypress="return isNumber(event)" />
+      <!--<input class=" input-8" id="dv" type="text" name="dv" required maxlength="1" placeholder="K">-->
       <!-- Teléfono -->
       <input class="input-48" id="telefono" type="tel" pattern="[0-9]{9}" maxlength="9" name="telefono" required
         placeholder="Teléfono celular" />
@@ -43,7 +37,8 @@
       <input class="input-100" id="correo_electronico" type="email" name="correo_electronico" required
         placeholder="Correo electrónico" maxlength="50" />
       <!-- Dirección -->
-      <input class="input-100" id="direccion" type="text" name="direccion" maxlength="50" required placeholder="Dirección" />
+      <input class="input-100" id="direccion" type="text" name="direccion" maxlength="50" required
+        placeholder="Dirección" />
       <!-- Región -->
       <select class="input-48" required name="nombre_region" id="nombre_region">
         <option value="" selected>Seleccione Región</option>
