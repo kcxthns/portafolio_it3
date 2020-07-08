@@ -97,6 +97,6 @@ urlpatterns = [
     path('pdf_descargar/<int:id_informe>', views.DescargarPDFRESERVA.as_view(), name='pdf_descargar'),
     #url informe stock
     path('informeStock', views.render_informestock_html, name='informeStock'),
-    path('informeReserva', views.render_informereserva_html, name='informeReserva')
+    path('informeReserva', views.render_informereserva_html, name='informeReserva'),
     
 ]

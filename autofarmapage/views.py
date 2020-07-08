@@ -1583,7 +1583,7 @@ def render_informestock_html(request):
 #vista informe reserva    
 def render_informereserva_html(request):
     CentroSalud = request.user.rut.id_centro.id_centro
-    return render(request, 'autofarmapage/formatoInformeRerserva.html', {})
+    return render(request, 'autofarmapage/formatoInformeReserva.html', {})
 # VISTA PDF INFORME STOCK
 
 
@@ -1666,7 +1666,7 @@ class MostrarPDFRESERVA(View):
         data = {
             'data1': data1,
             'fecha': fecha}
-        pdf = renderizar_pdf('autofarmapage/formatoInformeRerserva.html', data)
+        pdf = renderizar_pdf('autofarmapage/formatoInformeReserva.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
 
 

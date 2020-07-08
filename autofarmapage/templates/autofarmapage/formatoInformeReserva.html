@@ -10,7 +10,7 @@
     <header>
         <hr>
         <h2 align="center">INFORME STOCK MEDICAMENTOS</h2>
-        {%if data1.registro_informe %}
+        {%if data1.reserva_informe %}
 
         <h3>FECHA EMISIÓN: {{fecha.fecha}}</h3>
         <hr>
@@ -22,28 +22,26 @@
         <table  border="2px" style="padding: 3px;" >
             <thead style="margin:5px"> 
                 <tr style="margin:5px">
+                    <th>ID RESERVA</th>
+                    <th>CODIGO</th>
                     <th>NOMBRE MEDICAMENTO</th>
-                    <th>FABRICANTE</th>
-                    <th>PRESENTACION</th>
-                    <TH>CENTRO</TH>
-                    <TH>COMUNA</TH>
-                    <th>STOCK</th>
-                    <th>MEDICAMENTOS CADUCADOS</th>
-                    <th>TOTAL DISPONIBLE</th>
+                    <TH>ID RECETA</TH>
+                    <TH>CANTIDAD</TH>
+                    <th>FECHA_RESERVA</th>
+                 
 
                 </tr>
             </thead>
-            {% for datos in data1.registro_informe %}
+            {% for datos in data1.reserva_informe %}
             <tr style="margin:5px">
 
-                <td>{{ datos.NOMBRE_MEDICAMENTO }}</td>
-                <td>{{ datos.FABRICANTE}} </td>
-                <td>{{ datos.PRESENTACION}}</td>
-                <td>{{datos.CENTRO_SALUD}}</td>
-                <td>{{datos.COMUNA}}</td>
-                <td>{{ datos.STOCK}}</td>
-                <td>{{ datos.CADUCADO}}</td>
-                <td>{{ datos.TOTAL_STOCK}}</td>
+                <td>{{ datos.ID_RESERVA }}</td>
+                <td>{{ datos.CODIGO}} </td>
+                <td>{{ datos.NOMBRE_MEDICAMENTO}}</td>
+                <td>{{datos.ID_RECETA}}</td>
+                <td>{{datos.CANTIDAD}}</td>
+                <td>{{ datos.FECHA_RESERVA}}</td>
+                
 
 
             </tr>
