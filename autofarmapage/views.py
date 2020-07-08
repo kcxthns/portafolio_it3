@@ -541,7 +541,7 @@ def listarMedicamento(request):
                 nombre_medicamento__icontains=criterio_busqueda)
             stock = StockMedicamento.objects.filter(codigo__nombre_medicamento__icontains=criterio_busqueda).filter(
                 id_centro=request.user.rut.id_centro.id_centro).order_by('codigo')
-            paginador = Paginator(stock, 100)
+            paginador = Paginator(stock, 10)
             pagina = request.GET.get('page')
             stock = paginador.get_page(pagina)
             datos = {
@@ -602,7 +602,7 @@ def listarMedicamento(request):
             #medicamentos = Medicamento.objects.all()
         stock = StockMedicamento.objects.filter(
             id_centro=request.user.rut.id_centro.id_centro).order_by('codigo')
-        paginador = Paginator(stock, 100)
+        paginador = Paginator(stock, 10)
         pagina = request.GET.get('page')
         stock = paginador.get_page(pagina)
         datos = {
@@ -611,7 +611,7 @@ def listarMedicamento(request):
         }
         return render(request, 'autofarmapage/listar-medicamento.html', datos)
 
-    paginador = Paginator(stock, 100)
+    paginador = Paginator(stock, 10)
     pagina = request.GET.get('page')
     stock = paginador.get_page(pagina)
 

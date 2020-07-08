@@ -1,29 +1,25 @@
 {% load static %}
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!--Enlace css-->
-        <link rel="stylesheet" href="{% static 'css/estiloListarUsuario.css' %}">
-        <!--Enlace flexbox-->
-        <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
-         <!--Enlace iconos-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-        <!--  Enlace a fuentes-->
-        <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap"
-            rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Enlace css-->
+    <link rel="stylesheet" href="{% static 'css/estiloListarUsuario.css' %}">
+    <!--Enlace flexbox-->
+    <link rel="stylesheet" href="{% static 'css/flexboxgrid.css' %}">
+    <!--Enlace iconos-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <!--  Enlace a fuentes-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
 
-        <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap" rel="stylesheet">
 
-        <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        
-        <title>AutoFarma - Listar Medicamentos</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <title>AutoFarma - Listar Medicamentos</title>
 </head>
 
 <body>
@@ -32,7 +28,8 @@
             <div class="col-xs-12 col-lg-12">
                 <div class="header">
                     <div class="col-xs-12 end-xs">
-                        <a href="{% url 'inicio-farmacia' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}" alt="Logopaginablanco" height="40" width="200"> </a>
+                        <a href="{% url 'inicio-farmacia' %}"><img src="{% static 'imagenes/LOGO_blanco.png' %}"
+                                alt="Logopaginablanco" height="40" width="200"> </a>
                         <p>{{ user.rut.id_centro.nombre_centro }}</p>
                         <div class="col-xs-12 star-xs">
                             <h4>{{ user.rut.nombres|upper }} {{ user.rut.apellido_paterno|upper }}</h4>
@@ -49,21 +46,26 @@
                         <div class="row">
                             <div class="col-xs-12 col-lg-12 center-lg">
                                 <div class="button_usuario">
-                                    <a href="{% url 'agregar-medicamento' %}"><img src="{% static 'imagenes/icono_agregar_medicamento_blue.png' %}" alt="agregarMedicamento"  height="60" width="60"></a>
+                                    <a href="{% url 'agregar-medicamento' %}"><img
+                                            src="{% static 'imagenes/icono_agregar_medicamento_blue.png' %}"
+                                            alt="agregarMedicamento" height="60" width="60"></a>
                                     <h4>Agregar Medicamento</h4>
                                 </div>
                             </div>
 
                             <div class="col-xs-12 col-lg-12 center-lg">
                                 <div class="button_listarusuarios">
-                                    <a href="{% url 'listar-medicamento' %}"><img src="{% static 'imagenes/icono_listar_medicamentos_blue.png' %}" alt="lstarMedicamentos"  height="60" width="60"></a>
+                                    <a href="{% url 'listar-medicamento' %}"><img
+                                            src="{% static 'imagenes/icono_listar_medicamentos_blue.png' %}"
+                                            alt="lstarMedicamentos" height="60" width="60"></a>
                                     <h4>Listar Medicamentos</h4>
                                 </div>
                             </div>
 
                             <div class="col-xs-12 col-lg-12 center-lg">
                                 <div class="button_listarinformes">
-                                    <a href="#"><img src="{% static 'imagenes/listarInformes.png' %}" alt="Informes"  height="60" width="60"></a>
+                                    <a href="#"><img src="{% static 'imagenes/listarInformes.png' %}" alt="Informes"
+                                            height="60" width="60"></a>
                                     <h4>Informes</h4>
                                 </div>
                             </div>
@@ -84,13 +86,12 @@
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-xs-6 col-md-6 col-lg-6 end-xs">
-                                <input class="intputs" type="search" value="{{ request.GET.q }}"
-                                    name="q" required placeholder="Buscar Medicamento">
+                                <input class="intputs" type="search" value="{{ request.GET.q }}" name="q" required
+                                    placeholder="Buscar Medicamento">
                             </div>
                             <button class="buttonBuscar" name="submit" type="submit" value="Search">
-                                <img src="{% static 'imagenes/search.png' %}"
-                                alt="search-listar" height="30"
-                                width="30">
+                                <img src="{% static 'imagenes/search.png' %}" alt="search-listar" height="30"
+                                    width="30">
                             </button>
                         </div>
 
@@ -118,7 +119,7 @@
                                             type="text" value="{{ medicamentos.nombre_medicamento }}"
                                             name="nombre_medicamento" id="nombre_medicamento" required>-->
                                         <p class="labelListaMed">Código</p>
-                                        <p>{{ stock.codigo.codigo }}</p>     
+                                        <p>{{ stock.codigo.codigo }}</p>
                                     </div>
                                     <div class="col-xs-6 col-md-6 start-xs">
                                         <p class="labelListaMed">Nombre Medicamento</p>
@@ -131,7 +132,7 @@
                                     <div class="col-xs-1 col-md-2 star-xs">
                                         <p class="labelListaMed">Caducados</p>
                                         <p>
-                                            {{ stock.codigo.cad_codigo.cantidad }} 
+                                            {{ stock.codigo.cad_codigo.cantidad }}
                                         </p>
                                     </div>
                                 </div>
@@ -154,10 +155,8 @@
                                 <div class="rowe" id="{{ stock.codigo.codigo }}">
                                     <div id="buttomIcon" class="col-xs-12 col-md-12 col-lg-12 center-xs">
                                         <p style="font-size: small;">Gestión de Inventario</p>
-                                        <a id="arrowe"><img id="flechaimg"
-                                            src="{% static 'imagenes/arrow.svg' %}"
-                                            alt="lstar_usuario"
-                                            height="15" width="15"></a>
+                                        <a id="arrowe"><img id="flechaimg" src="{% static 'imagenes/arrow.svg' %}"
+                                                alt="lstar_usuario" height="15" width="15"></a>
                                     </div>
                                 </div>
                             </div>
@@ -170,12 +169,8 @@
                                         <div class="col-xs-12 center-xs">
                                             <p>AUMENTAR STOCK</p>
                                             <input type="hidden" id="onInput" name="codigo_medicamento">
-                                            <input type="number"
-                                                class="inputCard"
-                                                id="onInput"
-                                                name="stock_aumentar"
-                                               required
-                                               min="1">
+                                            <input type="number" class="inputCard" id="onInput" name="stock_aumentar"
+                                                required min="1">
                                             <button class="btnCardMed">AUMENTAR</button>
                                         </div>
                                     </div>
@@ -186,12 +181,10 @@
                                         <div class="col-xs-12 center-xs">
                                             <p>CADUCAR</p>
                                             <input type="hidden" id="onInputCaducar" name="codigo_med">
-                                            <input type="number"
-                                                class="inputCard"
-                                                id="onInputCaducar"
-                                                name="stock_caducar"
-                                               required>
-                                            <button class="btnCardMed" name="caducar_btn" value="caducar">CADUCAR</button>
+                                            <input type="number" class="inputCard" id="onInputCaducar"
+                                                name="stock_caducar" required>
+                                            <button class="btnCardMed" name="caducar_btn"
+                                                value="caducar">CADUCAR</button>
                                         </div>
                                     </div>
                                 </form>
@@ -201,11 +194,11 @@
                                 <div class="col-xs-12 center-xs">
                                     <div class="col-xs-12 col-md-12 center-xs">
                                         {% if stock.has_previous %}
-                                        <a href="?page={{ medicamentos.previous_page_number }}">Anterior</a>
+                                        <a href="?page={{ stock.previous_page_number }}">Anterior</a>
                                         {% endif %}
                                         {% if stock.has_next %}
-                                        <a href="?page={{ medicamentos.next_page_number }}">Siguiente</a>
-                                        {% endif %} 
+                                        <a href="?page={{ stock.next_page_number }}">Siguiente</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -215,28 +208,29 @@
                 </div>
             </div>
         </section>
-    </div>  
-    
+    </div>
+
     <script>
-        $(document).ready(function() {
-            var Card =$(".buttomCard"); 
-        
+        $(document).ready(function () {
+            var Card = $(".buttomCard");
+
             //$('#flechaimg').attr('src',"{% static 'imagenes/agregarUsuario.png' %}");
-         
-            $(".rowe").click(function(){
-          
-                $(Card).fadeOut('slow', function() { $(this).remove(); });
-            
+
+            $(".rowe").click(function () {
+
+                $(Card).fadeOut('slow', function () { $(this).remove(); });
+
                 $("#onInput").val('');
                 $("#onInputCaducar").val('');
                 var id_row = $(this).attr('id');
                 $(Card).hide().insertBefore(this).fadeIn("slow");
-           
+
                 $("#onInput").val(id_row);
-                $("#onInputCaducar").val(id_row);                   
+                $("#onInputCaducar").val(id_row);
             });
         });
     </script>
-    
+
 </body>
+
 </html>

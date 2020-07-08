@@ -61,7 +61,7 @@
                             </h4>
                         </div>
                         <div class="r-paciente1">
-                            <h4 id="formateoRutP">
+                            <h4 class="rutPaciente" id="formateoRutP">
                                 a {{receta.rut_paciente.rut}}{{receta.rut_paciente.dv}} </h4>
                         </div>
 
@@ -127,26 +127,33 @@
 
 
 <!-- Generador de PDF-->
+
+
+
 <script>
     var downPdf = document.getElementById("generarPDF");
+    var rutPac = document.getElementById("formateoRutP").innerHTML;
     downPdf.onclick = function () {
         html2canvas(document.getElementById("recetaMedica"), {
             dpi: 144,
             quality: 2,
-            html2canvas: { scale: 2 },
+            zoom: 0.5,
+            html2canvas: { scale: 1 },
             onrendered: function (canvas) {
                 var context = canvas.getContext('2d');
                 context.scale(2, 2);
                 var pageData = canvas.toDataURL("image/png", 1.0);
                 var pdf = new jsPDF('', 'pt', 'letter');
                 pdf.addImage(pageData, 'PNG', 30, 50);
-                pdf.save('receta-medica.pdf');
+                pdf.save(rutPac + '.pdf');
 
                 //'a4': [595.28, 841.89],
                 //'letter': [612, 792],
             }
         });
+
     };
+
 </script>
 <!--
     <script>
