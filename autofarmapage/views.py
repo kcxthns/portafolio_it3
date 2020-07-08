@@ -392,6 +392,9 @@ def deshabilitarUsuario(request, rut):
     # Form para habilitar/deshabilitar a la persona
     if request.method == 'POST':
         rut_usuario = request.POST['rutUsuario']
+        rut_usuario = rut_usuario.replace('-','')
+        rut_usuario = rut_usuario[0: len(rut_usuario) - 1]
+        print(rut_usuario)
         opcion = int(request.POST['opcion'])
         bd = ConexionBD()
         conn = bd.conectar()
@@ -1155,21 +1158,21 @@ def agregarpaciente(request):
         existe_persona = cursor.var(bool)
 
 
-<< << << < HEAD
+
         cursor.callfunc('pkg_crear_usuario.fn_existe_persona',
                         existe_persona, [rut])
         # Comprueba si el rut ya está registrado en la bd
         if existe_persona.getvalue():
             messages.error(request, 'El rut ' + rut + '-' +
                            dv + ' ya está registrado en el sistema.')
-== == == =
+
         cursor.callfunc('pkg_crear_usuario.fn_existe_persona',
                         existe_persona, [rut])
         # Comprueba si el rut ya está registrado en la bd
         if existe_persona.getvalue():
             messages.error(request, 'El rut ' + rut + '-' +
                            dv + ' ya está registrado en el sistema.')
->>>>>> > Karina2
+
         else:
             # Llamado al procedimiento almacenado para crear persona (no crea usuario)
             cursor.callproc('pkg_crear_usuario.sp_crear_persona', [
@@ -1579,9 +1582,9 @@ def renderizar_pdf(template_src, datos_informe={}):
 def stock_informe1(id_informe, conexion):
     con = conexion.conectar()
     cursor= con.cursor()
-    cursor.prepare("""SELECT e.nombre, e.laboratorio, e.presentacion, e.stock, e.caducados, e.total, e.centro , e.comuna 
+    cursor.prepare("""SELECT e.nombre_medicamento, e.fabricante, e.presentacion, e.centro_salud, e.comuna, e.stock, e.caducado , e.total_stock 
                           FROM registro_informes w, 
-                          TABLE(w.informe) e
+                          TABLE(w.array_informe_medicamento) e
                           WHERE id_informe = :id_informe""")
     cursor.execute(None, id_informe=id_informe)                      
     registro_informe = rows_to_dict_list(cursor)
@@ -1630,6 +1633,11 @@ def listarinforme(request):
     centroSalud = request.user.rut.id_centro.id_centro
     medicamentos = Medicamento.objects.all()
     bd_informes = RegistroInformes.objects.filter(id_centro=request.user.rut.id_centro).order_by('-id_informe')
+    informes = RegistroInformes.objects.filter(id_centro=request.user.rut.id_centro).order_by('-id_informe')
+    datos3={
+        
+        'informes':informes
+    }
 
     if request.method == "POST":
         bd = ConexionBD()
@@ -1638,21 +1646,18 @@ def listarinforme(request):
         realizado = cursor.var(int)
 
         paracetamol = 'paracetamol'
-        cursor.callproc('spa_insertar_informes', [now, centroSalud, 1, realizado])
-
-        if realizado.getvalue() == 1:
-            print("correcto")
-            messages.success(request,  'CORRECTO: INFORME ALMACENADO:')
-        elif realizado.getvalue() == 0:
-            print("incorrecto")
-            messages.success(request,  'ATENCIÓN: ¡OCURRIÓ UN ERROR!')
+        cursor.callproc('sp_guardar_informe_medicamento', [centroSalud])
+    return render(request, 'autofarmapage/listar-informe.html', datos3 )
+        #if realizado.getvalue() == 1:
+        #    print("correcto")
+        #    messages.success(request,  'CORRECTO: INFORME ALMACENADO:')
+        #elif realizado.getvalue() == 0:
+        #    print("incorrecto")
+        #    messages.success(request,  'ATENCIÓN: ¡OCURRIÓ UN ERROR!')
 
     # datos para la vista
-    datos= {
-        'medicamentos':medicamentos,
-        'bd_informes':bd_informes
-    }
-    return render(request, 'autofarmapage/listar-informe.html',datos)    
+      
+
 # funcion para convertir datos del query oracle en diccionario
 def rows_to_dict_list(cursor):
     columns = [i[0] for i in cursor.description]

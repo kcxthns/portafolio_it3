@@ -156,8 +156,8 @@
                                                 
                                             </tr>
                                         </thead>
-                                        {% if bd_informes %}
-                                        {% for i in bd_informes %}
+                                        {% if datos3.informes %}
+                                        {% for i in informes %}
                                         <tr>
                                             <td>{{ i.id_informe }}</td>
                                             <td>{{ i.fecha }} </td>
@@ -176,7 +176,8 @@
                                             </td>
                                         </tr>
                                         {% endfor %}
-                                        {% endif %}
+                                        {% endif%}
+                                       
                                     </table>
 
                                    
